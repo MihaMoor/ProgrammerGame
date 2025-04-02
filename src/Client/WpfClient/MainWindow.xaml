@@ -5,8 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Программист" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
 
+    <Grid x:Name="ViewMainWindow">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="ViewMainMenu" VerticalAlignment="Top" Height="25">
+            <Menu.ItemsSource>
+                <Binding Path="ViewMainMenuItems"/>
+            </Menu.ItemsSource>
+
+            <Menu.ItemContainerStyle>
+                <Style TargetType="MenuItem">
+                    <Setter Property="Header" Value="{Binding Header}"/>
+                    <Setter Property="ItemsSource" Value="{Binding SubItems}"/>
+                    <Setter Property="Command" Value="{Binding Command}"/>
+                </Style>
+            </Menu.ItemContainerStyle>
+        </Menu>
+        <Grid x:Name="ViewPlayerWindow" Background="#FF4668EF" Grid.Row="1">
+        </Grid>
     </Grid>
 </Window>
