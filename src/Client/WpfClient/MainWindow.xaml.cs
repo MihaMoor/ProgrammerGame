@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using WpfClient.Pages;
 
 namespace WpfClient
 {
@@ -10,6 +11,7 @@ namespace WpfClient
         public MainWindow()
         {
             InitializeComponent();
+            MainFrame.Navigate(new Game());
         }
     }
 }
