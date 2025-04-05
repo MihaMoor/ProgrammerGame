@@ -1,0 +1,23 @@
+name: .NET WPF Application Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-wpf:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '9.x'
+
+      - name: Build WPF Client
+        run: dotnet build src/Client/WpfClient/WpfClient.csproj --configuration Release
