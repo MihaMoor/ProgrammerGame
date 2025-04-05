@@ -23,9 +23,9 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Build Server.Domain
-        working-directory: ./src/Server/Server.Domain
+        working-directory: src/Server/Server.Domain
         run: dotnet build --configuration Release
 
       - name: Build Server.Api
-        working-directory: .src/Server/Server.Api
+        working-directory: src/Server/Server.Api
         run: dotnet build --configuration Release
