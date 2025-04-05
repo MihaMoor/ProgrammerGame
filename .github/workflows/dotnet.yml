@@ -1,0 +1,31 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET Server
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.0.x' # Укажите вашу версию .NET SDK
+
+      - name: Build Server.Domain
+        working-directory: ./Server.Domain
+        run: dotnet build --configuration Release
+
+      - name: Build Server.Api
+        working-directory: ./Server.Api
+        run: dotnet build --configuration Release
