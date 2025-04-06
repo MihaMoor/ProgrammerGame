@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using WpfClient.Widgets;
+using WpfClient.Widgets.Player;
 
 namespace WpfClient.Pages;
 
@@ -12,5 +13,6 @@ public partial class Game : Page
     {
         InitializeComponent();
         MenuBarFrame.Navigate(new MenuBar());
+        PlayerStatsFrame.Navigate(new MainStats());
     }
 }
