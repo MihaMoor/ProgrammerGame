@@ -16,7 +16,7 @@ namespace WpfClient
         private void AppStartup(object sender, StartupEventArgs e)
         {
             // Настройка зависимостей
-            AppServices.ConfigureServices();
+            AppServices.Configure();
 
             // Получение основного окна из DI-контейнера и запуск
             var mainWindow = AppServices.ServiceProvider.GetRequiredService<MainWindow>();

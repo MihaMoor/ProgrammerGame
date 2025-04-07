@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Domain", "src\Server
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Infrastructure", "src\Client\Client.Infrastructure\Client.Infrastructure.csproj", "{7A26C6C2-474C-4255-8390-B2A5099B1686}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{2FB3D838-AD7E-4F72-8257-26B40645E38F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.GrpcContracts", "src\Shared\GrpcContracts\Shared.GrpcContracts.csproj", "{547F48FF-92BC-4D71-BDCD-48A2D91F4948}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,10 @@ Global
 		{7A26C6C2-474C-4255-8390-B2A5099B1686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A26C6C2-474C-4255-8390-B2A5099B1686}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A26C6C2-474C-4255-8390-B2A5099B1686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{547F48FF-92BC-4D71-BDCD-48A2D91F4948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{547F48FF-92BC-4D71-BDCD-48A2D91F4948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{547F48FF-92BC-4D71-BDCD-48A2D91F4948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{547F48FF-92BC-4D71-BDCD-48A2D91F4948}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,5 +54,6 @@ Global
 		{71910004-F8F6-4F0E-AE05-D25D3F3A6DDE} = {0E9130AD-5DD3-482C-80F8-B468227C763E}
 		{603827D7-BEDC-4263-9C5B-5E1EA65DB93E} = {0E9130AD-5DD3-482C-80F8-B468227C763E}
 		{7A26C6C2-474C-4255-8390-B2A5099B1686} = {1FFF7C6B-C665-4F70-8887-D8E29D08E253}
+		{547F48FF-92BC-4D71-BDCD-48A2D91F4948} = {2FB3D838-AD7E-4F72-8257-26B40645E38F}
 	EndGlobalSection
 EndGlobal

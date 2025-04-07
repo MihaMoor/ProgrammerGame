@@ -1,17 +1,35 @@
-﻿using System.ComponentModel;
+﻿using Client.Infrastructure;
+using System.ComponentModel;
 using System.Windows.Controls;
+using Google.Protobuf.WellKnownTypes;
 
-namespace WpfClient.Widgets.Player;
+namespace WpfClient.Widgets.MainStats;
 
 /// <summary>
 /// Interaction logic for MainStats.xaml
 /// </summary>
 public partial class MainStats : Page
 {
-    public MainStats()
+    private GrpcClient<Empty, Shared.GrpcContracts.PlayerMainStatsService.PlayerMainStatsServiceClient> _grpcClient;
+
+    public MainStats(GrpcClient<Empty, Shared.GrpcContracts.PlayerMainStatsService.PlayerMainStatsServiceClient> grpcClient)
     {
+        _grpcClient = grpcClient;
         InitializeComponent();
-        this.DataContext = new PlayerMainStats(100, 100, 99.99, 100);
+        Init();
+    }
+
+    private async void Init()
+    {
+        var responce = await _grpcClient.Client.GetAsync(new Empty());
+        if (responce != null)
+        {
+            this.DataContext = new PlayerMainStats(health: responce.Health, hunger: responce.Hunger, money: responce.Money, mood: responce.Mood);
+        }
+        else
+        {
+            this.DataContext = new PlayerMainStats(health: 100, hunger: 100, money: 99.99, mood: 100);
+        }
     }
 }
 
