@@ -1,18 +1,16 @@
-﻿using Grpc.Core;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 
 namespace Client.Infrastructure;
 
-public class GrpcClient<TRequest, TResponce> : ClientBase, IDisposable
+public class GrpcClient<TClient> : IDisposable
 {
-    private HttpClientHandler _handler;
-    private GrpcChannel _channel;
+    protected readonly HttpClientHandler _handler;
+    protected readonly GrpcChannel _channel;
+    protected bool _disposedValue;
 
-    public TResponce Client { get; }
+    protected TClient Client { get; }
 
-    private bool disposedValue;
-
-    public GrpcClient(string adress, TResponce client)
+    public GrpcClient(string adress, TClient client)
     {
         Client = client;
         _handler = new();
@@ -24,7 +22,7 @@ public class GrpcClient<TRequest, TResponce> : ClientBase, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!disposedValue)
+        if (!_disposedValue)
         {
             if (disposing)
             {
@@ -35,7 +33,7 @@ public class GrpcClient<TRequest, TResponce> : ClientBase, IDisposable
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
             // TODO: set large fields to null
-            disposedValue = true;
+            _disposedValue = true;
         }
     }
 

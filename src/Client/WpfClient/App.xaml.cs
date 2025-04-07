@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace WpfClient
 {
@@ -19,8 +19,8 @@ namespace WpfClient
             AppServices.Configure();
 
             // Получение основного окна из DI-контейнера и запуск
-            var mainWindow = AppServices.ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            var mainWindow = AppServices.ServiceProvider?.GetRequiredService<MainWindow>();
+            mainWindow?.Show();
         }
     }
 
