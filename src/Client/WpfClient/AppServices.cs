@@ -16,7 +16,7 @@ public static class AppServices
 
         serviceCollection
             .ConfigureServices()
-            .ConfigureGrpcServices("https://localhost:5001")
+            .ConfigureGrpcServices("https://localhost:8081")
             .ConfigurePages()
             .ConfigureWidgets();
 

@@ -5,7 +5,7 @@ option csharp_namespace = "Shared.GrpcContracts";
 import "google/protobuf/empty.proto";
 
 service PlayerMainStatsService {
-    rpc Get(google.protobuf.Empty) returns (PlayerMainStatsDto);
+    rpc GetAsync(google.protobuf.Empty) returns (stream PlayerMainStatsDto);
 }
 
 message PlayerMainStatsDto {

@@ -11,14 +11,21 @@ public class PlayerMainStatsGrpcClient : GrpcClient<PlayerMainStatsService.Playe
         : base(adress, client)
     { }
 
-    public async Task<PlayerMainStatsDto> GetAsync()
+    public async Task<PlayerMainStatsDto> GetAsync(
+        Action<PlayerMainStatsDto> handler,
+        CancellationToken cancellationToken)
     {
         PlayerMainStatsDto? dto = null;
         try
         {
-            dto = await Client.GetAsync(new Empty());
+            using var call = Client.GetAsync(new Empty(), cancellationToken: cancellationToken);
+            while(await call.ResponseStream.MoveNext(cancellationToken))
+            {
+                dto = call.ResponseStream.Current;
+                handler(dto);
+            }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // Logging or send message to server for registration bug
         }
