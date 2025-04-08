@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Shared.GrpcContracts";
+
+import "google/protobuf/empty.proto";
+
+service PlayerMainStatsService {
+    rpc Get(google.protobuf.Empty) returns (PlayerMainStatsDto);
+}
+
+message PlayerMainStatsDto {
+    uint32 Health = 1;
+    uint32 Hunger = 2;
+    double Money = 3;
+    uint32 Mood = 4;
+}
