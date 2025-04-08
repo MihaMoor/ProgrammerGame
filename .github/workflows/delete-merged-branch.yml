@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [closed]
 
+permissions:
+  contents: write  # Дайте доступ на запись
+
 jobs:
   delete-branch:
     if: github.event.pull_request.merged == true
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Получает полную историю
 
       - name: Delete merged branch
         run: |
