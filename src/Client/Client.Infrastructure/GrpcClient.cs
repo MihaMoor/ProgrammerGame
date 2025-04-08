@@ -1,48 +1,39 @@
 ﻿using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
 
 namespace Client.Infrastructure;
 
-public class GrpcClient : IDisposable
+public class GrpcClient<TClient> : IDisposable
 {
-    private GrpcWebHandler _webHandler;
-    private GrpcChannel _channel;
+    protected readonly HttpClientHandler _handler;
+    protected readonly GrpcChannel _channel;
+    protected bool _disposedValue;
 
-    private bool disposedValue;
+    protected TClient Client { get; }
 
-    public GrpcClient(string adress)
+    public GrpcClient(string adress, TClient client)
     {
-        _webHandler = new (new HttpClientHandler());
+        Client = client;
+        _handler = new();
         _channel = GrpcChannel.ForAddress(adress, new GrpcChannelOptions
         {
-            HttpHandler = _webHandler
+            HttpHandler = _handler
         });
-    }
-
-    public void SendMessage<TMessage, TClient>(TMessage message)
-    {
-
-    }
-
-    public void RecieveMessage<T>()
-    {
-
     }
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!disposedValue)
+        if (!_disposedValue)
         {
             if (disposing)
             {
                 // TODO: dispose managed state (managed objects)
                 _channel.Dispose();
-                _webHandler.Dispose();
+                _handler.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
             // TODO: set large fields to null
-            disposedValue = true;
+            _disposedValue = true;
         }
     }
 

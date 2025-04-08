@@ -8,10 +8,10 @@ namespace WpfClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(Game game)
         {
             InitializeComponent();
-            MainFrame.Navigate(new Game());
+            MainFrame.Navigate(game);
         }
     }
 }
