@@ -3,23 +3,29 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Infrastructure;
 
-public class GrpsServices
+public static class GrpsServices
 {
-    public static void ConfigureGrpcServices(ServiceCollection serviceCollection, string adress)
+    public static ServiceCollection ConfigureGrpcServices(this ServiceCollection serviceCollection, string adress)
     {
         serviceCollection.AddSingleton(x => GrpcChannel.ForAddress(adress));
-        ConfigureContractServiceClients(serviceCollection);
-        ConfigureGrpcClients(serviceCollection, adress);
+
+        serviceCollection
+            .ConfigureContractServiceClients()
+            .ConfigureGrpcClients(adress);
+
+        return serviceCollection;
     }
 
-    private static void ConfigureContractServiceClients(ServiceCollection serviceCollection)
+    private static ServiceCollection ConfigureContractServiceClients(this ServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped(x =>
             new Shared.GrpcContracts.PlayerMainStatsService.PlayerMainStatsServiceClient(x.GetRequiredService<GrpcChannel>())
         );
+
+        return serviceCollection;
     }
 
-    private static void ConfigureGrpcClients(ServiceCollection serviceCollection, string adress)
+    private static ServiceCollection ConfigureGrpcClients(this ServiceCollection serviceCollection, string adress)
     {
         serviceCollection.AddScoped(x =>
             {
@@ -27,5 +33,7 @@ public class GrpsServices
                 return new Clients.PlayerMainStatsGrpcClient(adress, client);
             }
         );
+
+        return serviceCollection;
     }
 }

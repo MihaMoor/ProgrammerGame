@@ -14,29 +14,33 @@ public static class AppServices
     {
         var serviceCollection = new ServiceCollection();
 
-        ConfigureServices(serviceCollection);
-
-        GrpsServices.ConfigureGrpcServices(serviceCollection, "https://localhost:5001");
-
-        ConfigurePages(serviceCollection);
-        ConfigureWidgets(serviceCollection);
+        serviceCollection
+            .ConfigureServices()
+            .ConfigureGrpcServices("https://localhost:5001")
+            .ConfigurePages()
+            .ConfigureWidgets();
 
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 
-    public static void ConfigureServices(ServiceCollection serviceCollection)
+    public static ServiceCollection ConfigureServices(this ServiceCollection serviceCollection)
     {
+        return serviceCollection;
     }
 
-    private static void ConfigurePages(ServiceCollection serviceCollection)
+    private static ServiceCollection ConfigurePages(this ServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<MainWindow>(); // или transient/singleton по требованиям вашего проекта
         serviceCollection.AddScoped<Game>();
+
+        return serviceCollection;
     }
 
-    private static void ConfigureWidgets(ServiceCollection serviceCollection)
+    private static ServiceCollection ConfigureWidgets(this ServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<MenuBar>();
         serviceCollection.AddScoped<MainStats>();
+
+        return serviceCollection;
     }
 }
