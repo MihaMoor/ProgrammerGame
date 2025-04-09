@@ -1,4 +1,3 @@
-using Server.Api.Controllers;
 using Server.Api.Services;
 
 namespace Server.Api;
@@ -29,7 +28,6 @@ public class Program
         app.UseAuthorization();
 
         app.MapGrpcServices();
-        app.MapGrpcControllers();
 
         app.Run();
     }
