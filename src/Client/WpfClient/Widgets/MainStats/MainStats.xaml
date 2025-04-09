@@ -4,9 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:WpfClient.Widgets.MainStats"
+      d:DataContext="{d:DesignInstance Type=local:PlayerMainStats}"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="MainStats">
+      Title="MainStats"
+      Unloaded="PageUnloaded"
+>
 
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
@@ -73,7 +76,7 @@
             Grid.Column="0"
         />
         <Label
-            Content="{Binding Money, StringFormat=N2}"
+            Content="{Binding Money}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Grid.Row="3"

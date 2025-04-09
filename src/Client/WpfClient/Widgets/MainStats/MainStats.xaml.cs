@@ -1,4 +1,6 @@
 ﻿using Client.Infrastructure.Clients;
+using Shared.GrpcContracts;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfClient.Widgets.MainStats;
@@ -9,23 +11,37 @@ namespace WpfClient.Widgets.MainStats;
 public partial class MainStats : Page
 {
     private readonly PlayerMainStatsGrpcClient _grpcClient;
+    private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly PlayerMainStats _playerMainStats;
 
     public MainStats(PlayerMainStatsGrpcClient grpcClient)
     {
+        _playerMainStats = new();
         _grpcClient = grpcClient;
+        _cancellationTokenSource = new();
         InitializeComponent();
-        Init();
+        DataContext = _playerMainStats;
+        ConnectToServer();
     }
 
-    private async void Init()
+    private async void ConnectToServer()
     {
-        Shared.GrpcContracts.PlayerMainStatsDto responce = await _grpcClient.GetAsync();
+        PlayerMainStatsDto responce = await _grpcClient.GetAsync(HandlePlayerMainStatsGet, _cancellationTokenSource.Token);
+    }
 
-        this.DataContext = new PlayerMainStats(
-            health: responce.Health,
-            hunger: responce.Hunger,
-            money: responce.Money,
-            mood: responce.Mood
-        );
+    private void HandlePlayerMainStatsGet(PlayerMainStatsDto responce)
+    {
+        Dispatcher.Invoke(() =>
+        {
+            _playerMainStats.Health = responce.Health;
+            _playerMainStats.Hunger = responce.Hunger;
+            _playerMainStats.Money = responce.Money;
+            _playerMainStats.Mood = responce.Mood;
+        });
+    }
+
+    private void PageUnloaded(object sender, RoutedEventArgs e)
+    {
+        _cancellationTokenSource.Cancel();
     }
 }

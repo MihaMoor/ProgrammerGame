@@ -3,20 +3,24 @@ using Shared.GrpcContracts;
 
 namespace Client.Infrastructure.Clients;
 
-public class PlayerMainStatsGrpcClient : GrpcClient<PlayerMainStatsService.PlayerMainStatsServiceClient>
+public class PlayerMainStatsGrpcClient(
+    string adress,
+    PlayerMainStatsService.PlayerMainStatsServiceClient client)
+    : GrpcClient<PlayerMainStatsService.PlayerMainStatsServiceClient>(adress, client)
 {
-    public PlayerMainStatsGrpcClient(
-        string adress,
-        PlayerMainStatsService.PlayerMainStatsServiceClient client)
-        : base(adress, client)
-    { }
-
-    public async Task<PlayerMainStatsDto> GetAsync()
+    public async Task<PlayerMainStatsDto> GetAsync(
+        Action<PlayerMainStatsDto> handler,
+        CancellationToken cancellationToken)
     {
         PlayerMainStatsDto? dto = null;
         try
         {
-            dto = await Client.GetAsync(new Empty());
+            using var call = Client.GetAsync(new Empty(), cancellationToken: cancellationToken);
+            while(await call.ResponseStream.MoveNext(cancellationToken))
+            {
+                dto = call.ResponseStream.Current;
+                handler(dto);
+            }
         }
         catch (Exception)
         {
@@ -24,7 +28,7 @@ public class PlayerMainStatsGrpcClient : GrpcClient<PlayerMainStatsService.Playe
         }
 
         return
-            dto ??= new()
+            dto ?? new()
             {
                 Health = 100,
                 Hunger = 100,
