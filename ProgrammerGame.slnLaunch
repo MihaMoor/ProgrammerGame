@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Wpf+Server-docker",
+    "Projects": [
+      {
+        "Path": "src\\Server\\Server.Api\\Server.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "Docker"
+      },
+      {
+        "Path": "src\\Client\\WpfClient\\WpfClient.csproj",
+        "Action": "Start",
+        "DebugTarget": "WpfClient"
+      }
+    ]
+  }
+]

@@ -1,3 +1,7 @@
+using Elastic.Clients.Elasticsearch;
+using Elastic.Serilog.Sinks;
+using Elastic.Transport;
+using Serilog;
 using Server.Api.Services;
 
 namespace Server.Api;
@@ -7,6 +11,20 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        // Создание клиента Elasticsearch
+        var elasticsearchOptions = new ElasticsearchClientSettings(new Uri("http://localhost:9200"));
+        var elasticsearchClient = new ElasticsearchClient(elasticsearchOptions);
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(elasticsearchClient.Transport)
+            {
+                // Настройки Elasticsearch
+            })
+            .CreateLogger();
+        builder.Logging.ClearProviders();
+        builder.Host.UseSerilog();
 
         // Add services to the container.
         builder.Services.AddGrpc();

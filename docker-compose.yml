@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres_container
+    build:
+      context: .
+    environment:
+      POSTGRES_DB: "programmingGame"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - geomixdb-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+    networks:
+      - app-network
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "test@test.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadmin"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - app-network
+
+  elasticsearch:
+    image: elasticsearch:8.4.3
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=admin
+      - xpack.security.enabled=true
+    ports:
+      - "9200:9200"
+    networks:
+      - app-network
+
+  kibana:
+    image: kibana:8.4.3
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTIC_PASSWORD=admin
+    ports:
+      - "5601:5601"
+    networks:
+      - app-network
+
+  logstash:
+    image: logstash:8.4.3
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    networks:
+      - app-network
+
+  server.api:
+    image: ${DOCKER_REGISTRY-}serverapi
+    ports:
+      - "8081:81"
+    build:
+      context: .
+      dockerfile: src\Server\Server.Api\Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - app-network
+
+volumes:
+  geomixdb-data:
+  pgadmin-data:
+
+networks:
+  app-network:
+    driver: bridge
