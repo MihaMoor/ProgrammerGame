@@ -3,14 +3,11 @@ using Shared.GrpcContracts;
 
 namespace Client.Infrastructure.Clients;
 
-public class PlayerMainStatsGrpcClient : GrpcClient<PlayerMainStatsService.PlayerMainStatsServiceClient>
+public class PlayerMainStatsGrpcClient(
+    string adress,
+    PlayerMainStatsService.PlayerMainStatsServiceClient client)
+    : GrpcClient<PlayerMainStatsService.PlayerMainStatsServiceClient>(adress, client)
 {
-    public PlayerMainStatsGrpcClient(
-        string adress,
-        PlayerMainStatsService.PlayerMainStatsServiceClient client)
-        : base(adress, client)
-    { }
-
     public async Task<PlayerMainStatsDto> GetAsync(
         Action<PlayerMainStatsDto> handler,
         CancellationToken cancellationToken)
@@ -25,13 +22,13 @@ public class PlayerMainStatsGrpcClient : GrpcClient<PlayerMainStatsService.Playe
                 handler(dto);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Logging or send message to server for registration bug
         }
 
         return
-            dto ??= new()
+            dto ?? new()
             {
                 Health = 100,
                 Hunger = 100,

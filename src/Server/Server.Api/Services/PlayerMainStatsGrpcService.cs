@@ -1,10 +1,10 @@
-﻿using Shared.GrpcContracts;
-using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Shared.GrpcContracts;
 
 namespace Server.Api.Services;
 
-public class PlayerMainStatsServiceServer : PlayerMainStatsService.PlayerMainStatsServiceBase
+public class PlayerMainStatsGrpcService : PlayerMainStatsService.PlayerMainStatsServiceBase
 {
     public override async Task GetAsync(
         Empty empty,

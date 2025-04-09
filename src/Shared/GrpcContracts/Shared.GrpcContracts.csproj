@@ -15,8 +15,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="PlayerMainStats.proto" GrpcServices="None" />
-  </ItemGroup>
-
 </Project>
