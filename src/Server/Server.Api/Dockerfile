@@ -14,8 +14,6 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Server/Server.Api/Server.Api.csproj", "src/Server/Server.Api/"]
 COPY ["src/Shared/GrpcContracts/Shared.GrpcContracts.csproj", "src/Shared/GrpcContracts/"]
-COPY ["src/Server/Server.Api/Dockerfile", "."]
-
 RUN dotnet restore "./src/Server/Server.Api/Server.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Server/Server.Api"

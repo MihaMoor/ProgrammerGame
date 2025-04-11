@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>2837d0c2-08bd-4f6c-8cde-5f05d2c6810f</ProjectGuid>
+    <ProjectGuid>234e9a17-716f-494c-8ab2-5cd3940b7119</ProjectGuid>
     <DockerComposeProjectName>programming_game_$(Configuration.ToLower())</DockerComposeProjectName>
   </PropertyGroup>
   <ItemGroup>

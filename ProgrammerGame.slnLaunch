@@ -5,7 +5,7 @@
       {
         "Path": "src\\Server\\Server.Api\\Server.Api.csproj",
         "Action": "Start",
-        "DebugTarget": "Docker"
+        "DebugTarget": "Container (Dockerfile)"
       },
       {
         "Path": "src\\Client\\WpfClient\\WpfClient.csproj",

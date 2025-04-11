@@ -16,15 +16,16 @@ public class PlayerMainStatsGrpcClient(
         try
         {
             using var call = Client.GetAsync(new Empty(), cancellationToken: cancellationToken);
-            while(await call.ResponseStream.MoveNext(cancellationToken))
+            while (await call.ResponseStream.MoveNext(cancellationToken))
             {
                 dto = call.ResponseStream.Current;
                 handler(dto);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // Logging or send message to server for registration bug
+            //logger.LogCritical(ex, ex.Message);
         }
 
         return

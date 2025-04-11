@@ -1,7 +1,8 @@
+using Elastic.Channels;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Serilog.Sinks;
-using Elastic.Transport;
 using Serilog;
+using Serilog.Core;
 using Server.Api.Services;
 
 namespace Server.Api;
@@ -21,7 +22,29 @@ public class Program
             .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(elasticsearchClient.Transport)
             {
                 // Настройки Elasticsearch
+                MinimumLevel = Serilog.Events.LogEventLevel.Debug,
+                ConfigureChannel = channelOptions =>
+                {
+                    channelOptions.BufferOptions = new BufferOptions();
+                },
+                LevelSwitch = new LoggingLevelSwitch(Serilog.Events.LogEventLevel.Debug)
             })
+            //.WriteTo.Elasticsearch([new Uri("http://localhost:9200")],
+            //    options =>
+            //    {
+            //        options.DataStream = new DataStreamName() { Name = "ProgrammingGame" };
+            //        options.TextFormatting = new EcsTextFormatterConfiguration();
+            //        options.BootstrapMethod = BootstrapMethod.Failure;
+            //        options.ConfigureChannel = channelOptions =>
+            //        {
+            //            channelOptions.BufferOptions = new BufferOptions();
+            //        };
+            //        options.MinimumLevel = Serilog.Events.LogEventLevel.Debug;
+            //    },
+            //    configureTransport =>
+            //    {
+            //        configureTransport.ServerCertificateValidationCallback((_, _, _, _) => true);
+            //    })
             .CreateLogger();
         builder.Logging.ClearProviders();
         builder.Host.UseSerilog();
