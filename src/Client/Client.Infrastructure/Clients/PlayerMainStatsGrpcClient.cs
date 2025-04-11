@@ -22,7 +22,7 @@ public class PlayerMainStatsGrpcClient(
                 handler(dto);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Logging or send message to server for registration bug
             //logger.LogCritical(ex, ex.Message);
