@@ -13,6 +13,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Server/Server.Api/Server.Api.csproj", "src/Server/Server.Api/"]
+COPY ["src/Shared/GrpcContracts/Shared.GrpcContracts.csproj", "src/Shared/GrpcContracts/"]
 RUN dotnet restore "./src/Server/Server.Api/Server.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Server/Server.Api"

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
+  <PropertyGroup Label="Globals">
+    <ProjectVersion>2.1</ProjectVersion>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <DockerPublishLocally>False</DockerPublishLocally>
+    <ProjectGuid>234e9a17-716f-494c-8ab2-5cd3940b7119</ProjectGuid>
+    <DockerComposeProjectName>programming_game_$(Configuration.ToLower())</DockerComposeProjectName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="docker-compose.override.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose.yml" />
+    <None Include=".dockerignore" />
+  </ItemGroup>
+</Project>

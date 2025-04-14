@@ -1,0 +1,67 @@
+services:
+  server.api:
+    image: ${DOCKER_REGISTRY-}serverapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8081:8081"
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: src/Server/Server.Api/Dockerfile
+
+  programming-game.db:
+    container_name: programming-game.db
+    image: postgres
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+    volumes:
+      - programming-game.db-data:/var/lib/postgresql/data
+    ports:
+      - "6543:5432"
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "6060:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  elasticsearch:
+    image: elasticsearch:8.4.3
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=admin
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ports:
+      - "9200:9200"
+
+  logstash:
+    image: logstash:8.4.3
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:8.4.3
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=admin
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+volumes:
+  programming-game.db-data:
+  pgadmin-data:
