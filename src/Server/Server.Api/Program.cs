@@ -1,4 +1,5 @@
 using Elastic.Clients.Elasticsearch;
+using Prometheus;
 using Serilog;
 using Server.Api.Services;
 
@@ -44,6 +45,7 @@ public class Program
 
         app.UseAuthorization();
 
+        app.MapMetrics();
         app.MapGrpcServices();
 
         app.Run();
