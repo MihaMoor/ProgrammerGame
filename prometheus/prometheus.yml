@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus_app'
+    scheme: https
+    static_configs:
+      - targets: ['server.api:8081']  # Имя вашего сервиса в сети Docker
+    tls_config:
+      insecure_skip_verify: true  # Отключить проверку сертификата

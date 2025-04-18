@@ -3,4 +3,12 @@ https://docs.google.com/drawings/d/1E_hx5B4czRVFVhGJbrbPDlb_JFxJC8fYB86OMzZuAhg/
  ![Infographic 16_9](https://github.com/user-attachments/assets/e5b46f5b-7183-49f2-8d1d-b80e029ebe95)
 
 
- ��� ��������� ����� � Kibana ���������� ������� DataView, � ������� ������� ������� �� logstash.conf, ������ index
+ Для просмотра логов в Kibana необходимо создать DataView, в котором указать паттерн из logstash.conf, раздел index
+
+ Для просмотра метрик необходимо:
+- зайти в Grafana
+- перейти на вкладку Data Source
+- выбрать Prometheus
+- в поле Connection вбить http://prometheus:9090
+- проскролить в самый низ и нажать на кнопку Save & test
+Если что-то пошло не так - гуглить))
