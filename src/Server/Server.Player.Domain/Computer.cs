@@ -1,4 +1,4 @@
-﻿namespace Server.Domain;
+﻿namespace Server.Player.Domain;
 
 public enum Socket
 {
@@ -7,11 +7,19 @@ public enum Socket
     Core7,
 }
 
-public enum MemoryType
+public enum RamType
 {
     DDR3,
     DDR4,
     DDR5,
+}
+
+public enum MotherboardFormFactor
+{
+    ATX,
+    MicroATX,
+    MiniATX,
+    MiniITX,
 }
 
 public class CentralProcessingUnit
@@ -51,15 +59,15 @@ public class CentralProcessingUnit
     /// <summary>
     /// Совместимость с типом оперативной памяти
     /// </summary>
-    public MemoryType MemoryType { get; set; }
+    public RamType RamType { get; set; }
     /// <summary>
     /// Максимально поддерживаемый объем памяти, Gb
     /// </summary>
-    public uint MaxSupportedMemoryCapacity { get; set; }
+    public uint MaxSupportedRamCapacity { get; set; }
     /// <summary>
-    /// Количество каналов, шт
+    /// Количество каналов памяти, шт
     /// </summary>
-    public uint ChannelsCount { get; set; }
+    public uint RamChannelsCount { get; set; }
     /// <summary>
     /// Максимально поддерживаемая частота оперативной памяти, Mgh
     /// </summary>
@@ -79,10 +87,39 @@ public class CentralProcessingUnit
         => GigaHertz() * CoresCount * ThreadsCount;
 }
 
+public interface IConnectionInterface
+{
+
+}
+
+public class Port : IConnectionInterface
+{
+
+}
+
+public class Connector : IConnectionInterface
+{
+
+}
+
+public class Controller : IConnectionInterface
+{
+
+}
+
 public class Motherboard
 {
     public string Model { get; set; }
     public Socket CpuSocket { get; set; }
+    public RamType RamType { get; set; }
+    public MotherboardFormFactor FormFactor { get; set; }
+    public uint RamSlotsCount { get; set; }
+    public uint RamChannelsCount { get; set; }
+    public uint MaxSupportedRamCapacity { get; set; }
+    public uint MaxRamFrequency { get; set; }
+    public List<IConnectionInterface> Interfaces { get; private set; }
+    public NetworkCard NetworkCard { get; set; }
+    public uint PowerPinsCount { get; set; }
 }
 
 public class Case { }

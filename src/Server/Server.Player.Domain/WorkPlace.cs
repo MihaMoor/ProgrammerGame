@@ -1,4 +1,4 @@
-﻿namespace Server.Domain;
+﻿namespace Server.Player.Domain;
 
 public class WorkPlace
 {

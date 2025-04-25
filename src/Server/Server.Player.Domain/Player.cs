@@ -1,9 +1,8 @@
-﻿namespace Server.Domain;
+﻿namespace Server.Player.Domain;
 
 public class Player
 {
     public Guid Id { get; set; }
-    public Guid UserId { get; set; }
     public string Name { get; set; }
     public MainStats MainStats { get; set; }
     public WorkPlace WorkPlace { get; set; }
