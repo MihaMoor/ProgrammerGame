@@ -2,24 +2,24 @@
 
 public enum Socket
 {
-    LGA1851,
+    Lga1851,
     Core5,
     Core7,
 }
 
 public enum RamType
 {
-    DDR3,
-    DDR4,
-    DDR5,
+    Ddr3,
+    Ddr4,
+    Ddr5,
 }
 
 public enum MotherboardFormFactor
 {
-    ATX,
-    MicroATX,
-    MiniATX,
-    MiniITX,
+    Atx,
+    MicroAtx,
+    MiniAtx,
+    MiniItx,
 }
 
 public class CentralProcessingUnit
@@ -75,7 +75,7 @@ public class CentralProcessingUnit
     /// <summary>
     /// Тепловыделение, Вт
     /// </summary>
-    public uint TDP { get; set; }
+    public uint Tdp { get; set; }
 
     public long MegaHertz()
         => Frequency / 1_000_000;
@@ -87,22 +87,44 @@ public class CentralProcessingUnit
         => GigaHertz() * CoresCount * ThreadsCount;
 }
 
-public interface IConnectionInterface
+public enum InterfaceType
+{
+    UsbTypeA,
+    UsbTypeC,
+    Usb20,
+    Usb30,
+    Usb32Gen1,
+    Usb32Gen2,
+    DisplayPort,
+    Hdmi,
+    M2,
+    Rj45,
+    Nvme,
+    Sata,
+    PciExpress30x16,
+    PciExpress50x16,
+    PciExpressx1,
+    PciExpress40x4,
+}
+
+public abstract class ConnectionInterface
+{
+    public InterfaceType InterfaceType { get; set; }
+    public long Speed { get; set; }
+
+}
+
+public class Port : ConnectionInterface
 {
 
 }
 
-public class Port : IConnectionInterface
+public class Connector : ConnectionInterface
 {
 
 }
 
-public class Connector : IConnectionInterface
-{
-
-}
-
-public class Controller : IConnectionInterface
+public class Controller : ConnectionInterface
 {
 
 }
@@ -117,7 +139,7 @@ public class Motherboard
     public uint RamChannelsCount { get; set; }
     public uint MaxSupportedRamCapacity { get; set; }
     public uint MaxRamFrequency { get; set; }
-    public List<IConnectionInterface> Interfaces { get; private set; }
+    public List<ConnectionInterface> Interfaces { get; private set; }
     public NetworkCard NetworkCard { get; set; }
     public uint PowerPinsCount { get; set; }
 }

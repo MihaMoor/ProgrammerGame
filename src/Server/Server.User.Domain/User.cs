@@ -9,6 +9,9 @@ public class User
 
     public bool TryAddPlayer(Guid player)
     {
+        if (_players.Contains(player))
+            return false;
+
         _players.Add(player);
         return true;
     }
