@@ -4,7 +4,6 @@ public class MainStats
 {
     private uint _health;
     private uint _hunger;
-    private double _money;
     private uint _mood;
 
     public uint Health
@@ -33,12 +32,6 @@ public class MainStats
                 };
     }
 
-    public double Money
-    {
-        get => _money;
-        set => _money += value;
-    }
-
     public uint Mood
     {
         get => _mood;
@@ -52,11 +45,10 @@ public class MainStats
             };
     }
 
-    public MainStats(uint health, uint hunger, double money, uint mood)
+    public MainStats(uint health, uint hunger, uint mood)
     {
         Health = health;
         Hunger = hunger;
-        Money = money;
         Mood = mood;
     }
 }

@@ -7,7 +7,7 @@ public class Player
     public MainStats MainStats { get; set; }
     public WorkPlace WorkPlace { get; set; }
     public Job Job { get; set; }
-    public Education Education { get; set; }
-    public Skills Skills { get; set; }
-    public Bank Bank { get; set; }
+    public List<Education> Educations { get; set; }
+    public List<Skill> Skills { get; set; }
+    public Finance Bank { get; set; }
 }
