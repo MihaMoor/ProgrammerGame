@@ -54,6 +54,7 @@ public enum InterfaceType
     Wifi6,
     Wifi6e,
     Wifi7,
+    Aux,
 }
 
 public enum CoolingType
@@ -289,6 +290,10 @@ public class PowerSupply
     /// Производительность (КПД)
     /// </summary>
     public uint Performance { get; set; }
+    /// <summary>
+    /// Уровень шума вентилятора, dB
+    /// </summary>
+    public float FanNoiseLevel { get; set; }
 }
 
 public class HardDrive
@@ -429,6 +434,10 @@ public class GraphicsCard
     /// Количество пинов доп питания
     /// </summary>
     public uint PowerPinsCount { get; set; }
+    /// <summary>
+    /// Уровень шума вентилятора, dB
+    /// </summary>
+    public float FanNoiseLevel { get; set; }
 }
 
 public class Computer
