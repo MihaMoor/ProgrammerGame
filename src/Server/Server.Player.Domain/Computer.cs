@@ -2,9 +2,13 @@
 
 public enum Socket
 {
+    Lga1150,
+    Lga1155,
+    Lga1156,
+    Lga1200,
+    Lga1366,
+    Lga1700,
     Lga1851,
-    Core5,
-    Core7,
 }
 
 public enum RamType
@@ -20,6 +24,66 @@ public enum MotherboardFormFactor
     MicroAtx,
     MiniAtx,
     MiniItx,
+}
+
+public enum InterfaceType
+{
+    UsbTypeA,
+    UsbTypeC,
+    Usb20,
+    Usb30,
+    Usb32Gen1,
+    Usb32Gen2,
+    DisplayPort,
+    Hdmi,
+    M2,
+    Rj45,
+    Nvme,
+    Sata,
+    PciExpress_x1,
+    PciExpress20,
+    PciExpress30_x16,
+    PciExpress40_x4,
+    PciExpress50_x16,
+    Wifi1,
+    Wifi2,
+    Wifi3,
+    Wifi3e,
+    Wifi4,
+    Wifi5,
+    Wifi6,
+    Wifi6e,
+    Wifi7,
+}
+
+public enum CoolingType
+{
+    /// <summary>
+    /// Водяное
+    /// </summary>
+    Liquid,
+    /// <summary>
+    /// Воздушное
+    /// </summary>
+    Air,
+}
+
+public enum HardDriveType
+{
+    Hdd,
+    Ssd,
+}
+
+public enum GraphicsCardMemoryType
+{
+    Ddr3,
+    Ddr4,
+    Gddr3,
+    Gddr4,
+    Gddr5,
+    Gddr6,
+    Gddr6X,
+    Gddr7,
 }
 
 public class CentralProcessingUnit
@@ -76,6 +140,10 @@ public class CentralProcessingUnit
     /// Тепловыделение, Вт
     /// </summary>
     public uint Tdp { get; set; }
+    /// <summary>
+    /// Потребляемая мощность
+    /// </summary>
+    public float PowerConsumption { get; set; }
 
     public long MegaHertz()
         => Frequency / 1_000_000;
@@ -87,77 +155,280 @@ public class CentralProcessingUnit
         => GigaHertz() * CoresCount * ThreadsCount;
 }
 
-public enum InterfaceType
+public class ConnectionInterface
 {
-    UsbTypeA,
-    UsbTypeC,
-    Usb20,
-    Usb30,
-    Usb32Gen1,
-    Usb32Gen2,
-    DisplayPort,
-    Hdmi,
-    M2,
-    Rj45,
-    Nvme,
-    Sata,
-    PciExpress30x16,
-    PciExpress50x16,
-    PciExpressx1,
-    PciExpress40x4,
-}
-
-public abstract class ConnectionInterface
-{
+    /// <summary>
+    /// Тип интерфеса
+    /// </summary>
     public InterfaceType InterfaceType { get; set; }
+    /// <summary>
+    /// Пропускная способность
+    /// </summary>
     public long Speed { get; set; }
-
-}
-
-public class Port : ConnectionInterface
-{
-
-}
-
-public class Connector : ConnectionInterface
-{
-
-}
-
-public class Controller : ConnectionInterface
-{
-
+    /// <summary>
+    /// Потребляемая мощность
+    /// </summary>
+    public float PowerConsumption { get; set; }
 }
 
 public class Motherboard
 {
+    /// <summary>
+    /// Модель
+    /// </summary>
     public string Model { get; set; }
+    /// <summary>
+    /// Сокет подключения ЦПУ
+    /// </summary>
     public Socket CpuSocket { get; set; }
+    /// <summary>
+    /// Тип поддерживаемой памяти
+    /// </summary>
     public RamType RamType { get; set; }
+    /// <summary>
+    /// Форм-фактор платы
+    /// </summary>
     public MotherboardFormFactor FormFactor { get; set; }
+    /// <summary>
+    /// Количество слотов под память
+    /// </summary>
     public uint RamSlotsCount { get; set; }
+    /// <summary>
+    /// Количество каналов памяти
+    /// </summary>
     public uint RamChannelsCount { get; set; }
+    /// <summary>
+    /// Максимально поддерживаемый объем памяти
+    /// </summary>
     public uint MaxSupportedRamCapacity { get; set; }
+    /// <summary>
+    /// Максимальная частота памяти
+    /// </summary>
     public uint MaxRamFrequency { get; set; }
+    /// <summary>
+    /// Список интерфейсов подключения как внешних, так и внутренних.
+    /// </summary>
     public List<ConnectionInterface> Interfaces { get; private set; }
+    /// <summary>
+    /// Встроенная сетевая карта
+    /// </summary>
     public NetworkCard NetworkCard { get; set; }
+    /// <summary>
+    /// Количество пинов для подключения питания
+    /// </summary>
     public uint PowerPinsCount { get; set; }
+    /// <summary>
+    /// Потребляемая мощность
+    /// </summary>
+    public float PowerConsumption { get; set; }
 }
 
-public class Case { }
+public class Case
+{
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// Форм-фактор поддерживаемых материнских плат
+    /// </summary>
+    public MotherboardFormFactor FormFactor { get; set; }
+    /// <summary>
+    /// Потребляемая мощность
+    /// </summary>
+    public float PowerConsumption { get; set; }
+}
 
-public class NetworkCard { }
+public class NetworkCard
+{
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// Интерфейс подключения к материнской плате
+    /// </summary>
+    public InterfaceType ConnectionToMotherboardInterfaceType { get; set; }
+    /// <summary>
+    /// Интерфейсы подключения к интернету
+    /// </summary>
+    public List<InterfaceType> InterfaceTypes { get; private set; }
+    /// <summary>
+    /// Потребляемая мощность
+    /// </summary>
+    public float PowerConsumption { get; set; }
+}
 
-public class PowerSupply { }
+public class PowerSupply
+{
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// Мощность
+    /// </summary>
+    public long Power { get; set; }
+    /// <summary>
+    /// Форм-фактор
+    /// </summary>
+    public MotherboardFormFactor FormFactor { get; set; }
+    /// <summary>
+    /// Колиество пинов для подключения материнской платы
+    /// </summary>
+    public uint MotherboardPinsCount { get; set; }
+    /// <summary>
+    /// Количество пинов для подключения видеокарты
+    /// </summary>
+    public uint GraphicsCardPinsCount { get; set; }
+    /// <summary>
+    /// Наработка на отказ, количество часов
+    /// </summary>
+    public long Mtbf { get; set; }
+    /// <summary>
+    /// Производительность (КПД)
+    /// </summary>
+    public uint Performance { get; set; }
+}
 
-public class HardDrive { }
+public class HardDrive
+{
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// Потребляемая мощность
+    /// </summary>
+    public float PowerConsumption { get; set; }
+    /// <summary>
+    /// Тип диска
+    /// </summary>
+    public HardDriveType HardDriveType { get; set; }
+    /// <summary>
+    /// Объем, Gb
+    /// </summary>
+    public uint Capacity { get; set; }
+    /// <summary>
+    /// Тип подключения
+    /// </summary>
+    public InterfaceType ConnectionInterface { get; set; }
+    /// <summary>
+    /// Максимальная скорость чтения, Mb/s
+    /// </summary>
+    public uint MaxReadSpeed { get; set; }
+    /// <summary>
+    /// Максимальная скорость записи, Mb/s
+    /// </summary>
+    public uint MaxWriteSpeed { get; set; }
+    /// <summary>
+    /// Ресурс, Tb
+    /// </summary>
+    public uint Tbw { get; set; }
+}
 
-public class Memory { }
+public class Ram
+{
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// ОБъем, Mb
+    /// </summary>
+    public long Capacity { get; set; }
+    /// <summary>
+    /// Частота, Gh
+    /// </summary>
+    public long Frequency { get; set; }
+    /// <summary>
+    /// Тип памяти
+    /// </summary>
+    public RamType RamType { get; set; }
+    /// <summary>
+    /// Пропускная способность, Mb/s
+    /// </summary>
+    public long Throughput { get; set; }
+    /// <summary>
+    /// Потребляемая мощность
+    /// </summary>
+    public float PowerConsumption { get; set; }
+}
 
-public class Cooling { }
+public class Cooling
+{
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// Тип охлаждения
+    /// </summary>
+    public CoolingType CoolingType { get; set; }
+    /// <summary>
+    /// Уровень шума вентилятора, dB
+    /// </summary>
+    public float FanNoiseLevel { get; set; }
+    /// <summary>
+    /// Максимальное тепловыделение процессора, Wt
+    /// </summary>
+    public uint MaxCpuHeatDissipation { get; set; }
+    /// <summary>
+    /// Список совместимых сокетов
+    /// </summary>
+    public List<Socket> CompatibleSockets { get; private set; }
+    /// <summary>
+    /// Потребляемая мощность, Wt
+    /// </summary>
+    public float PowerConsumption { get; set; }
+}
 
 public class GraphicsCard
 {
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// Потребляемая мощность, Wt
+    /// </summary>
+    public float PowerConsumption { get; set; }
+    /// <summary>
+    /// Тип подключения к материнской плате
+    /// </summary>
+    public InterfaceType MotherboardInterfaceType { get; set; }
+    /// <summary>
+    /// Частота, Gh
+    /// </summary>
+    public long Frequency { get; set; }
+    /// <summary>
+    /// Максимальное разрешение монитора
+    /// </summary>
+    public (uint,uint) MaxResolution { get; set; }
+    /// <summary>
+    /// Число процессоров (ядер)
+    /// </summary>
+    public uint ProcessorsCount { get; set; }
+    /// <summary>
+    /// Объем, Gb
+    /// </summary>
+    public uint Capacity { get; set; }
+    /// <summary>
+    /// Тип памяти
+    /// </summary>
+    public GraphicsCardMemoryType GraphicsCardMemoryType { get; set; }
+    /// <summary>
+    /// Разрядность шины видеопамяти, bit
+    /// </summary>
+    public uint BusWidth { get; set; }
+    /// <summary>
+    /// Интерфейсы подключения мониторов
+    /// </summary>
+    public List<InterfaceType> InterfaceTypes { get; private set; }
+    /// <summary>
+    /// Количество пинов доп питания
+    /// </summary>
+    public uint PowerPinsCount { get; set; }
 }
 
 public class Computer
@@ -168,7 +439,7 @@ public class Computer
     public PowerSupply? PowerSupply { get; set; }
     public HardDrive? HardDrive { get; set; }
     public CentralProcessingUnit? Cpu { get; set; }
-    public Memory? Ram { get; set; }
+    public Ram? Ram { get; set; }
     public Cooling? Cooling { get; set; }
     public List<GraphicsCard>? GraphicsCards { get; private set; }
     public bool CanReplaceGraphicsCard { get; private set; }
