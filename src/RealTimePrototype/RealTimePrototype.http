@@ -1,0 +1,34 @@
+@RealTimePrototype_HostAddress = https://localhost:7058
+
+@id=0
+
+GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}
+Accept: application/json
+
+###
+
+GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/satiety
+
+###
+
+POST {{RealTimePrototype_HostAddress}}/api/players
+Content-Type: application/json
+
+{
+  "id":{{id}},
+  "Satiety":100
+}
+
+###
+
+GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/activate
+
+###
+
+GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/deactivate
+
+###
+
+GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/test/hangry
+
+###
