@@ -465,4 +465,6 @@ public class Computer
         Ram != null &&
         Cooling != null &&
         GraphicsCards != null;
+
+    public event Action<bool> ComputerReadyEvent;
 }
