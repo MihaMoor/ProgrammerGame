@@ -10,10 +10,19 @@ internal class Player : INotifyPropertyChanged
     private double _money;
     private uint _mood;
     private double _pocketMoney;
+    private string _name;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public string Name { get; set; }
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged();
+        }
+    }
 
     public double PocketMoney
     {
