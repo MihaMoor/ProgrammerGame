@@ -19,8 +19,12 @@ jobs:
         with:
           dotnet-version: '9.x'
 
-      - name: Build Server.Domain
-        working-directory: src/Server/Server.Domain
+      - name: Build Server.Player.Domain
+        working-directory: src/Server/Server.Player.Domain
+        run: dotnet build --configuration Release
+
+      - name: Build Server.User.Domain
+        working-directory: src/Server/Server.User.Domain
         run: dotnet build --configuration Release
 
       - name: Build Server.Api
