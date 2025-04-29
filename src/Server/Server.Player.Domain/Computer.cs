@@ -36,15 +36,15 @@ public enum InterfaceType
     Usb32Gen2,
     DisplayPort,
     Hdmi,
+    Vga,
     M2,
-    Rj45,
-    Nvme,
     Sata,
     PciExpress_x1,
     PciExpress20,
     PciExpress30_x16,
     PciExpress40_x4,
     PciExpress50_x16,
+    Rj45,
     Wifi1,
     Wifi2,
     Wifi3,
@@ -442,16 +442,49 @@ public class GraphicsCard
 
 public class Computer
 {
-    public string Name { get; set; }
+    /// <summary>
+    /// Модель
+    /// </summary>
+    public string Model { get; set; }
+    /// <summary>
+    /// Корпус
+    /// </summary>
     public Case? Case { get; set; }
+    /// <summary>
+    /// Материнка
+    /// </summary>
     public Motherboard? Motherboard { get; set; }
+    /// <summary>
+    /// Сетевая карта
+    /// </summary>
     public NetworkCard? NetworkCard { get; set; }
+    /// <summary>
+    /// Блок питания
+    /// </summary>
     public PowerSupply? PowerSupply { get; set; }
-    public HardDrive? HardDrive { get; set; }
+    /// <summary>
+    /// Жесткие диски
+    /// </summary>
+    public List<HardDrive>? HardDrive { get; set; }
+    /// <summary>
+    /// ЦПУ
+    /// </summary>
     public CentralProcessingUnit? Cpu { get; set; }
+    /// <summary>
+    /// Память
+    /// </summary>
     public Ram? Ram { get; set; }
+    /// <summary>
+    /// Система охлаждения
+    /// </summary>
     public Cooling? Cooling { get; set; }
+    /// <summary>
+    /// Видюхи
+    /// </summary>
     public List<GraphicsCard>? GraphicsCards { get; private set; }
+    /// <summary>
+    /// Возможность заменить видеокарту
+    /// </summary>
     public bool CanReplaceGraphicsCard { get; private set; }
     public bool IsReady =>
         // Вообще, тут сложная логика проверки совместимости интерфейсов
