@@ -1,17 +1,17 @@
-﻿namespace Server.Player.Domain;
+﻿namespace Server.WorkPlace.Domain;
 
-public class Mouse
+public class Headphone
 {
     /// <summary>
     /// Модель
     /// </summary>
     public string Model { get; set; }
     /// <summary>
-    /// DPI
+    /// Максимальная мощность, dB
     /// </summary>
-    public uint Dpi { get; set; }
+    public float MaxPower { get; set; }
     /// <summary>
-    /// Интерфейс подключения
+    /// Тип подключения
     /// </summary>
     public InterfaceType InterfaceType { get; set; }
 }

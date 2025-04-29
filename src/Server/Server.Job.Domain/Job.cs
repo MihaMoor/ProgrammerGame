@@ -1,4 +1,4 @@
-﻿namespace Server.Player.Domain;
+﻿namespace Server.Job.Domain;
 
 public class Job
 {

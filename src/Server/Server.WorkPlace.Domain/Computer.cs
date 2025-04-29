@@ -1,4 +1,4 @@
-﻿namespace Server.Player.Domain;
+﻿namespace Server.WorkPlace.Domain;
 
 public enum Socket
 {

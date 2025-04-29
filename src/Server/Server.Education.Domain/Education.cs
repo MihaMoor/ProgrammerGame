@@ -1,4 +1,4 @@
-﻿namespace Server.Player.Domain;
+﻿namespace Server.Education.Domain;
 
 public class Education
 {
