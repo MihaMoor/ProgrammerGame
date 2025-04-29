@@ -10,6 +10,7 @@ public class Player
     /// Имя
     /// </summary>
     public string Name { get; set; }
+
     /// <summary>
     /// Здоровье
     /// </summary>
@@ -17,14 +18,14 @@ public class Player
     {
         get => _health;
         set =>
-            _health =
-                value switch
-                {
-                    > 100 => 100,
-                    <= 0 => 0,
-                    _ => value
-                };
+            _health = value switch
+            {
+                > 100 => 100,
+                <= 0 => 0,
+                _ => value,
+            };
     }
+
     /// <summary>
     /// Голод
     /// </summary>
@@ -32,14 +33,14 @@ public class Player
     {
         get => _hunger;
         set =>
-            _hunger =
-                value switch
-                {
-                    > 100 => 100,
-                    <= 0 => 0,
-                    _ => value
-                };
+            _hunger = value switch
+            {
+                > 100 => 100,
+                <= 0 => 0,
+                _ => value,
+            };
     }
+
     /// <summary>
     /// Настроение
     /// </summary>
@@ -47,14 +48,14 @@ public class Player
     {
         get => _mood;
         set =>
-            _mood =
-            value switch
+            _mood = value switch
             {
                 > 100 => 100,
                 <= 0 => 0,
-                _ => value
+                _ => value,
             };
     }
+
     /// <summary>
     /// Карманные деньги
     /// </summary>

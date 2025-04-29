@@ -8,6 +8,7 @@ public class User
     /// Id
     /// </summary>
     public Guid Id { get; init; }
+
     /// <summary>
     /// Список персонажей пользователя
     /// </summary>

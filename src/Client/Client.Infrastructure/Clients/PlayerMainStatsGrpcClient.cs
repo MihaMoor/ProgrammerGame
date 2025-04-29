@@ -3,16 +3,15 @@ using Shared.GrpcContracts;
 
 namespace Client.Infrastructure.Clients;
 
-public class PlayerMainStatsGrpcClient(
-    string adress,
-    PlayerMainStatsService.PlayerMainStatsServiceClient client)
-    : GrpcClient<PlayerMainStatsService.PlayerMainStatsServiceClient>(adress, client)
+public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient client)
+    : GrpcClient<PlayerService.PlayerServiceClient>(adress, client)
 {
-    public async Task<PlayerMainStatsDto> GetAsync(
-        Action<PlayerMainStatsDto> handler,
-        CancellationToken cancellationToken)
+    public async Task<PlayerDto> GetAsync(
+        Action<PlayerDto> handler,
+        CancellationToken cancellationToken
+    )
     {
-        PlayerMainStatsDto? dto = null;
+        PlayerDto? dto = null;
         try
         {
             using var call = Client.GetAsync(new Empty(), cancellationToken: cancellationToken);
@@ -28,13 +27,15 @@ public class PlayerMainStatsGrpcClient(
             //logger.LogCritical(ex, ex.Message);
         }
 
-        return
-            dto ?? new()
+        return dto
+            ?? new()
             {
+                Name = "Unknown",
                 Health = 100,
                 Hunger = 100,
                 Money = 99.99,
-                Mood = 100
+                Mood = 100,
+                PocketMoney = 0.01,
             };
     }
 }

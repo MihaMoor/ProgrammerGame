@@ -6,10 +6,12 @@ public class Headphone
     /// Модель
     /// </summary>
     public string Model { get; set; }
+
     /// <summary>
     /// Максимальная мощность, dB
     /// </summary>
     public float MaxPower { get; set; }
+
     /// <summary>
     /// Тип подключения
     /// </summary>

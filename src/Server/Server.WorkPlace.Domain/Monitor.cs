@@ -6,10 +6,12 @@ public class Monitor
     /// Модель
     /// </summary>
     public string Model { get; set; }
+
     /// <summary>
     /// Максимальное разрешение
     /// </summary>
-    public (uint,uint) MaxResolution { get; set; }
+    public (uint, uint) MaxResolution { get; set; }
+
     /// <summary>
     /// Интерфейс подключения
     /// </summary>

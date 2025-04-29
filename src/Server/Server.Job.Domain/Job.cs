@@ -6,10 +6,12 @@ public class Job
     /// Id
     /// </summary>
     public Guid Id { get; set; }
+
     /// <summary>
     /// Зарплата в месяц
     /// </summary>
     public double MonthlySalary { get; set; }
+
     /// <summary>
     /// Стаж работы
     /// </summary>

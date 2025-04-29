@@ -9,13 +9,15 @@ namespace CitilinkParser
         public static void Main(string[] args)
         {
             var options = new ChromeOptions();
-            options.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+            options.AddArgument(
+                "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            );
             // options.AddArgument("--headless"); // Если вы не хотите открывать окно браузера
             using var driver = new ChromeDriver(options);
 
             var urlsToParse = new List<string>
             {
-                "https://www.citilink.ru/catalog/materinskie-platy/"
+                "https://www.citilink.ru/catalog/materinskie-platy/",
                 // Можно добавить другие категории или непосредственно ссылки на товары
             };
 
@@ -47,11 +49,15 @@ namespace CitilinkParser
             doc.LoadHtml(driver.PageSource);
 
             //var productNodes = doc.DocumentNode.SelectNodes("//a[contains(@class, 'product')]");
-            var productNodes = doc.DocumentNode.SelectNodes("//*[@id=\"__next\"]/div[1]/main/section/div[2]/div/div[3]/section/div[2]/div[2]/div[1]/div/div[2]/div[4]/div[1]/a");
+            var productNodes = doc.DocumentNode.SelectNodes(
+                "//*[@id=\"__next\"]/div[1]/main/section/div[2]/div/div[3]/section/div[2]/div[2]/div[1]/div/div[2]/div[4]/div[1]/a"
+            );
 
             if (productNodes != null)
             {
-                links.AddRange(productNodes.Select(node => node.GetAttributeValue("href", string.Empty)));
+                links.AddRange(
+                    productNodes.Select(node => node.GetAttributeValue("href", string.Empty))
+                );
             }
 
             return links;
@@ -68,9 +74,15 @@ namespace CitilinkParser
             var productDetails = new Dictionary<string, object>
             {
                 ["Наименование"] = doc.DocumentNode.SelectSingleNode("//h1")?.InnerText.Trim(),
-                ["Цена"] = doc.DocumentNode.SelectSingleNode("//*[@id=\"__next\"]/div[1]/main/div/div[2]/div/div[4]/div/div[3]/div/div[2]/div/div[2]/span/span/span[1]")?.InnerText.Trim(),
-                ["Описание"] = doc.DocumentNode.SelectSingleNode("//div[contains(@class, 'ProductDescription')]")?.InnerText.Trim(),
-                ["Ссылка"] = productLink
+                ["Цена"] = doc
+                    .DocumentNode.SelectSingleNode(
+                        "//*[@id=\"__next\"]/div[1]/main/div/div[2]/div/div[4]/div/div[3]/div/div[2]/div/div[2]/span/span/span[1]"
+                    )
+                    ?.InnerText.Trim(),
+                ["Описание"] = doc
+                    .DocumentNode.SelectSingleNode("//div[contains(@class, 'ProductDescription')]")
+                    ?.InnerText.Trim(),
+                ["Ссылка"] = productLink,
             };
 
             return productDetails;
@@ -86,7 +98,9 @@ namespace CitilinkParser
                 // Запись данных
                 foreach (var product in data)
                 {
-                    writer.WriteLine(string.Join(",", product.Values.Select(v => v.ToString().Replace(",", ";"))));
+                    writer.WriteLine(
+                        string.Join(",", product.Values.Select(v => v.ToString().Replace(",", ";")))
+                    );
                 }
             }
         }

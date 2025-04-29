@@ -3,7 +3,7 @@
 public enum KeyboardType
 {
     Membran,
-    Mechanics
+    Mechanics,
 }
 
 public class Keyboard
@@ -12,14 +12,17 @@ public class Keyboard
     /// Модель
     /// </summary>
     public string Model { get; set; }
+
     /// <summary>
     /// Количество клавиш
     /// </summary>
     public uint KeysCount { get; set; }
+
     /// <summary>
     /// Тип клавиатуры
     /// </summary>
     public KeyboardType KeyboardType { get; set; }
+
     /// <summary>
     /// Интерфейс подключения
     /// </summary>

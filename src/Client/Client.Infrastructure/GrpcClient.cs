@@ -14,10 +14,10 @@ public class GrpcClient<TClient> : IDisposable
     {
         Client = client;
         _handler = new();
-        _channel = GrpcChannel.ForAddress(adress, new GrpcChannelOptions
-        {
-            HttpHandler = _handler
-        });
+        _channel = GrpcChannel.ForAddress(
+            adress,
+            new GrpcChannelOptions { HttpHandler = _handler }
+        );
     }
 
     protected virtual void Dispose(bool disposing)

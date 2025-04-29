@@ -6,10 +6,12 @@ public class Mouse
     /// Модель
     /// </summary>
     public string Model { get; set; }
+
     /// <summary>
     /// DPI
     /// </summary>
     public uint Dpi { get; set; }
+
     /// <summary>
     /// Интерфейс подключения
     /// </summary>

@@ -11,8 +11,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Создание клиента Elasticsearch
-        var elasticsearchOptions = new ElasticsearchClientSettings(new Uri("http://localhost:9200"));
+        // РЎРѕР·РґР°РЅРёРµ РєР»РёРµРЅС‚Р° Elasticsearch
+        var elasticsearchOptions = new ElasticsearchClientSettings(
+            new Uri("http://localhost:9200")
+        );
         var elasticsearchClient = new ElasticsearchClient(elasticsearchOptions);
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()

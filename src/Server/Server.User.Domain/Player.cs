@@ -6,14 +6,17 @@ public class Player
     /// Id
     /// </summary>
     public Guid Id { get; set; }
+
     /// <summary>
     /// Имя
     /// </summary>
     public string Name { get; set; }
+
     /// <summary>
     /// Количество рабочих мест
     /// </summary>
     public uint WorkPlaceCount { get; set; }
+
     /// <summary>
     /// Наличие работоспособного компьютера
     /// </summary>
