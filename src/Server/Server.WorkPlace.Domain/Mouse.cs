@@ -1,17 +1,17 @@
-﻿namespace Server.Player.Domain;
+﻿namespace Server.WorkPlace.Domain;
 
-public class Monitor
+public class Mouse
 {
     /// <summary>
     /// Модель
     /// </summary>
     public string Model { get; set; }
     /// <summary>
-    /// Максимальное разрешение
+    /// DPI
     /// </summary>
-    public (uint,uint) MaxResolution { get; set; }
+    public uint Dpi { get; set; }
     /// <summary>
     /// Интерфейс подключения
     /// </summary>
-    public List<InterfaceType> InterfaceTypes { get; set; }
+    public InterfaceType InterfaceType { get; set; }
 }

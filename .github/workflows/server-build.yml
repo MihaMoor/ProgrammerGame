@@ -27,6 +27,22 @@ jobs:
         working-directory: src/Server/Server.User.Domain
         run: dotnet build --configuration Release
 
+      - name: Build Server.Bank.Domain
+        working-directory: src/Server/Server.Bank.Domain
+        run: dotnet build --configuration Release
+
+      - name: Build Server.Education.Domain
+        working-directory: src/Server/Server.Education.Domain
+        run: dotnet build --configuration Release
+
+      - name: Build Server.Job.Domain
+        working-directory: src/Server/Server.User.Domain
+        run: dotnet build --configuration Release
+
+      - name: Build Server.WorkPlace.Domain
+        working-directory: src/Server/Server.WorkPlace.Domain
+        run: dotnet build --configuration Release
+
       - name: Build Server.Api
         working-directory: src/Server/Server.Api
         run: dotnet build --configuration Release
