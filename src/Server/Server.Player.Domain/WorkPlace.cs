@@ -5,10 +5,6 @@ public class WorkPlace
     /// <summary>
     /// ПК
     /// </summary>
-    public List<Computer> Computers { get; set; }
-    /// <summary>
-    /// Аквтивный (рабочий) ПК
-    /// </summary>
     public Computer ActiveComputer { get; set; }
     /// <summary>
     /// Мониторы
