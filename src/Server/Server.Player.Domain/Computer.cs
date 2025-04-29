@@ -442,7 +442,6 @@ public class GraphicsCard
 
 public class Computer
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public Case? Case { get; set; }
     public Motherboard? Motherboard { get; set; }

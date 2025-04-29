@@ -2,7 +2,6 @@
 
 public class Player
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public MainStats MainStats { get; set; }
     public WorkPlace WorkPlace { get; set; }
