@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfClient.Widgets;
+namespace WpfClient.Widgets.MenuBar;
 
 /// <summary>
 /// Interaction logic for MenuBar.xaml
@@ -13,9 +13,9 @@ public partial class MenuBar : Page
         InitializeComponent();
     }
 
-    private void ApplicationQuit(object sender, RoutedEventArgs e)
-            => Application.Current.Shutdown();
+    private void ApplicationQuit(object sender, RoutedEventArgs e) =>
+        Application.Current.Shutdown();
 
-    private void About(object sender, RoutedEventArgs e)
-        => MessageBox.Show("Здрасте...", "О нас", MessageBoxButton.OK, MessageBoxImage.Information);
+    private void About(object sender, RoutedEventArgs e) =>
+        MessageBox.Show("Здрасте...", "О нас", MessageBoxButton.OK, MessageBoxImage.Information);
 }

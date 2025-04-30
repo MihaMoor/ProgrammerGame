@@ -1,16 +1,38 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WpfClient.Widgets.MainStats;
+namespace WpfClient.Widgets.PlayerWidget;
 
-internal class PlayerMainStats : INotifyPropertyChanged
+internal class Player : INotifyPropertyChanged
 {
     private uint _health;
     private uint _hunger;
     private double _money;
     private uint _mood;
+    private double _pocketMoney;
+    private string _name;
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public double PocketMoney
+    {
+        get => _pocketMoney;
+        set
+        {
+            _pocketMoney = value;
+            OnPropertyChanged();
+        }
+    }
 
     public uint Health
     {
@@ -41,7 +63,8 @@ internal class PlayerMainStats : INotifyPropertyChanged
     }
     public uint Mood
     {
-        get => _mood; set
+        get => _mood;
+        set
         {
             _mood = value;
             OnPropertyChanged();
