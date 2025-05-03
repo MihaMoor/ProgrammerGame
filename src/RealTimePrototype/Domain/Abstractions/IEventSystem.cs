@@ -1,6 +1,6 @@
 ﻿namespace RealTimePrototype.Domain.Abstractions;
 
-public interface IEventService
+public interface IEventSystem
 {
     public void React();
 }

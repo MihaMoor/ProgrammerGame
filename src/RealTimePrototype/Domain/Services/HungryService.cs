@@ -22,7 +22,9 @@ public class HungryService(IPlayerRepository playerRepository, float unitPerTick
             if (player == null)
                 continue;
 
-            player.Satiety -= unitPerTick;
+            player.Satiety -= (player.Mood >= 50)
+                ? unitPerTick
+                : unitPerTick * 2;
 
             playerRepository.Update(player);
         }

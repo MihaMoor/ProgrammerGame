@@ -7,16 +7,17 @@ Accept: application/json
 
 ###
 
-GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/satiety
+# GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/satiety
 
-###
+# ###
 
 POST {{RealTimePrototype_HostAddress}}/api/players
 Content-Type: application/json
 
 {
   "id":{{id}},
-  "Satiety":100
+  "Satiety":100,
+  "Mood":49
 }
 
 ###
@@ -29,6 +30,17 @@ GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/deactivate
 
 ###
 
-GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/test/hangry
+# GET {{RealTimePrototype_HostAddress}}/api/players/{{id}}/test/hangry
+
+# ###
+
+PUT {{RealTimePrototype_HostAddress}}/api/players/{{id}}
+Content-Type: application/json
+
+{
+  "id":{{id}},
+  "Satiety":100,
+  "Mood":100
+}
 
 ###

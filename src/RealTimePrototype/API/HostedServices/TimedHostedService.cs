@@ -1,19 +1,14 @@
-﻿using RealTimePrototype.Domain.EventServices;
+﻿using RealTimePrototype.Domain.Services;
 
 namespace RealTimePrototype.API.HostedServices;
 
-public class TimedHostedService(
-    ILogger<TimedHostedService> logger,
-    EventManagerService eventManagerService)
+public class TimedHostedService(HungryService hungryService)
     : IHostedService, IDisposable
 {
-    private int executionCount = 0;
     private Timer? _timer = null;
 
     public Task StartAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Timed Hosted Service running.");
-
         _timer = new Timer(
             DoWork,
             null,
@@ -24,17 +19,10 @@ public class TimedHostedService(
     }
 
     private void DoWork(object? state)
-    {
-        var count = Interlocked.Increment(ref executionCount);
-
-        logger.LogInformation(
-            "Timed Hosted Service is working. Count: {Count}", count);
-    }
+        => hungryService.Hungry();
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Timed Hosted Service is stopping.");
-
         _timer?.Change(Timeout.Infinite, 0);
 
         return Task.CompletedTask;
