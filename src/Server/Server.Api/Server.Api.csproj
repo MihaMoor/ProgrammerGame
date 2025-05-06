@@ -11,16 +11,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.30.2" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
     <PackageReference Include="Grpc.Tools" Version="2.71.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
-    <PackageReference
-      Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"
-      Version="1.21.2"
-    />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
     <PackageReference Include="Serilog" Version="4.2.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
@@ -29,9 +25,6 @@
     <PackageReference Include="Elastic.Clients.Elasticsearch" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\GrpcContracts\Shared.GrpcContracts.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Protobuf Include="..\..\Shared\GrpcContracts\Player.proto" GrpcServices="Server" />
+    <ProjectReference Include="..\..\Shared\Shared.MapEndpoints\Shared.EndpointMapper.csproj" />
   </ItemGroup>
 </Project>

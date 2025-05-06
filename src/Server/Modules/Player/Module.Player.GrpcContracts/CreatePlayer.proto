@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Module.Player.GrpcContracts";
+
+import "google/protobuf/empty.proto";
+import "Player.proto";
+
+service CreatePlayerService {
+    rpc CreateAsync(CreatePlayerCommand) returns (PlayerDto);
+}
+
+message CreatePlayerCommand {
+    string Name = 1;
+}
+

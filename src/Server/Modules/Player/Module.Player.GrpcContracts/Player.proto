@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Module.Player.GrpcContracts";
+
+import "google/protobuf/empty.proto";
+
+service PlayerService {
+    rpc GetAsync(Guid) returns (stream PlayerDto);
+    rpc GetByIdAsync(Guid) returns (PlayerDto);
+}
+
+message Guid{
+    string Id = 1;
+}
+
+message PlayerDto {
+    string Name = 1;
+    uint32 Health = 2;
+    uint32 Hunger = 3;
+    double Money = 4;
+    uint32 Mood = 5;
+    double PocketMoney = 6;
+}
