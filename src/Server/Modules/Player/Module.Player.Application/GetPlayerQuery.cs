@@ -1,13 +1,15 @@
 ﻿namespace Module.Player.Application;
 
-public class GetPlayerQuery(IPlayerRepository playerRepository) : IQuery<Player>
+public sealed record GetPlayerQuery(Guid PlayerId) : IQuery<Player>;
+
+public sealed class GetPlayerQueryHandler(IPlayerRepository playerRepository) : IQueryHandler<GetPlayerQuery, Player>
 {
-    public async Task<Result> Handle(Guid playerId, CancellationToken token)
+    public async Task<Result<Player>> Handle(GetPlayerQuery playerQuery, CancellationToken token)
     {
-        Player? player = await playerRepository.GetAsync(playerId, token);
+        Player? player = await playerRepository.GetAsync(playerQuery.PlayerId, token);
         if(player is null)
         {
-            return Result.Failure(PlayerError.NotFound(playerId));
+            return Result.Failure<Player>(PlayerError.NotFound(playerQuery.PlayerId));
         }
         return Result.Success(player);
     }
@@ -34,26 +36,12 @@ public interface IPlayerRepository
     Task<Player?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 }
 
-public interface ICommand : IBaseCommand
+public interface ICommand
 {
 }
 
-public interface ICommand<TResponse> : IBaseCommand
+public interface ICommand<TResponse>
 {
-}
-
-public interface IBaseCommand
-{
-}
-
-public interface IQuery<TResponse>
-{
-}
-
-public interface IQueryHandler<in TQuery, TResponse>
-    where TQuery : IQuery<TResponse>
-{
-    Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken);
 }
 
 public interface ICommandHandler<in TCommand>
@@ -67,6 +55,25 @@ public interface ICommandHandler<in TCommand, TResponse>
 {
     Task<Result<TResponse>> Handle(TCommand command, CancellationToken cancellationToken);
 }
+
+
+
+
+
+
+public interface IQuery<TResponse>
+{
+}
+
+public interface IQueryHandler<TQuery, TResponse>
+    where TQuery : IQuery<TResponse>
+{
+    Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken);
+}
+
+
+
+
 
 public class Result
 {
