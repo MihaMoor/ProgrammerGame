@@ -15,6 +15,22 @@ public class GetPlayerQueryHandler(IPlayerRepository playerRepository) : IQueryH
     }
 }
 
+// что-то тут не то
+//public record GetPlayerQuery2(): IQuery<string>;
+
+public class GetPlayerQuery2Handler(IPlayerRepository playerRepository) : ITypedQueryHandler<Guid, Player>
+{
+    public async Task<Result<Player>> Handle(Guid id, CancellationToken cancellationToken)
+    {
+        Player? player = await playerRepository.GetAsync(id, cancellationToken);
+        if (player is null)
+        {
+            return Result.Failure<Player>(PlayerError.NotFound(id));
+        }
+        return Result.Success(player);
+    }
+}
+
 public class Player
 {
 }
@@ -48,10 +64,20 @@ public interface IQuery
 {
 }
 
+// не получится использовать
+//public interface IQuery<TType>
+//{
+//}
+
 public interface IQueryHandler<in TQuery, TResponse>
     where TQuery : IQuery
 {
     Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken);
+}
+
+public interface ITypedQueryHandler<TQueryType, TResponse>
+{
+    Task<Result<TResponse>> Handle(TQueryType query, CancellationToken cancellationToken);
 }
 
 public interface ICommandHandler<in TCommand>
