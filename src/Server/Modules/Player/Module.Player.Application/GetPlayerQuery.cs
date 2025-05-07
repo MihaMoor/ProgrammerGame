@@ -1,13 +1,15 @@
 ﻿namespace Module.Player.Application;
 
-public class GetPlayerQuery(IPlayerRepository playerRepository) : IQuery<Player>
+public record GetPlayerQuery(Guid Id) : IQuery;
+
+public class GetPlayerQueryHandler(IPlayerRepository playerRepository) : IQueryHandler<GetPlayerQuery, Player>
 {
-    public async Task<Result> Handle(Guid playerId, CancellationToken token)
+    public async Task<Result<Player>> Handle(GetPlayerQuery query, CancellationToken cancellationToken)
     {
-        Player? player = await playerRepository.GetAsync(playerId, token);
-        if(player is null)
+        Player? player = await playerRepository.GetAsync(query.Id, cancellationToken);
+        if (player is null)
         {
-            return Result.Failure(PlayerError.NotFound(playerId));
+            return Result.Failure<Player>(PlayerError.NotFound(query.Id));
         }
         return Result.Success(player);
     }
@@ -34,24 +36,20 @@ public interface IPlayerRepository
     Task<Player?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 }
 
-public interface ICommand : IBaseCommand
+public interface ICommand
 {
 }
 
-public interface ICommand<TResponse> : IBaseCommand
+public interface ICommand<TResponse>
 {
 }
 
-public interface IBaseCommand
-{
-}
-
-public interface IQuery<TResponse>
+public interface IQuery
 {
 }
 
 public interface IQueryHandler<in TQuery, TResponse>
-    where TQuery : IQuery<TResponse>
+    where TQuery : IQuery
 {
     Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken);
 }
