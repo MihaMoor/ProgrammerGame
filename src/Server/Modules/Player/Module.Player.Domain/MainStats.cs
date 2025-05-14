@@ -1,4 +1,4 @@
-﻿using Server.Shared.Results;
+using Server.Shared.Results;
 
 namespace Server.Module.Player.Domain;
 
@@ -36,6 +36,13 @@ public sealed class MainStats
     /// </summary>
     public double PocketMoney { get; private set; }
 
+    /// <summary>
+    /// Creates a new <see cref="MainStats"/> instance for a player with the specified name and default stat values.
+    /// </summary>
+    /// <param name="name">The player's name. Must not be null, empty, or whitespace.</param>
+    /// <returns>
+    /// A successful <see cref="Result{MainStats}"/> containing the new instance if the name is valid; otherwise, a failure result.
+    /// </returns>
     public static Result<MainStats> CreatePlayer(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -58,7 +65,10 @@ public sealed class MainStats
 
     /// <summary>
     /// Изменяет значение здоровья с ограничением от 0 до 100
+    /// <summary>
+    /// Adjusts the player's health by the specified delta, clamping the result between 0 and 100. Triggers the StatsChanged event if the value changes.
     /// </summary>
+    /// <param name="delta">The amount to change the health by, which may be positive or negative.</param>
     public void ChangeHealth(int delta)
     {
         uint prevValue = Health;
@@ -71,7 +81,10 @@ public sealed class MainStats
 
     /// <summary>
     /// Изменяет значение голода с ограничением от 0 до 100
+    /// <summary>
+    /// Adjusts the player's hunger level by the specified delta, clamping the result between 0 and 100. Triggers the StatsChanged event if the value changes.
     /// </summary>
+    /// <param name="delta">The amount to change the hunger level by (can be positive or negative).</param>
     public void ChangeHunger(int delta)
     {
         uint prevValue = Hunger;
@@ -84,7 +97,11 @@ public sealed class MainStats
 
     /// <summary>
     /// Изменяет значение настроения с ограничением от 0 до 100
+    /// <summary>
+    /// Adjusts the player's mood by the specified delta, clamping the result between 0 and 100.
+    /// Triggers the StatsChanged event if the mood value changes.
     /// </summary>
+    /// <param name="delta">The amount to change the mood by (can be positive or negative).</param>
     public void ChangeMood(int delta)
     {
         uint prevValue = Mood;
@@ -97,7 +114,10 @@ public sealed class MainStats
 
     /// <summary>
     /// Изменяет количество карманных денег
+    /// <summary>
+    /// Adjusts the player's pocket money by the specified amount, ensuring it does not fall below zero. Triggers the StatsChanged event if the value changes.
     /// </summary>
+    /// <param name="delta">The amount to add to the current pocket money. Can be negative.</param>
     public void ChangePocketMoney(double delta)
     {
         double prevValue = PocketMoney;

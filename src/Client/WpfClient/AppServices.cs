@@ -1,4 +1,4 @@
-﻿using Client.Infrastructure;
+using Client.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using WpfClient.Pages;
 using WpfClient.Widgets;
@@ -35,6 +35,11 @@ public static class AppServices
         return serviceCollection;
     }
 
+    /// <summary>
+    /// Registers UI widget services with the dependency injection container.
+    /// </summary>
+    /// <param name="serviceCollection">The service collection to configure.</param>
+    /// <returns>The updated service collection with widget registrations.</returns>
     private static ServiceCollection ConfigureWidgets(this ServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<MenuBar>();

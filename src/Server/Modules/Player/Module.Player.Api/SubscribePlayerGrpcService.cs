@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
@@ -12,6 +12,17 @@ internal sealed class SubscribePlayerGrpcService(
     IQueryHandler<SubscribeMainStats, IAsyncEnumerable<MainStats>> _subscribeHandler
 ) : PlayerService.PlayerServiceBase
 {
+    /// <summary>
+    /// Streams real-time updates of a player's main statistics to the client in response to a subscription request.
+    /// </summary>
+    /// <param name="request">The subscription request containing the player's UUID.</param>
+    /// <param name="responseStream">The server stream writer used to send <see cref="PlayerDto"/> updates to the client.</param>
+    /// <param name="context">The gRPC call context, supporting cancellation and status propagation.</param>
+    /// <remarks>
+    /// Validates the player ID, initiates a subscription to the player's main statistics, and streams updates as they become available.
+    /// Throws a gRPC <see cref="RpcException"/> with <see cref="StatusCode.InvalidArgument"/> if the player ID is invalid,
+    /// or with <see cref="StatusCode.Internal"/> if the subscription fails.
+    /// </remarks>
     public override async Task Subscribe(
         UUID request,
         IServerStreamWriter<PlayerDto> responseStream,

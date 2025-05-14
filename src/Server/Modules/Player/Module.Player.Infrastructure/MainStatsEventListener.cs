@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Domain;
 
@@ -8,7 +8,10 @@ public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger L
 {
     private readonly ConcurrentDictionary<Guid, MainStats> _trackedEntities = new();
 
-    // Этот метод вызывается, когда MainStats загружается из репозитория
+    /// <summary>
+    /// Begins tracking the specified <see cref="MainStats"/> entity and subscribes to its stats change events.
+    /// </summary>
+    /// <param name="entity">The <see cref="MainStats"/> entity to track.</param>
     public void TrackEntity(MainStats entity)
     {
         if (_trackedEntities.TryAdd(entity.MainStatsId, entity))
@@ -18,7 +21,10 @@ public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger L
         }
     }
 
-    // Прекращаем отслеживание сущности
+    /// <summary>
+    /// Stops tracking the specified MainStats entity and unsubscribes from its StatsChanged event.
+    /// </summary>
+    /// <param name="entity">The MainStats entity to untrack.</param>
     public void UntrackEntity(MainStats entity)
     {
         if (_trackedEntities.TryRemove(entity.MainStatsId, out _))
@@ -27,6 +33,9 @@ public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger L
         }
     }
 
+    /// <summary>
+    /// Handles a stats change event for a tracked MainStats entity by asynchronously notifying subscribers.
+    /// </summary>
     private void OnEntityChanged(MainStats entity)
     {
         // Асинхронно уведомляем всех подписчиков

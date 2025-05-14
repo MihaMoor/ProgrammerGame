@@ -1,4 +1,4 @@
-﻿using Grpc.Net.Client;
+using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Infrastructure;
@@ -17,6 +17,11 @@ public static class GrpsServices
         return serviceCollection;
     }
 
+    /// <summary>
+    /// Registers scoped gRPC service clients for player-related operations in the service collection.
+    /// </summary>
+    /// <param name="serviceCollection">The service collection to configure.</param>
+    /// <returns>The updated service collection with gRPC service clients registered.</returns>
     private static ServiceCollection ConfigureContractServiceClients(
         this ServiceCollection serviceCollection
     )
@@ -35,6 +40,11 @@ public static class GrpsServices
         return serviceCollection;
     }
 
+    /// <summary>
+    /// Registers the PlayerGrpcClient as a scoped service using the provided address and a resolved PlayerServiceClient.
+    /// </summary>
+    /// <param name="adress">The gRPC server address used to initialize the client.</param>
+    /// <returns>The updated ServiceCollection with the PlayerGrpcClient registration.</returns>
     private static ServiceCollection ConfigureGrpcClients(
         this ServiceCollection serviceCollection,
         string adress

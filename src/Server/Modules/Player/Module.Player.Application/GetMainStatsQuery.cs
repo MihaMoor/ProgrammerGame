@@ -1,4 +1,4 @@
-﻿using System.Threading.Channels;
+using System.Threading.Channels;
 using Server.Module.Player.Domain;
 using Server.Module.Player.Infrastructure;
 using Server.Shared.Cqrs;
@@ -11,6 +11,14 @@ public sealed record GetMainStatsQuery(Guid MainStatsId) : IQuery<MainStats>;
 public sealed class GetMainStatsQueryHandler(IMainStatsRepository mainStatsRepository)
     : IQueryHandler<GetMainStatsQuery, MainStats>
 {
+    /// <summary>
+    /// Handles a query to retrieve a <c>MainStats</c> entity by its unique identifier.
+    /// </summary>
+    /// <param name="playerQuery">The query containing the ID of the main stats to retrieve.</param>
+    /// <param name="token">Cancellation token for the asynchronous operation.</param>
+    /// <returns>
+    /// A result containing the <c>MainStats</c> entity if found; otherwise, a failure result with a not found error.
+    /// </returns>
     public async Task<Result<MainStats>> Handle(
         GetMainStatsQuery playerQuery,
         CancellationToken token
@@ -32,6 +40,15 @@ public sealed class SubscribeMainStatsHandler(
     IMainStatsChangeNotifier notifier
 ) : IQueryHandler<SubscribeMainStats, IAsyncEnumerable<MainStats>>
 {
+    /// <summary>
+    /// Handles a subscription query for a MainStats entity, returning an asynchronous stream of updates for the specified MainStatsId.
+    /// </summary>
+    /// <param name="query">The subscription query containing the MainStatsId to monitor.</param>
+    /// <param name="cancellationToken">Token to cancel the subscription and release resources.</param>
+    /// <returns>
+    /// A result containing an asynchronous enumerable that yields the current and subsequent updates of the MainStats entity,
+    /// or a failure result if the entity is not found.
+    /// </returns>
     public async Task<Result<IAsyncEnumerable<MainStats>>> Handle(
         SubscribeMainStats query,
         CancellationToken cancellationToken = default

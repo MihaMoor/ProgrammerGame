@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Domain;
 
@@ -11,6 +11,12 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         ConcurrentBag<(Func<MainStats, Task> Handler, IDisposable Subscription)>
     > _subscriptions = new();
 
+    /// <summary>
+    /// Subscribes an asynchronous handler to be notified when the specified MainStats entity changes.
+    /// </summary>
+    /// <param name="mainStatsId">The unique identifier of the MainStats entity to observe.</param>
+    /// <param name="handler">An asynchronous delegate to invoke when the MainStats changes.</param>
+    /// <returns>An IDisposable that can be used to unsubscribe the handler.</returns>
     public IDisposable Subscribe(Guid mainStatsId, Func<MainStats, Task> handler)
     {
         Subscription subscription = new(mainStatsId, handler, this);
@@ -34,7 +40,13 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         return subscription;
     }
 
-    // Вызывается при изменении MainStats
+    /// <summary>
+    /// Asynchronously notifies all subscribed handlers of changes to the specified <see cref="MainStats"/> instance.
+    /// </summary>
+    /// <param name="stats">The updated <see cref="MainStats"/> object whose subscribers should be notified.</param>
+    /// <remarks>
+    /// Invokes all registered handlers for the given <c>MainStatsId</c> in parallel. Exceptions thrown by handlers are caught and logged without interrupting other notifications.
+    /// </remarks>
     internal async Task OnMainStatsChanged(MainStats stats)
     {
         if (
@@ -67,7 +79,11 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         }
     }
 
-    // Метод для отписки
+    /// <summary>
+    /// Removes a specific subscription handler for the given MainStatsId.
+    /// </summary>
+    /// <param name="mainStatsId">The identifier of the MainStats entity.</param>
+    /// <param name="subscription">The subscription to remove.</param>
     internal void Unsubscribe(Guid mainStatsId, IDisposable subscription)
     {
         if (
@@ -104,6 +120,12 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         private readonly MainStatsChangeNotifier _notifier;
         private bool _disposed;
 
+        /// <summary>
+        /// Initializes a new subscription for a specific MainStatsId and handler within the MainStatsChangeNotifier.
+        /// </summary>
+        /// <param name="mainStatsId">The identifier of the MainStats entity to subscribe to.</param>
+        /// <param name="handler">The asynchronous handler to invoke when the MainStats changes.</param>
+        /// <param name="notifier">The parent notifier managing this subscription.</param>
         public Subscription(
             Guid mainStatsId,
             Func<MainStats, Task> handler,
@@ -115,6 +137,9 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
             _notifier = notifier;
         }
 
+        /// <summary>
+        /// Unsubscribes from notifications for the associated MainStatsId and releases resources.
+        /// </summary>
         public void Dispose()
         {
             if (!_disposed)
