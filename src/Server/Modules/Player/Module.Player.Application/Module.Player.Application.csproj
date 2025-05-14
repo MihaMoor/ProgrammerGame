@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Module.Player.Domain\Module.Player.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

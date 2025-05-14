@@ -1,49 +1,47 @@
 ﻿using Grpc.Core;
 using Microsoft.Extensions.Logging;
-using Module.Player.GrpcContracts;
+using Server.Module.Player.Application;
+using Server.Module.Player.Domain;
+using Server.Module.Player.GrpcContracts;
 
-namespace Module.Player.Api;
+namespace Server.Module.Player.Api;
 
-internal class GetPlayerGrpcService(ILogger<GetPlayerGrpcService> logger)
-    : PlayerService.PlayerServiceBase
+internal class GetPlayerGrpcService(
+    ILogger<GetPlayerGrpcService> logger,
+    IQueryHandler<GetMainStatsQuery, MainStats> handler
+) : PlayerService.PlayerServiceBase
 {
-    public override async Task GetAsync(UUID request, IServerStreamWriter<PlayerDto> responseStream, ServerCallContext context)
+    public override async Task Get(
+        UUID request,
+        IServerStreamWriter<PlayerDto> responseStream,
+        ServerCallContext context
+    )
     {
-        PlayerDto playerDto = new()
+        GetMainStatsQuery query = new(new(request.Id));
+
+        Result<MainStats> result = await handler.Handle(query);
+
+        if (result.IsFailure)
         {
-            Name = "Test",
-            Health = 100,
-            Hunger = 100,
-            Money = 100,
-            Mood = 100,
-            PocketMoney = 25,
-        };
-
-        var random = new Random();
-
-        while (!context.CancellationToken.IsCancellationRequested)
-        {
-            playerDto.Health = (uint)random.Next(0, 100);
-            playerDto.Hunger = (uint)random.Next(0, 100);
-            playerDto.Money = random.NextDouble() * 100;
-            playerDto.Mood = (uint)random.Next(0, 100);
-
-            logger.LogInformation(
-                $"Player stats.\nHealth: {playerDto.Health}\nHunger: {playerDto.Hunger}\nMoney: {playerDto.Money}\nMood: {playerDto.Mood}"
-            );
-
-            await responseStream.WriteAsync(playerDto);
-            await Task.Delay(1000);
+            logger.LogError(result.Error.ToString());
+            await responseStream.WriteAsync(new PlayerDto());
         }
-    }
 
-    public override async Task<PlayerDto> GetByIdAsync(UUID request, ServerCallContext context)
-    {
-        var command = new GetPlayerQuery
+        await responseStream.WriteAsync(result.Value.ToViewModel());
+
+        while (!context.CancellationToken.IsCancellationRequested) { }
+    }
+}
+
+internal static class PlayerExtensions
+{
+    public static PlayerDto ToViewModel(this MainStats stats) =>
+        new()
         {
-            Id = new System.Guid(request.Id),
+            Name = stats.Name,
+            Health = stats.Health,
+            Hunger = stats.Hunger,
+            PocketMoney = stats.PocketMoney,
+            Mood = stats.Mood,
         };
-
-        return await base.GetByIdAsync(request, context);
-    }
 }

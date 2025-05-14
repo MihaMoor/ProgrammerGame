@@ -1,23 +1,23 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Client.Infrastructure.Clients;
-using Shared.GrpcContracts;
+using Server.Module.Player.GrpcContracts;
 
-namespace WpfClient.Widgets.PlayerWidget;
+namespace WpfClient.Widgets;
 
 /// <summary>
 /// Interaction logic for .xaml
 /// </summary>
-public partial class PlayerWidget : Page
+public partial class MainStatsWidget : Page
 {
-    private readonly PlayerGrpcClient _grpcClient;
     private readonly CancellationTokenSource _cancellationTokenSource;
-    private readonly Player _player;
+    private readonly MainStats _player;
+    private readonly PlayerGrpcClient _playerGrpcClient;
 
-    public PlayerWidget(PlayerGrpcClient grpcClient)
+    public MainStatsWidget(PlayerGrpcClient grpcClient)
     {
         _player = new();
-        _grpcClient = grpcClient;
+        _playerGrpcClient = grpcClient;
         _cancellationTokenSource = new();
         InitializeComponent();
         DataContext = _player;
@@ -26,10 +26,7 @@ public partial class PlayerWidget : Page
 
     private async void ConnectToServer()
     {
-        PlayerDto responce = await _grpcClient.GetAsync(
-            HandlePlayerGet,
-            _cancellationTokenSource.Token
-        );
+        var responce = await _playerGrpcClient.Get(HandlePlayerGet, _cancellationTokenSource.Token);
     }
 
     private void HandlePlayerGet(PlayerDto responce)
@@ -39,7 +36,6 @@ public partial class PlayerWidget : Page
             _player.Name = responce.Name;
             _player.Health = responce.Health;
             _player.Hunger = responce.Hunger;
-            _player.Money = responce.Money;
             _player.Mood = responce.Mood;
             _player.PocketMoney = responce.PocketMoney;
         });

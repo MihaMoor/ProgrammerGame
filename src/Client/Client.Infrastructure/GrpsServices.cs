@@ -21,9 +21,16 @@ public static class GrpsServices
         this ServiceCollection serviceCollection
     )
     {
-        serviceCollection.AddScoped(x => new Shared.GrpcContracts.PlayerService.PlayerServiceClient(
-            x.GetRequiredService<GrpcChannel>()
-        ));
+        serviceCollection.AddScoped(
+            x => new Server.Module.Player.GrpcContracts.PlayerService.PlayerServiceClient(
+                x.GetRequiredService<GrpcChannel>()
+            )
+        );
+        serviceCollection.AddScoped(
+            x => new Server.Module.Player.GrpcContracts.CreatePlayerService.CreatePlayerServiceClient(
+                x.GetRequiredService<GrpcChannel>()
+            )
+        );
 
         return serviceCollection;
     }
@@ -36,7 +43,7 @@ public static class GrpsServices
         serviceCollection.AddScoped(x =>
         {
             var client =
-                x.GetRequiredService<Shared.GrpcContracts.PlayerService.PlayerServiceClient>();
+                x.GetRequiredService<Server.Module.Player.GrpcContracts.PlayerService.PlayerServiceClient>();
             return new Clients.PlayerGrpcClient(adress, client);
         });
 

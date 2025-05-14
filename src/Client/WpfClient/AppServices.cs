@@ -1,8 +1,7 @@
 ﻿using Client.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using WpfClient.Pages;
-using WpfClient.Widgets.MenuBar;
-using WpfClient.Widgets.PlayerWidget;
+using WpfClient.Widgets;
 
 namespace WpfClient;
 
@@ -39,7 +38,7 @@ public static class AppServices
     private static ServiceCollection ConfigureWidgets(this ServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<MenuBar>();
-        serviceCollection.AddScoped<PlayerWidget>();
+        serviceCollection.AddScoped<MainStatsWidget>();
 
         return serviceCollection;
     }

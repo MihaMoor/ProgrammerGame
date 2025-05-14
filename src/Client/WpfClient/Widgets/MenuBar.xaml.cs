@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfClient.Widgets.MenuBar;
+namespace WpfClient.Widgets;
 
 /// <summary>
 /// Interaction logic for MenuBar.xaml

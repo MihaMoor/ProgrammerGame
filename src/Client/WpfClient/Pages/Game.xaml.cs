@@ -1,6 +1,5 @@
 ﻿using System.Windows.Controls;
-using WpfClient.Widgets.MenuBar;
-using WpfClient.Widgets.PlayerWidget;
+using WpfClient.Widgets;
 
 namespace WpfClient.Pages;
 
@@ -9,7 +8,7 @@ namespace WpfClient.Pages;
 /// </summary>
 public partial class Game : Page
 {
-    public Game(MenuBar menuBar, PlayerWidget mainStats)
+    public Game(MenuBar menuBar, MainStatsWidget mainStats)
     {
         InitializeComponent();
         MenuBarFrame.Navigate(menuBar);

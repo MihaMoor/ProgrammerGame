@@ -15,6 +15,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="..\..\Shared\GrpcContracts\Player.proto" GrpcServices="Client" />
+    <ProjectReference Include="..\..\Server\Modules\Player\Module.Player.GrpcContracts\Module.Player.GrpcContracts.csproj" />
   </ItemGroup>
 </Project>

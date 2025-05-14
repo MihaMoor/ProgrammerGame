@@ -1,22 +1,20 @@
-﻿namespace Module.Player.Application;
+﻿using Server.Module.Player.Domain;
 
-public sealed record GetPlayerQuery(Guid PlayerId) : IQuery<Player>;
+namespace Server.Module.Player.Application;
 
-public sealed class GetPlayerQueryHandler(IPlayerRepository playerRepository) : IQueryHandler<GetPlayerQuery, Player>
+public sealed record GetMainStatsQuery(Guid PlayerId) : IQuery<MainStats>;
+
+public sealed class GetMainStatsQueryHandler(IPlayerRepository playerRepository) : IQueryHandler<GetMainStatsQuery, MainStats>
 {
-    public async Task<Result<Player>> Handle(GetPlayerQuery playerQuery, CancellationToken token)
+    public async Task<Result<MainStats>> Handle(GetMainStatsQuery playerQuery, CancellationToken token)
     {
-        Player? player = await playerRepository.GetAsync(playerQuery.PlayerId, token);
-        if(player is null)
+        MainStats? mainStats = await playerRepository.GetAsync(playerQuery.PlayerId, token);
+        if (mainStats is null)
         {
-            return Result.Failure<Player>(PlayerError.NotFound(playerQuery.PlayerId));
+            return Result.Failure<MainStats>(PlayerError.NotFound(playerQuery.PlayerId));
         }
-        return Result.Success(player);
+        return Result.Success(mainStats);
     }
-}
-
-public class Player
-{
 }
 
 public static class PlayerError
@@ -33,7 +31,7 @@ public interface IPlayerRepository
     /// <param name="id">Id игрока</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Игрока</returns>
-    Task<Player?> GetAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<MainStats?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 }
 
 public interface ICommand
@@ -47,13 +45,13 @@ public interface ICommand<TResponse>
 public interface ICommandHandler<in TCommand>
     where TCommand : ICommand
 {
-    Task<Result> Handle(TCommand command, CancellationToken cancellationToken);
+    Task<Result> Handle(TCommand command, CancellationToken cancellationToken = default);
 }
 
 public interface ICommandHandler<in TCommand, TResponse>
     where TCommand : ICommand<TResponse>
 {
-    Task<Result<TResponse>> Handle(TCommand command, CancellationToken cancellationToken);
+    Task<Result<TResponse>> Handle(TCommand command, CancellationToken cancellationToken = default);
 }
 
 
@@ -68,7 +66,7 @@ public interface IQuery<TResponse>
 public interface IQueryHandler<TQuery, TResponse>
     where TQuery : IQuery<TResponse>
 {
-    Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken);
+    Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken = default);
 }
 
 

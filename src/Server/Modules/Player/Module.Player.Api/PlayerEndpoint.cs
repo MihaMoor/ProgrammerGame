@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Routing;
 using Shared.EndpointMapper;
 
-namespace Module.Player.Api;
+namespace Server.Module.Player.Api;
 
-public static class CreatePlayer
+public static class PlayerEndpoint
 {
     public sealed class Enpoint : IEndpoint
     {
-        public void MapEndpoint(IEndpointRouteBuilder app)
+        public void MapEndpoints(IEndpointRouteBuilder app)
         {
+            app.MapGrpcService<GetPlayerGrpcService>();
             app.MapGrpcService<CreatePlayerGrpcService>();
         }
     }
