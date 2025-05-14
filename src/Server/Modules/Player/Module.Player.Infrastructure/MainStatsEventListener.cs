@@ -30,7 +30,6 @@ public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger L
     private void OnEntityChanged(MainStats entity)
     {
         // Асинхронно уведомляем всех подписчиков
-        _ = _notifier.OnMainStatsChanged(entity);
         Task.Run(async () =>
         {
             try

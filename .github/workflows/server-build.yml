@@ -3,8 +3,12 @@ name: .NET Server Build
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'src/Server/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - 'src/Server/**'
 
 jobs:
   build-server:
