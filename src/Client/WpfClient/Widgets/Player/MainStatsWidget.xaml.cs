@@ -29,15 +29,15 @@ public partial class MainStatsWidget : Page
         PlayerDto response = _playerGrpcClient.Get(HandlePlayerGet, _cancellationTokenSource.Token);
     }
 
-    private void HandlePlayerGet(PlayerDto responce)
+    private void HandlePlayerGet(PlayerDto response)
     {
         Dispatcher.Invoke(() =>
         {
-            _mainStats.Name = responce.Name;
-            _mainStats.Health = responce.Health;
-            _mainStats.Hunger = responce.Hunger;
-            _mainStats.Mood = responce.Mood;
-            _mainStats.PocketMoney = responce.PocketMoney;
+            _mainStats.Name = response.Name;
+            _mainStats.Health = response.Health;
+            _mainStats.Hunger = response.Hunger;
+            _mainStats.Mood = response.Mood;
+            _mainStats.PocketMoney = response.PocketMoney;
         });
     }
 

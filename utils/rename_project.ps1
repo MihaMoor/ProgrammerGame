@@ -69,6 +69,8 @@ try {
             Set-Content -LiteralPath $item.FullName -Value $newContent
         }
     }
+
+    # Удаляем резервную копию
 }
 catch {
     # Этот блок выполняется, если в блоке try возникла ошибка

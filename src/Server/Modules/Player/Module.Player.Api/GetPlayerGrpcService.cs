@@ -22,7 +22,14 @@ internal class GetPlayerGrpcService(
         if (result.IsFailure)
         {
             logger.LogError(result.Error.ToString());
-            throw new RpcException(new Status(StatusCode.NotFound, result.Error.ToString()));
+            // TODO: необходимо связать логику кодов домена и статусов GRPC.
+            StatusCode statusCode = result.Error switch
+            {
+                _ when result.Error.Code.Contains("NotFound") => StatusCode.NotFound,
+                _ when result.Error is ArgumentException => StatusCode.InvalidArgument,
+                _ => StatusCode.Internal,
+            };
+            throw new RpcException(new Status(statusCode, result.Error.ToString()));
         }
 
         return result.Value.ToViewModel();

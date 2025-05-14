@@ -36,7 +36,10 @@ public sealed class MainStats
     /// </summary>
     public double PocketMoney { get; private set; }
 
-    private MainStats() { }
+    private MainStats()
+    {
+        Name = string.Empty;
+    }
 
     public static Result<MainStats> CreatePlayer(string name)
     {
