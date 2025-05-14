@@ -4,15 +4,15 @@ using Server.Module.Player.Domain;
 using Server.Module.Player.Infrastructure;
 using Server.Shared.Cqrs;
 
-namespace Module.Player.Api;
+namespace Server.Module.Player.Api;
 
 public static class PlayerServiceRegistration
 {
     public static IServiceCollection AddPlayerServices(this IServiceCollection services)
     {
         return services
-            .AddSingleton<MainStatsChangeNotifier>()
             .AddSingleton<MainStatsEventListener>()
+            .AddSingleton<IMainStatsChangeNotifier, MainStatsChangeNotifier>()
             .AddScoped<IMainStatsChangeNotifier>(sp =>
                 sp.GetRequiredService<MainStatsChangeNotifier>()
             )

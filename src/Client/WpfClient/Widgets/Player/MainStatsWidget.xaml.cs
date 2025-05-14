@@ -11,16 +11,16 @@ namespace WpfClient.Widgets;
 public partial class MainStatsWidget : Page
 {
     private readonly CancellationTokenSource _cancellationTokenSource;
-    private readonly MainStats _player;
+    private readonly MainStats _mainStats;
     private readonly PlayerGrpcClient _playerGrpcClient;
 
     public MainStatsWidget(PlayerGrpcClient grpcClient)
     {
-        _player = new();
+        _mainStats = new();
         _playerGrpcClient = grpcClient;
         _cancellationTokenSource = new();
         InitializeComponent();
-        DataContext = _player;
+        DataContext = _mainStats;
         ConnectToServer();
     }
 
@@ -33,11 +33,11 @@ public partial class MainStatsWidget : Page
     {
         Dispatcher.Invoke(() =>
         {
-            _player.Name = responce.Name;
-            _player.Health = responce.Health;
-            _player.Hunger = responce.Hunger;
-            _player.Mood = responce.Mood;
-            _player.PocketMoney = responce.PocketMoney;
+            _mainStats.Name = responce.Name;
+            _mainStats.Health = responce.Health;
+            _mainStats.Hunger = responce.Hunger;
+            _mainStats.Mood = responce.Mood;
+            _mainStats.PocketMoney = responce.PocketMoney;
         });
     }
 

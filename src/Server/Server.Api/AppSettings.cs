@@ -2,7 +2,7 @@
 
 public class AppSettings
 {
-    public required string PostgreSqlConnectionString { get; set; }
+    public required PostgreSql PostgreSql { get; set; }
     public required Elasticsearch Elasticsearch { get; set; }
     public required Logstash Logstash { get; set; }
 }

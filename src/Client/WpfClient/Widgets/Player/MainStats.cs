@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace WpfClient.Widgets;
 
-internal class MainStats : INotifyPropertyChanged
+public class MainStats : INotifyPropertyChanged
 {
     private uint _health;
     private uint _hunger;

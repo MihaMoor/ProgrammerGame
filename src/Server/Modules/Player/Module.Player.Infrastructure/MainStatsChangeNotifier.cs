@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
+using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
 
 namespace Server.Module.Player.Infrastructure;
@@ -8,30 +9,25 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
 {
     private readonly ConcurrentDictionary<
         Guid,
-        ConcurrentBag<(Func<MainStats, Task> Handler, IDisposable Subscription)>
+        ConcurrentDictionary<Guid, Func<MainStats, Task>>
     > _subscriptions = new();
 
     public IDisposable Subscribe(Guid mainStatsId, Func<MainStats, Task> handler)
     {
-        Subscription subscription = new(mainStatsId, handler, this);
+        // Создаем уникальный ID для подписки
+        Guid subscriptionId = Guid.NewGuid();
 
-        // Добавляем подписку в словарь
-        _subscriptions.AddOrUpdate(
+        // Получаем или создаем внутренний словарь для указанного mainStatsId
+        ConcurrentDictionary<Guid, Func<MainStats, Task>> handlersDict = _subscriptions.GetOrAdd(
             mainStatsId,
-            // Если записи для этого ID нет, создаем новую коллекцию
-            _ => new ConcurrentBag<(Func<MainStats, Task>, IDisposable)>
-            {
-                (handler, subscription),
-            },
-            // Если запись существует, добавляем в существующую коллекцию
-            (_, existing) =>
-            {
-                existing.Add((handler, subscription));
-                return existing;
-            }
+            _ => new ConcurrentDictionary<Guid, Func<MainStats, Task>>()
         );
 
-        return subscription;
+        // Добавляем обработчик во внутренний словарь
+        handlersDict.TryAdd(subscriptionId, handler);
+
+        // Возвращаем объект подписки
+        return new Subscription(mainStatsId, subscriptionId, this);
     }
 
     // Вызывается при изменении MainStats
@@ -40,86 +36,70 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         if (
             _subscriptions.TryGetValue(
                 stats.MainStatsId,
-                out ConcurrentBag<(
-                    Func<MainStats, Task> Handler,
-                    IDisposable Subscription
-                )>? handlers
+                out ConcurrentDictionary<Guid, Func<MainStats, Task>>? handlersDict
             )
         )
         {
-            IEnumerable<Task> tasks = handlers.Select(h =>
-                SafeInvokeAsync(h.Handler, stats, _logger)
+            // Запускаем все обработчики параллельно
+            IEnumerable<Task> tasks = handlersDict.Values.Select(handler =>
+                SafeInvokeAsync(handler, stats, _logger)
             );
 
             await Task.WhenAll(tasks);
-
-            static async Task SafeInvokeAsync(Func<MainStats, Task> h, MainStats s, ILogger _logger)
-            {
-                try
-                {
-                    await h(s);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex);
-                }
-            }
         }
     }
 
-    // Метод для отписки
-    internal void Unsubscribe(Guid mainStatsId, IDisposable subscription)
+    private static async Task SafeInvokeAsync(
+        Func<MainStats, Task> handler,
+        MainStats stats,
+        ILogger logger
+    )
     {
+        try
+        {
+            await handler(stats);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Ошибка при обработке события изменения MainStats");
+        }
+    }
+
+    internal void Unsubscribe(Guid mainStatsId, Guid subscriptionId)
+    {
+        // Если для mainStatsId есть словарь обработчиков
         if (
             _subscriptions.TryGetValue(
                 mainStatsId,
-                out ConcurrentBag<(
-                    Func<MainStats, Task> Handler,
-                    IDisposable Subscription
-                )>? handlers
+                out ConcurrentDictionary<Guid, Func<MainStats, Task>>? handlersDict
             )
         )
         {
-            ConcurrentBag<(Func<MainStats, Task>, IDisposable)> updated =
-            [
-                .. handlers.Where(x => x.Subscription != subscription),
-            ];
+            // Удаляем обработчик по его ID
+            handlersDict.TryRemove(subscriptionId, out _);
 
-            if (updated.IsEmpty)
+            // Если словарь обработчиков пуст, удаляем его из основного словаря
+            if (handlersDict.IsEmpty)
             {
                 _subscriptions.TryRemove(mainStatsId, out _);
-            }
-            else
-            {
-                _subscriptions[mainStatsId] = updated;
             }
         }
     }
 
     // Внутренний класс для представления подписки
-    private class Subscription : IDisposable
+    private class Subscription(
+        Guid mainStatsId,
+        Guid subscriptionId,
+        MainStatsChangeNotifier notifier
+    ) : IDisposable
     {
-        private readonly Guid _mainStatsId;
-        private readonly Func<MainStats, Task> _handler;
-        private readonly MainStatsChangeNotifier _notifier;
         private bool _disposed;
-
-        public Subscription(
-            Guid mainStatsId,
-            Func<MainStats, Task> handler,
-            MainStatsChangeNotifier notifier
-        )
-        {
-            _mainStatsId = mainStatsId;
-            _handler = handler;
-            _notifier = notifier;
-        }
 
         public void Dispose()
         {
             if (!_disposed)
             {
-                _notifier.Unsubscribe(_mainStatsId, this);
+                notifier.Unsubscribe(mainStatsId, subscriptionId);
                 _disposed = true;
             }
         }

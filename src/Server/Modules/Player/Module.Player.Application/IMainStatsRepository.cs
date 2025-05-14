@@ -1,6 +1,6 @@
 ﻿using Server.Module.Player.Domain;
 
-namespace Server.Module.Player.Infrastructure;
+namespace Server.Module.Player.Application;
 
 public interface IMainStatsRepository
 {

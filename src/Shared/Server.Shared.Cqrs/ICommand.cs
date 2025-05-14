@@ -4,7 +4,7 @@ namespace Server.Shared.Cqrs;
 
 public interface ICommand { }
 
-public interface ICommand<TResponse> { }
+public interface ICommand<out TResponse> : ICommand { }
 
 public interface ICommandHandler<in TCommand>
     where TCommand : ICommand

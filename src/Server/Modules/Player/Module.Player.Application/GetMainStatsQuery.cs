@@ -1,6 +1,5 @@
 ﻿using System.Threading.Channels;
 using Server.Module.Player.Domain;
-using Server.Module.Player.Infrastructure;
 using Server.Shared.Cqrs;
 using Server.Shared.Results;
 
@@ -49,7 +48,12 @@ public sealed class SubscribeMainStatsHandler(
         }
 
         // Создаем канал для передачи обновлений
-        Channel<MainStats> channel = Channel.CreateUnbounded<MainStats>();
+        Channel<MainStats> channel = Channel.CreateBounded<MainStats>(
+            new BoundedChannelOptions(10) // ёмкость подберите опытным путём
+            {
+                FullMode = BoundedChannelFullMode.DropOldest,
+            }
+        );
 
         // Сразу отправляем текущее состояние
         await channel.Writer.WriteAsync(mainStats, cancellationToken);

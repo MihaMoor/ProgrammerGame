@@ -4,7 +4,7 @@ namespace Server.Module.Player.Domain;
 
 public sealed class MainStats
 {
-    public event Action<MainStats> StatsChanged;
+    public event Action<MainStats>? StatsChanged;
 
     /// <summary>
     /// Уникальный идентификатор
@@ -36,6 +36,8 @@ public sealed class MainStats
     /// </summary>
     public double PocketMoney { get; private set; }
 
+    private MainStats() { }
+
     public static Result<MainStats> CreatePlayer(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -51,7 +53,7 @@ public sealed class MainStats
             PocketMoney = 99.99,
         };
 
-        mainStats.StatsChanged.Invoke(mainStats);
+        mainStats.StatsChanged?.Invoke(mainStats);
 
         return mainStats;
     }

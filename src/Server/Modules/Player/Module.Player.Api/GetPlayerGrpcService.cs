@@ -22,7 +22,7 @@ internal class GetPlayerGrpcService(
         if (result.IsFailure)
         {
             logger.LogError(result.Error.ToString());
-            return new PlayerDto();
+            throw new RpcException(new Status(StatusCode.NotFound, result.Error.ToString()));
         }
 
         return result.Value.ToViewModel();

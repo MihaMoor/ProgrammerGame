@@ -19,7 +19,40 @@ Write-Host "Root folder: $parentFolder"
 $oldName = Read-Host "Old project name"
 $newName = Read-Host "New project name"
 
+
+# Валидация ввода
+if ([string]::IsNullOrWhiteSpace($oldName) -or [string]::IsNullOrWhiteSpace($newName)) {
+    Write-Error "Имена проектов не могут быть пустыми."
+    exit 1
+}
+
+# Проверка наличия старого имени в файлах проекта
+$foundOldName = $false
+foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Include "*.cs", "*.csproj", "*.sln") {
+    $content = Get-Content -LiteralPath $item.FullName -Raw
+    if ($content -match [regex]::Escape($oldName)) {
+        $foundOldName = $true
+        break
+    }
+}
+
+if (-not $foundOldName) {
+    Write-Warning "Имя '$oldName' не найдено в проекте. Проверьте правильность ввода."
+    $continue = Read-Host "Продолжить? (y/n)"
+    if ($continue -ne "y") {
+        exit 0
+    }
+}
+
 try {
+    # Создаем резервную копию
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $backupDir = Join-Path -Path (Split-Path -Path $parentFolder -Parent) -ChildPath "backup_$timestamp"
+    Write-Host "Создание резервной копии в $backupDir..."
+    Copy-Item -Path $parentFolder -Destination $backupDir -Recurse
+    Write-Host "Резервная копия создана успешно."
+       
+
     # Rename files and folders
     foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse | Sort-Object -Property FullName -Descending) {
         $itemNewName = $item.Name.Replace($oldName, $newName)

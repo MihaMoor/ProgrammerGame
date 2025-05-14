@@ -33,9 +33,14 @@ internal sealed class SubscribePlayerGrpcService(
         if (result.IsFailure)
         {
             _logger.LogError("Failed to subscribe to player stats: {Error}", result.Error);
-            throw new RpcException(
-                new Status(StatusCode.Internal, $"Subscribe failed: {result.Error}")
-            );
+
+            StatusCode status = result.Error.Code switch
+            {
+                "Player.NotFound" => StatusCode.NotFound,
+                "Subscription.Invalid" => StatusCode.FailedPrecondition,
+                _ => StatusCode.Internal,
+            };
+            throw new RpcException(new Status(status, result.Error.ToString()));
         }
 
         try

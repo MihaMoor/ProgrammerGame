@@ -1,4 +1,5 @@
-﻿using Server.Module.Player.Domain;
+﻿using Server.Module.Player.Application;
+using Server.Module.Player.Domain;
 using Server.Shared.Results;
 
 namespace Server.Module.Player.Infrastructure;
@@ -11,14 +12,14 @@ public class MainStatsRepository(MainStatsEventListener eventListener) : IMainSt
         Result<MainStats>? result = MainStats.CreatePlayer($"Player_{id}");
 
         if (result.IsFailure)
-            return Task.FromResult<MainStats>(null);
+            return Task.FromResult<MainStats?>(null);
 
         MainStats? entity = result.Value;
 
         if (entity != null)
         {
             // Начинаем отслеживать изменения в загруженной сущности
-            eventListener.TrackEntity(result.Value);
+            eventListener.TrackEntity(entity);
         }
 
         return Task.FromResult(entity);
