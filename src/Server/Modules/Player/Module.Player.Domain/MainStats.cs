@@ -56,8 +56,6 @@ public sealed class MainStats
             PocketMoney = 99.99,
         };
 
-        mainStats.StatsChanged?.Invoke(mainStats);
-
         return mainStats;
     }
 
