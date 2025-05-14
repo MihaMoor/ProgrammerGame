@@ -46,18 +46,30 @@ public class Program
         AppSettings? appSettings = builder.Configuration.Get<AppSettings>();
 
         if (appSettings == null)
-            throw new ArgumentNullException(nameof(appSettings));
+        {
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
+            builder.Logging.ClearProviders();
+            builder.Host.UseSerilog();
+            return;
+        }
 
         // Создание клиента Elasticsearch
-        ElasticsearchClientSettings elasticsearchOptions = new ElasticsearchClientSettings(
-            appSettings.Elasticsearch.GetUri()
+        ElasticsearchClientSettings elasticsearchOptions = new(
+            appSettings.Elasticsearch?.GetUri() ?? new Uri("hhtp://localhost:9200")
         );
-        ElasticsearchClient elasticsearchClient = new ElasticsearchClient(elasticsearchOptions);
+        ElasticsearchClient elasticsearchClient = new(elasticsearchOptions);
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.Http(appSettings.Logstash.Url, (long?)appSettings.Logstash.QueueLimitBytes)
+            .WriteTo.Http(
+                appSettings.Logstash?.Url ?? "http://logstash:5044",
+                (long?)appSettings.Logstash?.QueueLimitBytes ?? 104857600
+            )
             .CreateLogger();
         builder.Logging.ClearProviders();
         builder.Host.UseSerilog();
