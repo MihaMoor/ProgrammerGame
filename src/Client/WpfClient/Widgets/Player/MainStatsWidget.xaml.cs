@@ -26,7 +26,7 @@ public partial class MainStatsWidget : Page
 
     private async void ConnectToServer()
     {
-        var responce = await _playerGrpcClient.Get(HandlePlayerGet, _cancellationTokenSource.Token);
+        var responce = _playerGrpcClient.Get(HandlePlayerGet, _cancellationTokenSource.Token);
     }
 
     private void HandlePlayerGet(PlayerDto responce)

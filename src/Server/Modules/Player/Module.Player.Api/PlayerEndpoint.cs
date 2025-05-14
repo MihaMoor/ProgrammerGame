@@ -12,6 +12,7 @@ public static class PlayerEndpoint
         {
             app.MapGrpcService<GetPlayerGrpcService>();
             app.MapGrpcService<CreatePlayerGrpcService>();
+            app.MapGrpcService<SubscribePlayerGrpcService>();
         }
     }
 }

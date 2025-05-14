@@ -5,18 +5,15 @@ namespace Client.Infrastructure.Clients;
 public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient client)
     : GrpcClient<PlayerService.PlayerServiceClient>(adress, client)
 {
-    public async Task<PlayerDto> Get(Action<PlayerDto> handler, CancellationToken cancellationToken)
+    public PlayerDto Get(Action<PlayerDto> handler, CancellationToken cancellationToken)
     {
         PlayerDto? dto = null;
         try
         {
             UUID uUID = new() { Id = Guid.NewGuid().ToString() };
-            using var call = Client.Get(uUID, cancellationToken: cancellationToken);
-            while (await call.ResponseStream.MoveNext(cancellationToken))
-            {
-                dto = call.ResponseStream.Current;
-                handler(dto);
-            }
+            dto = Client.Get(uUID, cancellationToken: cancellationToken);
+
+            handler(dto);
         }
         catch (Exception)
         {

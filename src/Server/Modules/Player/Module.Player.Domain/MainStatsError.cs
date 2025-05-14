@@ -1,4 +1,6 @@
-﻿namespace Server.Module.Player.Application;
+﻿using Server.Shared.Errors;
+
+namespace Server.Module.Player.Domain;
 
 public static class MainStatsError
 {

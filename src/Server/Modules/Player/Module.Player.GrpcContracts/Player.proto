@@ -5,7 +5,8 @@ package player.v1;
 option csharp_namespace = "Server.Module.Player.GrpcContracts";
 
 service PlayerService {
-    rpc Get(UUID) returns (stream PlayerDto);
+    rpc Get(UUID) returns (PlayerDto);
+    rpc Subscribe(UUID) returns (stream PlayerDto);
 }
 
 message UUID{

@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
 using Server.Module.Player.GrpcContracts;
+using Server.Shared.Cqrs;
+using Server.Shared.Results;
 
 namespace Server.Module.Player.Api;
 
@@ -11,11 +13,7 @@ internal class GetPlayerGrpcService(
     IQueryHandler<GetMainStatsQuery, MainStats> handler
 ) : PlayerService.PlayerServiceBase
 {
-    public override async Task Get(
-        UUID request,
-        IServerStreamWriter<PlayerDto> responseStream,
-        ServerCallContext context
-    )
+    public override async Task<PlayerDto> Get(UUID request, ServerCallContext context)
     {
         GetMainStatsQuery query = new(new(request.Id));
 
@@ -24,12 +22,10 @@ internal class GetPlayerGrpcService(
         if (result.IsFailure)
         {
             logger.LogError(result.Error.ToString());
-            await responseStream.WriteAsync(new PlayerDto());
+            return new PlayerDto();
         }
 
-        await responseStream.WriteAsync(result.Value.ToViewModel());
-
-        while (!context.CancellationToken.IsCancellationRequested) { }
+        return result.Value.ToViewModel();
     }
 }
 

@@ -1,4 +1,6 @@
-﻿using Server.Module.Player.Domain;
+﻿using System.Threading.Channels;
+using Server.Module.Player.Domain;
+using Server.Module.Player.Infrastructure;
 using Server.Shared.Cqrs;
 using Server.Shared.Results;
 
@@ -21,17 +23,54 @@ public sealed class GetMainStatsQueryHandler(IMainStatsRepository mainStatsRepos
         }
         return Result.Success(mainStats);
     }
-
-    Task<Result<MainStats>> IQueryHandler<GetMainStatsQuery, MainStats>.Handle(
-        GetMainStatsQuery query,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
 }
 
-public sealed class SubscribeMainStats(Guid MainStatsId) : IQuery<MainStats>
+public sealed record SubscribeMainStats(Guid MainStatsId) : IQuery<IAsyncEnumerable<MainStats>>;
+
+public sealed class SubscribeMainStatsHandler(
+    IMainStatsRepository mainStatsRepository,
+    IMainStatsChangeNotifier notifier
+) : IQueryHandler<SubscribeMainStats, IAsyncEnumerable<MainStats>>
 {
-    // Тут должна быть логика подписки на слой Application и получения от него данных
+    public async Task<Result<IAsyncEnumerable<MainStats>>> Handle(
+        SubscribeMainStats query,
+        CancellationToken cancellationToken = default
+    )
+    {
+        MainStats? mainStats = await mainStatsRepository.GetAsync(
+            query.MainStatsId,
+            cancellationToken
+        );
+        if (mainStats is null)
+        {
+            return Result.Failure<IAsyncEnumerable<MainStats>>(
+                MainStatsError.NotFound(query.MainStatsId)
+            );
+        }
+
+        // Создаем канал для передачи обновлений
+        Channel<MainStats> channel = Channel.CreateUnbounded<MainStats>();
+
+        // Сразу отправляем текущее состояние
+        await channel.Writer.WriteAsync(mainStats, cancellationToken);
+
+        // Регистрируем обработчик изменений и передаем их в канал
+        IDisposable subscription = notifier.Subscribe(
+            query.MainStatsId,
+            async (updatedStats) =>
+            {
+                await channel.Writer.WriteAsync(updatedStats, cancellationToken);
+            }
+        );
+
+        // Обрабатываем отмену для очистки ресурсов
+        cancellationToken.Register(() =>
+        {
+            subscription.Dispose();
+            channel.Writer.Complete();
+        });
+
+        // Возвращаем асинхронный поток данных
+        return Result.Success(channel.Reader.ReadAllAsync(cancellationToken));
+    }
 }

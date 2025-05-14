@@ -1,10 +1,11 @@
-﻿using Server.Module.Player.Application;
-using Server.Shared.Results;
+﻿using Server.Shared.Results;
 
 namespace Server.Module.Player.Domain;
 
-public class MainStats
+public sealed class MainStats
 {
+    public event Action<MainStats> StatsChanged;
+
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
@@ -35,17 +36,12 @@ public class MainStats
     /// </summary>
     public double PocketMoney { get; private set; }
 
-    private MainStats()
-    {
-        Name = string.Empty;
-    }
-
     public static Result<MainStats> CreatePlayer(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             return Result.Failure<MainStats>(MainStatsError.NameIsEmpty());
 
-        return new MainStats
+        MainStats mainStats = new()
         {
             MainStatsId = Guid.NewGuid(),
             Name = name,
@@ -54,6 +50,10 @@ public class MainStats
             Mood = 100,
             PocketMoney = 99.99,
         };
+
+        mainStats.StatsChanged.Invoke(mainStats);
+
+        return mainStats;
     }
 
     /// <summary>
@@ -61,8 +61,12 @@ public class MainStats
     /// </summary>
     public void ChangeHealth(int delta)
     {
+        uint prevValue = Health;
         int newValue = (int)Health + delta;
         Health = (uint)Math.Clamp(newValue, 0, 100);
+
+        if (Health != prevValue)
+            StatsChanged?.Invoke(this);
     }
 
     /// <summary>
@@ -70,8 +74,12 @@ public class MainStats
     /// </summary>
     public void ChangeHunger(int delta)
     {
+        uint prevValue = Hunger;
         int newValue = (int)Hunger + delta;
         Hunger = (uint)Math.Clamp(newValue, 0, 100);
+
+        if (Hunger != prevValue)
+            StatsChanged?.Invoke(this);
     }
 
     /// <summary>
@@ -79,8 +87,12 @@ public class MainStats
     /// </summary>
     public void ChangeMood(int delta)
     {
+        uint prevValue = Mood;
         int newValue = (int)Mood + delta;
         Mood = (uint)Math.Clamp(newValue, 0, 100);
+
+        if (Mood != prevValue)
+            StatsChanged?.Invoke(this);
     }
 
     /// <summary>
@@ -88,6 +100,10 @@ public class MainStats
     /// </summary>
     public void ChangePocketMoney(double delta)
     {
+        double prevValue = PocketMoney;
         PocketMoney = Math.Max(0, PocketMoney + delta);
+
+        if (PocketMoney != prevValue)
+            StatsChanged?.Invoke(this);
     }
 }

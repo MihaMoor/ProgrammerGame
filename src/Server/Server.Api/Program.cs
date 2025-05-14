@@ -9,7 +9,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         ConfigureELK(builder);
 
@@ -21,7 +21,7 @@ public class Program
 
         builder.Services.AddEndpoints();
 
-        var app = builder.Build();
+        WebApplication app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -49,10 +49,10 @@ public class Program
             throw new ArgumentNullException(nameof(appSettings));
 
         // Создание клиента Elasticsearch
-        var elasticsearchOptions = new ElasticsearchClientSettings(
+        ElasticsearchClientSettings elasticsearchOptions = new ElasticsearchClientSettings(
             appSettings.Elasticsearch.GetUri()
         );
-        var elasticsearchClient = new ElasticsearchClient(elasticsearchOptions);
+        ElasticsearchClient elasticsearchClient = new ElasticsearchClient(elasticsearchOptions);
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .MinimumLevel.Debug()
