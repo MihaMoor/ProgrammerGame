@@ -8,7 +8,6 @@ on:
 
 jobs:
   build-wpf:
-    if: contains(join(github.event.commits.*.message, ' '), 'client') || (github.event_name == 'pull_request' && contains(github.event.pull_request.body, 'client'))
     runs-on: windows-latest
 
     steps:
