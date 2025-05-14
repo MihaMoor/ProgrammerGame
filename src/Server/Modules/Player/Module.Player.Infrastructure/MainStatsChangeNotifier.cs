@@ -47,15 +47,21 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
             )
         )
         {
-            foreach ((Func<MainStats, Task> handler, IDisposable _) in handlers)
+            IEnumerable<Task> tasks = handlers.Select(h =>
+                SafeInvokeAsync(h.Handler, stats, _logger)
+            );
+
+            await Task.WhenAll(tasks);
+
+            static async Task SafeInvokeAsync(Func<MainStats, Task> h, MainStats s, ILogger _logger)
             {
                 try
                 {
-                    await handler(stats);
+                    await h(s);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex.Message);
+                    _logger.LogError(ex.Message, ex);
                 }
             }
         }

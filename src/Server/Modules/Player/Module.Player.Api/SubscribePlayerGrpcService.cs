@@ -20,7 +20,11 @@ internal sealed class SubscribePlayerGrpcService(
     {
         _logger.LogInformation("Subscribe request received for player {PlayerId}", request.Id);
 
-        SubscribeMainStats query = new SubscribeMainStats(Guid.Parse(request.Id));
+        if (!Guid.TryParse(request.Id, out Guid playerId))
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid player Id"));
+
+        SubscribeMainStats query = new(playerId);
+
         Shared.Results.Result<IAsyncEnumerable<MainStats>> result = await _subscribeHandler.Handle(
             query,
             context.CancellationToken
@@ -29,9 +33,9 @@ internal sealed class SubscribePlayerGrpcService(
         if (result.IsFailure)
         {
             _logger.LogError("Failed to subscribe to player stats: {Error}", result.Error);
-            // В случае ошибки можно отправить пустой DTO или завершить стрим с ошибкой
-            await responseStream.WriteAsync(new PlayerDto());
-            return;
+            throw new RpcException(
+                new Status(StatusCode.Internal, $"Subscribe failed: {result.Error}")
+            );
         }
 
         try

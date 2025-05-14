@@ -1,9 +1,10 @@
 ﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 using Server.Module.Player.Domain;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class MainStatsEventListener(MainStatsChangeNotifier _notifier)
+public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger Logger)
 {
     private readonly ConcurrentDictionary<Guid, MainStats> _trackedEntities = new();
 
@@ -30,5 +31,16 @@ public class MainStatsEventListener(MainStatsChangeNotifier _notifier)
     {
         // Асинхронно уведомляем всех подписчиков
         _ = _notifier.OnMainStatsChanged(entity);
+        Task.Run(async () =>
+        {
+            try
+            {
+                await _notifier.OnMainStatsChanged(entity);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message, ex);
+            }
+        });
     }
 }

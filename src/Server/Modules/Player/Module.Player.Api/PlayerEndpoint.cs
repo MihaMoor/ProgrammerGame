@@ -6,7 +6,7 @@ namespace Server.Module.Player.Api;
 
 public static class PlayerEndpoint
 {
-    public sealed class Enpoint : IEndpoint
+    public sealed class Endpoint : IEndpoint
     {
         public void MapEndpoints(IEndpointRouteBuilder app)
         {
