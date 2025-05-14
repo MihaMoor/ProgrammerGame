@@ -23,28 +23,20 @@ jobs:
         with:
           dotnet-version: '9.x'
 
-      - name: Build Server.Player.Domain
-        working-directory: src/Server/Server.Player.Domain
+      - name: Build Module.Player.Domain
+        working-directory: src/Server/Modules/Player/Module.Player.Domain
         run: dotnet build --configuration Release
 
-      - name: Build Server.User.Domain
-        working-directory: src/Server/Server.User.Domain
+      - name: Build Module.Player.Application
+        working-directory: src/Server/Modules/Player/Module.Player.Application
         run: dotnet build --configuration Release
-
-      - name: Build Server.Bank.Domain
-        working-directory: src/Server/Server.Bank.Domain
+        
+      - name: Build Module.Player.Infrastructure
+        working-directory: src/Server/Modules/Player/Module.Player.Infrastructure
         run: dotnet build --configuration Release
-
-      - name: Build Server.Education.Domain
-        working-directory: src/Server/Server.Education.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Server.Job.Domain
-        working-directory: src/Server/Server.User.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Server.WorkPlace.Domain
-        working-directory: src/Server/Server.WorkPlace.Domain
+        
+      - name: Build Module.Player.Api
+        working-directory: src/Server/Modules/Player/Module.Player.Api
         run: dotnet build --configuration Release
 
       - name: Build Server.Api
