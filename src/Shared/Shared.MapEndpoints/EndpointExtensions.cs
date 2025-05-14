@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +8,10 @@ namespace Shared.EndpointMapper;
 
 public static class EndpointExtensions
 {
+    /// <summary>
+    /// Registers all types implementing <c>IEndpoint</c> from the entry assembly, its referenced assemblies, and the executing assembly as transient services.
+    /// </summary>
+    /// <returns>The modified <see cref="IServiceCollection"/> with registered endpoint services.</returns>
     public static IServiceCollection AddEndpoints(this IServiceCollection services)
     {
         Assembly? entryAssembly = Assembly.GetEntryAssembly();
@@ -27,6 +31,11 @@ public static class EndpointExtensions
         return services;
     }
 
+    /// <summary>
+    /// Registers all non-abstract, non-interface types implementing <see cref="IEndpoint"/> from the specified assembly as transient services.
+    /// </summary>
+    /// <param name="assembly">The assembly to scan for <see cref="IEndpoint"/> implementations.</param>
+    /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddEndpoints(
         this IServiceCollection services,
         Assembly assembly
@@ -45,6 +54,12 @@ public static class EndpointExtensions
         return services;
     }
 
+    /// <summary>
+    /// Maps all registered <see cref="IEndpoint"/> implementations to the application's routing pipeline using the specified route group builder or the application itself.
+    /// </summary>
+    /// <param name="app">The <see cref="WebApplication"/> to map endpoints onto.</param>
+    /// <param name="routeGroupBuilder">An optional <see cref="RouteGroupBuilder"/> to group mapped endpoints; if null, endpoints are mapped directly to the application.</param>
+    /// <returns>The <see cref="WebApplication"/> instance with endpoints mapped.</returns>
     public static IApplicationBuilder MapEndpoints(
         this WebApplication app,
         RouteGroupBuilder? routeGroupBuilder = null

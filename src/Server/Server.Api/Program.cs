@@ -7,6 +7,10 @@ namespace Server.Api;
 
 public class Program
 {
+    /// <summary>
+    /// Entry point for the web application, configuring services, middleware, and starting the server.
+    /// </summary>
+    /// <param name="args">Command-line arguments for application configuration.</param>
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +44,11 @@ public class Program
         app.Run();
     }
 
+    /// <summary>
+    /// Configures Elasticsearch client and Serilog logging using application settings.
+    /// </summary>
+    /// <param name="builder">The web application builder used to access configuration and register services.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the AppSettings configuration section is missing or null.</exception>
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));

@@ -1,4 +1,4 @@
-﻿using Server.Shared.Results;
+using Server.Shared.Results;
 
 namespace Server.Shared.Errors;
 
@@ -9,5 +9,9 @@ public record Error(string Code, string Description)
 
     public static implicit operator Result(Error error) => Result.Failure(error);
 
-    public Result ToResult() => Result.Failure(this);
+    /// <summary>
+/// Converts this error into a failure <see cref="Result"/> containing the current error instance.
+/// </summary>
+/// <returns>A failure <see cref="Result"/> with this error.</returns>
+public Result ToResult() => Result.Failure(this);
 }
