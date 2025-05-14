@@ -7,8 +7,8 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-    if: contains(join(github.event.head_commit.message, ' '), 'server')
+  build-server:
+    if: contains(join(github.event.commits.*.message, ' '), 'server') || (github.event_name == 'pull_request' && contains(github.event.pull_request.body, 'server'))
     runs-on: ubuntu-latest
 
     steps:
