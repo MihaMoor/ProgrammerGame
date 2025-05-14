@@ -42,19 +42,22 @@ public class Program
 
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+        AppSettings? appSettings = builder.Configuration.Get<AppSettings>();
+
+        if (appSettings == null)
+            throw new ArgumentNullException(nameof(appSettings));
+
         // Создание клиента Elasticsearch
         var elasticsearchOptions = new ElasticsearchClientSettings(
-            new Uri("http://localhost:9200")
+            appSettings.Elasticsearch.GetUri()
         );
         var elasticsearchClient = new ElasticsearchClient(elasticsearchOptions);
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.Http(
-                "http://logstash:5044",
-                queueLimitBytes: 104857600 //100 Mb
-            )
+            .WriteTo.Http(appSettings.Logstash.Url, (long?)appSettings.Logstash.QueueLimitBytes)
             .CreateLogger();
         builder.Logging.ClearProviders();
         builder.Host.UseSerilog();

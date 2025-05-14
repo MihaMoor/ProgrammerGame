@@ -1,4 +1,6 @@
-﻿namespace Server.Module.Player.Domain;
+﻿using Server.Module.Player.Application;
+
+namespace Server.Module.Player.Domain;
 
 public class MainStats
 {
@@ -37,10 +39,10 @@ public class MainStats
         Name = string.Empty;
     }
 
-    public static MainStats CreatePlayer(string name)
+    public static Result<MainStats> CreatePlayer(string name)
     {
         if (name == string.Empty)
-            throw new ArgumentNullException("Имя игрока не может быть пустым");
+            return Result.Failure<MainStats>(MainStatsError.NameIsEmpty());
 
         return new MainStats
         {
@@ -50,5 +52,40 @@ public class MainStats
             Mood = 100,
             PocketMoney = 99.99,
         };
+    }
+
+    /// <summary>
+    /// Изменяет значение здоровья с ограничением от 0 до 100
+    /// </summary>
+    public void ChangeHealth(int delta)
+    {
+        int newValue = (int)Health + delta;
+        Health = (uint)Math.Clamp(newValue, 0, 100);
+    }
+
+    /// <summary>
+    /// Изменяет значение голода с ограничением от 0 до 100
+    /// </summary>
+    public void ChangeHunger(int delta)
+    {
+        int newValue = (int)Hunger + delta;
+        Hunger = (uint)Math.Clamp(newValue, 0, 100);
+    }
+
+    /// <summary>
+    /// Изменяет значение настроения с ограничением от 0 до 100
+    /// </summary>
+    public void ChangeMood(int delta)
+    {
+        int newValue = (int)Mood + delta;
+        Mood = (uint)Math.Clamp(newValue, 0, 100);
+    }
+
+    /// <summary>
+    /// Изменяет количество карманных денег
+    /// </summary>
+    public void ChangePocketMoney(double delta)
+    {
+        PocketMoney = Math.Max(0, PocketMoney + delta);
     }
 }
