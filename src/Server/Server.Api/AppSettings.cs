@@ -21,16 +21,10 @@ public class PostgreSql
 
 public class Logstash
 {
-    private string _url = string.Empty;
-
     /// <summary>
     /// Адрес
     /// </summary>
-    public required string Url
-    {
-        get => _url;
-        set => _url = value;
-    }
+    public required string Url { get; set; }
 
     /// <summary>
     /// Лимит объема сообщения в очереди
@@ -41,24 +35,19 @@ public class Logstash
     /// Получить url адрес подключения
     /// </summary>
     /// <returns>url</returns>
-    public Uri GetUri() => new(_url);
+    public Uri GetUri() => new(Url);
 }
 
 public class Elasticsearch
 {
-    private string _url = string.Empty;
-
     /// <summary>
     /// Адрес
     /// </summary>
-    public required string Url
-    {
-        set => _url = value;
-    }
+    public required string Url { get; set; }
 
     /// <summary>
     /// Получить url адрес подключения
     /// </summary>
     /// <returns>url</returns>
-    public Uri GetUri() => new(_url);
+    public Uri GetUri() => new(Url);
 }

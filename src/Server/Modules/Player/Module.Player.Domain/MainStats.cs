@@ -1,4 +1,5 @@
 ﻿using Server.Module.Player.Application;
+using Server.Shared.Results;
 
 namespace Server.Module.Player.Domain;
 
@@ -41,11 +42,12 @@ public class MainStats
 
     public static Result<MainStats> CreatePlayer(string name)
     {
-        if (name == string.Empty)
+        if (string.IsNullOrWhiteSpace(name))
             return Result.Failure<MainStats>(MainStatsError.NameIsEmpty());
 
         return new MainStats
         {
+            MainStatsId = Guid.NewGuid(),
             Name = name,
             Health = 100,
             Hunger = 100,

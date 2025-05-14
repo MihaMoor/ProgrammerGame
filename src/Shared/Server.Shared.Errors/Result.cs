@@ -1,4 +1,6 @@
-﻿namespace Server.Module.Player.Application;
+﻿using Server.Shared.Errors;
+
+namespace Server.Shared.Results;
 
 public class Result
 {

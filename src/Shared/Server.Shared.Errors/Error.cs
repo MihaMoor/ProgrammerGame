@@ -1,4 +1,6 @@
-﻿namespace Server.Module.Player.Application;
+﻿using Server.Shared.Results;
+
+namespace Server.Shared.Errors;
 
 public record Error(string Code, string Description)
 {

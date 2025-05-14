@@ -1,4 +1,6 @@
-﻿namespace Server.Module.Player.Application;
+﻿using Server.Shared.Results;
+
+namespace Server.Shared.Cqrs;
 
 public interface IQuery<TResponse> { }
 
