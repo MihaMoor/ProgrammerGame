@@ -21,6 +21,7 @@ public partial class MainStatsWidget : Page
         _cancellationTokenSource = new();
         InitializeComponent();
         DataContext = _mainStats;
+        Unloaded += PageUnloaded;
         ConnectToServer();
     }
 
