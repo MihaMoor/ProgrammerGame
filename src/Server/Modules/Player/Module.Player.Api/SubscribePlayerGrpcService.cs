@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using Module.Player.Api;
 using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
 using Server.Module.Player.GrpcContracts;
@@ -34,12 +35,7 @@ internal sealed class SubscribePlayerGrpcService(
         {
             _logger.LogError("Failed to subscribe to player stats: {Error}", result.Error);
 
-            StatusCode status = result.Error.Code switch
-            {
-                "Player.NotFound" => StatusCode.NotFound,
-                "Subscription.Invalid" => StatusCode.FailedPrecondition,
-                _ => StatusCode.Internal,
-            };
+            StatusCode status = result.Error.Code.ToStatusCode();
             throw new RpcException(new Status(status, result.Error.ToString()));
         }
 
