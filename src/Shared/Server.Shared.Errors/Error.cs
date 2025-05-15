@@ -1,6 +1,4 @@
-﻿using Server.Shared.Results;
-
-namespace Server.Shared.Errors;
+﻿namespace Server.Shared.Errors;
 
 public record Error(ErrorCode Code, string Description)
 {

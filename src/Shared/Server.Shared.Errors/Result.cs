@@ -1,6 +1,4 @@
-﻿using Server.Shared.Errors;
-
-namespace Server.Shared.Results;
+﻿namespace Server.Shared.Errors;
 
 public class Result
 {
