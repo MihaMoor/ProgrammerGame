@@ -15,8 +15,18 @@ public class PostgreSql
     public required string Username { get; set; }
     public required string Password { get; set; }
 
-    public string CreateConnectionString() =>
-        $"Host={Host}; Port={Port}; Database={Database}; Username={Username}; Password={Password}";
+    public string CreateConnectionString()
+    {
+        Npgsql.NpgsqlConnectionStringBuilder builder = new()
+        {
+            Host = Host,
+            Port = (int)Port,
+            Database = Database,
+            Username = Username,
+            Password = Password,
+        };
+        return builder.ConnectionString;
+    }
 }
 
 public class Logstash

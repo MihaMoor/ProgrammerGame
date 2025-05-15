@@ -1,4 +1,4 @@
-﻿using Server.Shared.Results;
+﻿using Server.Shared.Errors;
 
 namespace Server.Shared.Cqrs;
 

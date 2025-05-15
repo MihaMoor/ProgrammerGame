@@ -1,4 +1,4 @@
-﻿using Server.Shared.Results;
+﻿using Server.Shared.Errors;
 
 namespace Server.Module.Player.Domain;
 
@@ -34,7 +34,7 @@ public sealed class MainStats
     /// <summary>
     /// Карманные деньги
     /// </summary>
-    public double PocketMoney { get; private set; }
+    public decimal PocketMoney { get; private set; }
 
     private MainStats()
     {
@@ -60,7 +60,7 @@ public sealed class MainStats
             Health = 100,
             Hunger = 100,
             Mood = 100,
-            PocketMoney = 99.99,
+            PocketMoney = 99.99m,
         };
 
         return mainStats;
@@ -110,8 +110,8 @@ public sealed class MainStats
     /// </summary>
     public void ChangePocketMoney(double delta)
     {
-        double prevValue = PocketMoney;
-        PocketMoney = Math.Max(0, PocketMoney + delta);
+        decimal prevValue = PocketMoney;
+        PocketMoney = Math.Max(0, PocketMoney + (decimal)delta);
 
         if (PocketMoney != prevValue)
             StatsChanged?.Invoke(this);

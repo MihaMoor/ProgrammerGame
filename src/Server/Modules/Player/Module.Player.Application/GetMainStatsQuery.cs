@@ -1,7 +1,7 @@
 ﻿using System.Threading.Channels;
 using Server.Module.Player.Domain;
 using Server.Shared.Cqrs;
-using Server.Shared.Results;
+using Server.Shared.Errors;
 
 namespace Server.Module.Player.Application;
 
@@ -61,9 +61,10 @@ public sealed class SubscribeMainStatsHandler(
         // Регистрируем обработчик изменений и передаем их в канал
         IDisposable subscription = notifier.Subscribe(
             query.MainStatsId,
-            async (updatedStats) =>
+            updatedStats =>
             {
-                await channel.Writer.WriteAsync(updatedStats, cancellationToken);
+                channel.Writer.TryWrite(updatedStats);
+                return ValueTask.CompletedTask;
             }
         );
 
