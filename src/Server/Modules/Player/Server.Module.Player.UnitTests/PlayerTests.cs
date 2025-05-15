@@ -6,11 +6,12 @@ using Xunit.Sdk;
 
 namespace Server.Module.Player.UnitTests;
 
+[Trait("Category", "Unit")]
 public partial class PlayerTests
 {
-    [Theory(Timeout = 10)]
+    [TimeoutTheory(timeoutMilliseconds: 10)]
     [MemberData(nameof(CreateMainStatsData))]
-    public void Cоздания_основных_характеристик(string? name, bool expected, Error? error)
+    public void Создания_основных_характеристик(string? name, bool expected, Error? error)
     {
         Result<MainStats> actual = MainStats.CreatePlayer(name);
 
@@ -25,7 +26,7 @@ public partial class PlayerTests
 // Атрибут для использования в тестах
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 [XunitTestCaseDiscoverer(
-    "Server.Module.Player.UnitTests.TimeoutTestCaseDiscoverer",
+    "Server.Module.Player.UnitTests.TimeoutTheoryAttribute",
     "Server.Module.Player.UnitTests"
 )]
 public class TimeoutTheoryAttribute(int timeoutMilliseconds) : TheoryAttribute
@@ -45,6 +46,8 @@ public class TimeoutTestCaseDiscoverer : IXunitTestCaseDiscoverer
         yield return new TimeoutTestCase(testMethod, timeout);
     }
 
+    // Используем перегрузку метода, которая соответствует интерфейсу IXunitTestCaseDiscoverer,
+    // но для обратной совместимости делегируем вызов более простой версии
     [Obsolete]
     public IEnumerable<IXunitTestCase> Discover(
         ITestFrameworkDiscoveryOptions discoveryOptions,

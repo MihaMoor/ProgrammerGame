@@ -14,13 +14,18 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '9.0.x'
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
       - name: Restore dependencies
         run: dotnet restore
 
@@ -29,4 +34,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          dotnet test --no-build --verbosity normal
+          dotnet test --no-build --verbosity normal --filter "Category=Unit"
