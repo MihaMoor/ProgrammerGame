@@ -59,7 +59,7 @@ public class Program
 
         // Создание клиента Elasticsearch
         ElasticsearchClientSettings elasticsearchOptions = new(
-            appSettings.Elasticsearch?.GetUri() ?? new Uri("hhtp://localhost:9200")
+            appSettings.Elasticsearch?.GetUri() ?? new Uri("http://localhost:9200")
         );
         ElasticsearchClient elasticsearchClient = new(elasticsearchOptions);
         Log.Logger = new LoggerConfiguration()
