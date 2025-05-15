@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Server.Shared.Errors;
 
-namespace Module.Player.Api;
+namespace Server.Module.Player.Api;
 
 internal static class DomainErrorMapper
 {
