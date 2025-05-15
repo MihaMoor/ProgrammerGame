@@ -41,6 +41,13 @@ public sealed class MainStats
         Name = string.Empty;
     }
 
+    /// <summary>
+    /// Создание основных характеристик
+    /// </summary>
+    /// <param name="name">Имя персонажа</param>
+    /// <returns>
+    /// <see cref="Result"/> <see cref="MainStatsError.NameIsEmpty()"/>
+    /// </returns>
     public static Result<MainStats> CreatePlayer(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
