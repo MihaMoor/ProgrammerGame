@@ -11,7 +11,7 @@ internal static class PlayerExtensions
             Name = stats.Name,
             Health = stats.Health,
             Hunger = stats.Hunger,
-            PocketMoney = stats.PocketMoney,
+            PocketMoney = (double)stats.PocketMoney,
             Mood = stats.Mood,
         };
 }
