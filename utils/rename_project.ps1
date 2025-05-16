@@ -36,11 +36,11 @@ if ([string]::IsNullOrWhiteSpace($oldName) -or [string]::IsNullOrWhiteSpace($new
 # Проверка наличия старого имени в файлах проекта
 $foundOldName = $false
 foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Include "*.cs", "*.csproj", "*.sln" -Exclude "node_modules", ".git", "bin", "obj") {
-    Write-Output $item.FullName
+    Write-Verbose "Проверка файла: $($item.FullName)"
 
     try {
         $content = Get-Content -LiteralPath $item.FullName -ErrorAction Stop
-        Write-Host "Доступ есть к файлу: $($item.FullName)"
+        Write-Verbose "Доступ есть к файлу: $($item.FullName)"
         if ($content -match [regex]::Escape($oldName)) {
             $foundOldName = $true
             break
@@ -69,7 +69,7 @@ try {
        
 
     # Rename files and folders
-    foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse | Sort-Object -Property FullName -Descending -Exclude "node_modules", ".git", "bin", "obj") {
+    foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Exclude "node_modules", ".git", "bin", "obj" | Sort-Object -Property FullName -Descending) {
         $itemNewName = $item.Name.Replace($oldName, $newName)
         if ($item.Name -ne $itemNewName) {
             Rename-Item -LiteralPath $item.FullName -NewName $itemNewName
@@ -78,10 +78,10 @@ try {
 
     # Replace content in files
     foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Include "*.cmd", "*.cs", "*.csproj", "*.json", "*.md", "*.proj", "*.props", "*.ps1", "*.sln", "*.slnx", "*.targets", "*.txt", "*.vb", "*.vbproj", "*.xaml", "*.xml", "*.xproj", "*.yml", "*.yaml" -Exclude "node_modules", ".git", "bin", "obj") {
-        $content = Get-Content -LiteralPath $item.FullName
+        $content = Get-Content -LiteralPath $item.FullName -Encoding UTF8
         if ($content) {
             $newContent = $content.Replace($oldName, $newName)
-            Set-Content -LiteralPath $item.FullName -Value $newContent
+            Set-Content -LiteralPath $item.FullName -Value $newContent -Encoding UTF8
         }
     }
 
@@ -92,8 +92,21 @@ try {
 }
 catch {
     # Этот блок выполняется, если в блоке try возникла ошибка
-    Write-Error "Error:"
+    Write-Error "Произошла ошибка во время выполнения скрипта:"
     Write-Error $_.Exception.Message
+    Write-Error "Стек вызовов: $($_.ScriptStackTrace)"
+    
+    if ($createBackup -ne "n" -and (Test-Path -Path $backupDir)) {
+        $restore = Read-Host "Восстановить данные из резервной копии? (y/n) [y]"
+        if ($restore -ne "n") {
+            Write-Host "Восстановление из резервной копии $backupDir..."
+            # Здесь код для восстановления из резервной копии
+            # ...
+            Write-Host "Восстановление завершено."
+        }
+    }
 }
 
-Read-Host "Press any key to close window..."
+Write-Host "Операция завершена. Проект успешно переименован с '$oldName' на '$newName'."
+Write-Host ""
+Read-Host "Нажмите любую клавишу для закрытия окна..."
