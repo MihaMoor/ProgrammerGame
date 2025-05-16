@@ -13,7 +13,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="Player.proto" />
-    <Protobuf Include="CreatePlayer.proto" />
+    <Protobuf Include="Player.proto" ProtoRoot="$(ProjectDir)" />
+    <Protobuf Include="CreatePlayer.proto" ProtoRoot="$(ProjectDir)" />
   </ItemGroup>
 </Project>

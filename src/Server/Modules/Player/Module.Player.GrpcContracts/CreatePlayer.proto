@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package server.module.player.grpccontracts.player.v1;
+package server.module.player.moduleplayergrpccontracts.player.v1;
 
-option csharp_namespace = "Server.Module.Player.GrpcContracts";
+option csharp_namespace = "Server.Module.Player.GrpcContracts.Player.V1";
 
 import "Player.proto";
 
@@ -11,6 +11,6 @@ service CreatePlayerService {
 }
 
 message CreatePlayerCommand {
-    string Name = 1;
+    string name = 1;
 }
 

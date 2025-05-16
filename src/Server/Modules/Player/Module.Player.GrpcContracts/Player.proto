@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package server.module.player.grpccontracts.player.v1;
+package server.module.player.moduleplayergrpccontracts.player.v1;
 
-option csharp_namespace = "Server.Module.Player.GrpcContracts";
+option csharp_namespace = "Server.Module.Player.GrpcContracts.Player.V1";
 
 service PlayerService {
     rpc Get(UUID) returns (PlayerDto);
@@ -10,13 +10,13 @@ service PlayerService {
 }
 
 message UUID{
-    string Id = 1;
+    string id = 1;
 }
 
 message PlayerDto {
-    string Name = 1;
-    uint32 Health = 2;
-    uint32 Hunger = 3;
-    double PocketMoney = 4;
-    uint32 Mood = 5;
+    string name = 1;
+    uint32 health = 2;
+    uint32 hunger = 3;
+    double pocketMoney = 4;
+    uint32 mood = 5;
 }
