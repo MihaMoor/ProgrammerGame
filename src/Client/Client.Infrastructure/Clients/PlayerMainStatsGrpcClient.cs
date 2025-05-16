@@ -1,4 +1,5 @@
-﻿using Server.Module.Player.GrpcContracts;
+﻿using Grpc.Core;
+using Server.Module.Player.GrpcContracts;
 
 namespace Client.Infrastructure.Clients;
 
@@ -15,12 +16,11 @@ public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient c
 
             handler(dto);
         }
-        catch (Exception)
+        catch (RpcException rpcEx)
         {
             // Logging or send message to server for registration bug
-            //logger.LogCritical(ex, ex.Message);
+            Console.WriteLine($"gRPC ошибка: {rpcEx.StatusCode} - {rpcEx.Message}");
         }
-
         return dto
             ?? new()
             {

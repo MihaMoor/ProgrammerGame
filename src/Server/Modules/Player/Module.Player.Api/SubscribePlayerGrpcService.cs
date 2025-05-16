@@ -4,6 +4,7 @@ using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
 using Server.Module.Player.GrpcContracts;
 using Server.Shared.Cqrs;
+using Server.Shared.Errors;
 
 namespace Server.Module.Player.Api;
 
@@ -25,7 +26,7 @@ internal sealed class SubscribePlayerGrpcService(
 
         SubscribeMainStats query = new(playerId);
 
-        Shared.Results.Result<IAsyncEnumerable<MainStats>> result = await _subscribeHandler.Handle(
+        Result<IAsyncEnumerable<MainStats>> result = await _subscribeHandler.Handle(
             query,
             context.CancellationToken
         );
@@ -51,6 +52,9 @@ internal sealed class SubscribePlayerGrpcService(
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             _logger.LogError(ex, "Error while streaming player stats updates");
+            throw new RpcException(
+                new Status(StatusCode.Internal, "Streaming error: " + ex.Message)
+            );
         }
     }
 }

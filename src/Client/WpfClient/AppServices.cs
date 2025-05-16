@@ -11,7 +11,7 @@ public static class AppServices
 
     public static void Configure()
     {
-        var serviceCollection = new ServiceCollection();
+        ServiceCollection serviceCollection = new();
 
         serviceCollection
             .ConfigureServices()

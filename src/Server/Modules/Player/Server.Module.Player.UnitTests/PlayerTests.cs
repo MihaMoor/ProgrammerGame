@@ -1,6 +1,5 @@
 ﻿using Server.Module.Player.Domain;
 using Server.Shared.Errors;
-using Server.Shared.Results;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -9,7 +8,7 @@ namespace Server.Module.Player.UnitTests;
 [Trait("Category", "Unit")]
 public partial class PlayerTests
 {
-    [TimeoutTheory(timeoutMilliseconds: 10)]
+    [TimeoutTheory(timeoutMilliseconds: 3)]
     [MemberData(nameof(CreateMainStatsData))]
     public void Создания_основных_характеристик(string? name, bool expected, Error? error)
     {
@@ -26,7 +25,7 @@ public partial class PlayerTests
 // Атрибут для использования в тестах
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 [XunitTestCaseDiscoverer(
-    "Server.Module.Player.UnitTests.TimeoutTheoryAttribute",
+    "Server.Module.Player.UnitTests.TimeoutTestCaseDiscoverer",
     "Server.Module.Player.UnitTests"
 )]
 public class TimeoutTheoryAttribute(int timeoutMilliseconds) : TheoryAttribute

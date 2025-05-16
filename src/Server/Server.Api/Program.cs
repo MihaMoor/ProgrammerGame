@@ -62,15 +62,20 @@ public class Program
             appSettings.Elasticsearch?.GetUri() ?? new Uri("http://localhost:9200")
         );
         ElasticsearchClient elasticsearchClient = new(elasticsearchOptions);
+
+        ulong queueLimitBytes = appSettings.Logstash.QueueLimitBytes;
+
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .MinimumLevel.Debug()
             .WriteTo.Console()
             .WriteTo.Http(
                 appSettings.Logstash?.Url ?? "http://logstash:5044",
-                (long?)appSettings.Logstash?.QueueLimitBytes ?? 104857600
+                (long?)(queueLimitBytes is > long.MaxValue ? long.MaxValue : (long)queueLimitBytes)
+                    ?? 104_857_600
             )
             .CreateLogger();
+        builder.Services.AddSingleton(elasticsearchClient);
         builder.Logging.ClearProviders();
         builder.Host.UseSerilog();
     }

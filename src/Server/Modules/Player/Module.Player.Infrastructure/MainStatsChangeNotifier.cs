@@ -1,7 +1,7 @@
-﻿using System.Collections.Concurrent;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
+using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
 
@@ -23,8 +23,13 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
             _ => new ConcurrentDictionary<Guid, Func<MainStats, Task>>()
         );
 
+        ArgumentNullException.ThrowIfNull(handler);
+
         // Добавляем обработчик во внутренний словарь
-        handlersDict.TryAdd(subscriptionId, handler);
+        if (!handlersDict.TryAdd(subscriptionId, handler))
+        {
+            throw new InvalidOperationException($"Subscription id collision: {subscriptionId}");
+        }
 
         // Возвращаем объект подписки
         return new Subscription(mainStatsId, subscriptionId, this);
