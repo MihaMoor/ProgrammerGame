@@ -1,7 +1,14 @@
-$ErrorActionPreference = "Stop!"
+$ErrorActionPreference = "Continue"
+$VerbosePreference = "Continue"
 
 $OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltinRole] "Administrator")) {
+    # Перезапуск с правами администратора
+    Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    exit
+}
 
 # Получаем полный путь к текущему скрипту
 $scriptPath = $MyInvocation.MyCommand.Path
@@ -14,7 +21,7 @@ $parentFolder = Split-Path -Path $parentFolder -Parent
 Set-Location $parentFolder
 
 # Получаем относительный путь к родительской папке (это будет просто ".")
-$rootFolder = "."
+$rootFolder = "./src"
 Write-Host "Root folder: $parentFolder"
 $oldName = Read-Host "Old project name"
 $newName = Read-Host "New project name"
@@ -28,11 +35,19 @@ if ([string]::IsNullOrWhiteSpace($oldName) -or [string]::IsNullOrWhiteSpace($new
 
 # Проверка наличия старого имени в файлах проекта
 $foundOldName = $false
-foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Include "*.cs", "*.csproj", "*.sln") {
-    $content = Get-Content -LiteralPath $item.FullName -Raw
-    if ($content -match [regex]::Escape($oldName)) {
-        $foundOldName = $true
-        break
+foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Include "*.cs", "*.csproj", "*.sln" -Exclude "node_modules", ".git", "bin", "obj") {
+    Write-Output $item.FullName
+
+    try {
+        $content = Get-Content -LiteralPath $item.FullName -ErrorAction Stop
+        Write-Host "Доступ есть к файлу: $($item.FullName)"
+        if ($content -match [regex]::Escape($oldName)) {
+            $foundOldName = $true
+            break
+        }
+    }
+    catch {
+        Write-Error "Нет доступа к файлу: $($item.FullName). Ошибка: $_"
     }
 }
 
@@ -45,16 +60,16 @@ if (-not $foundOldName) {
 }
 
 try {
-    # Создаем резервную копию
-    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-    $backupDir = Join-Path -Path (Split-Path -Path $parentFolder -Parent) -ChildPath "backup_$timestamp"
-    Write-Host "Создание резервной копии в $backupDir..."
-    Copy-Item -Path $parentFolder -Destination $backupDir -Recurse
-    Write-Host "Резервная копия создана успешно."
+    # # Создаем резервную копию
+    # $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    # $backupDir = Join-Path -Path (Split-Path -Path $parentFolder -Parent) -ChildPath "backup_$timestamp"
+    # Write-Host "Создание резервной копии в $backupDir..."
+    # Copy-Item -Path $parentFolder -Destination $backupDir -Recurse
+    # Write-Host "Резервная копия создана успешно."
        
 
     # Rename files and folders
-    foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse | Sort-Object -Property FullName -Descending) {
+    foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse | Sort-Object -Property FullName -Descending -Exclude "node_modules", ".git", "bin", "obj") {
         $itemNewName = $item.Name.Replace($oldName, $newName)
         if ($item.Name -ne $itemNewName) {
             Rename-Item -LiteralPath $item.FullName -NewName $itemNewName
@@ -62,7 +77,7 @@ try {
     }
 
     # Replace content in files
-    foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Include "*.cmd", "*.cs", "*.csproj", "*.json", "*.md", "*.proj", "*.props", "*.ps1", "*.sln", "*.slnx", "*.targets", "*.txt", "*.vb", "*.vbproj", "*.xaml", "*.xml", "*.xproj", "*.yml", "*.yaml") {
+    foreach ($item in Get-ChildItem -LiteralPath $rootFolder -Recurse -Include "*.cmd", "*.cs", "*.csproj", "*.json", "*.md", "*.proj", "*.props", "*.ps1", "*.sln", "*.slnx", "*.targets", "*.txt", "*.vb", "*.vbproj", "*.xaml", "*.xml", "*.xproj", "*.yml", "*.yaml" -Exclude "node_modules", ".git", "bin", "obj") {
         $content = Get-Content -LiteralPath $item.FullName
         if ($content) {
             $newContent = $content.Replace($oldName, $newName)
@@ -70,10 +85,10 @@ try {
         }
     }
 
-    # Удаляем резервную копию
-    Write-Host "Операция успешно завершена. Удаляем резервную копию..."
-    Remove-Item -Path $backupDir -Recurse -Force
-    Write-Host "Резервная копия удалена."
+    # # Удаляем резервную копию
+    # Write-Host "Операция успешно завершена. Удаляем резервную копию..."
+    # Remove-Item -Path $backupDir -Recurse -Force
+    # Write-Host "Резервная копия удалена."
 }
 catch {
     # Этот блок выполняется, если в блоке try возникла ошибка
