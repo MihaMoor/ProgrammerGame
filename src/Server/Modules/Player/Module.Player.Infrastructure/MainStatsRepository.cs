@@ -1,6 +1,6 @@
 ﻿using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
-using Server.Shared.Results;
+using Server.Shared.Errors;
 
 namespace Server.Module.Player.Infrastructure;
 

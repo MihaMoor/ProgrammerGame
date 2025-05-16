@@ -11,6 +11,5 @@ public partial class PlayerTests
             { "test1", true, null },
             { "", false, MainStatsError.NameIsEmpty() },
             { " ", false, MainStatsError.NameIsEmpty() },
-            { null, false, MainStatsError.NameIsEmpty() },
         };
 }

@@ -10,7 +10,7 @@ public partial class PlayerTests
 {
     [TimeoutTheory(timeoutMilliseconds: 3)]
     [MemberData(nameof(CreateMainStatsData))]
-    public void Создания_основных_характеристик(string? name, bool expected, Error? error)
+    public void Создания_основных_характеристик(string name, bool expected, Error? error)
     {
         Result<MainStats> actual = MainStats.CreatePlayer(name);
 

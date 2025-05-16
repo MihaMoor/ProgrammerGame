@@ -4,11 +4,13 @@ package player.v1;
 
 option csharp_namespace = "Server.Module.Player.GrpcContracts";
 
-import "google/protobuf/guid.proto";
-
 service PlayerService {
-    rpc Get(google.protobuf.Guid) returns (PlayerDto);
-    rpc Subscribe(google.protobuf.Guid) returns (stream PlayerDto);
+    rpc Get(UUID) returns (PlayerDto);
+    rpc Subscribe(UUID) returns (stream PlayerDto);
+}
+
+message UUID{
+    string Id = 1;
 }
 
 message PlayerDto {
