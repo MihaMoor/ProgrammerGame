@@ -7,6 +7,8 @@ namespace Server.Api;
 
 public class Program
 {
+    private const ulong DefaultQueueLimitBytes = 104_857_600UL;
+
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -43,7 +45,7 @@ public class Program
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-        AppSettings? appSettings = builder.Configuration.Get<AppSettings>();
+        AppSettings? appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
 
         if (appSettings == null)
         {
@@ -63,7 +65,7 @@ public class Program
         );
         ElasticsearchClient elasticsearchClient = new(elasticsearchOptions);
 
-        ulong queueLimitBytes = appSettings.Logstash.QueueLimitBytes;
+        ulong queueLimitBytes = appSettings.Logstash?.QueueLimitBytes ?? DefaultQueueLimitBytes;
 
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()

@@ -63,7 +63,7 @@ public sealed class MainStats
             PocketMoney = 99.99m,
         };
 
-        return mainStats;
+        return Result.Success(mainStats);
     }
 
     /// <summary>

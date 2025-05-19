@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using Server.Module.Player.Domain;
-using Server.Module.Player.GrpcContracts;
+using Server.Module.Player.GrpcContracts.Player.V1;
 using Server.Shared.Cqrs;
 using Server.Shared.Errors;
 

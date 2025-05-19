@@ -64,7 +64,7 @@ public sealed class SubscribeMainStatsHandler(
             updatedStats =>
             {
                 channel.Writer.TryWrite(updatedStats);
-                return ValueTask.CompletedTask;
+                return Task.CompletedTask;
             }
         );
 

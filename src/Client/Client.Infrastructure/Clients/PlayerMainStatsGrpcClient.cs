@@ -1,5 +1,5 @@
 ﻿using Grpc.Core;
-using Server.Module.Player.GrpcContracts;
+using Server.Module.Player.GrpcContracts.Player.V1;
 
 namespace Client.Infrastructure.Clients;
 

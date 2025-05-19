@@ -1,6 +1,6 @@
 ﻿using Grpc.Core;
 using Microsoft.Extensions.Logging;
-using Server.Module.Player.GrpcContracts;
+using Server.Module.Player.GrpcContracts.Player.V1;
 
 namespace Server.Module.Player.Api;
 
