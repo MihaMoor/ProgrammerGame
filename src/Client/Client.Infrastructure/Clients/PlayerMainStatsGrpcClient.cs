@@ -14,13 +14,18 @@ public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient c
             UUID uUID = new() { Id = Guid.NewGuid().ToString() };
             dto = Client.Get(uUID, cancellationToken: cancellationToken);
 
-            handler(dto);
+            handler?.Invoke(dto);
         }
         catch (RpcException rpcEx)
         {
             // Logging or send message to server for registration bug
             Console.WriteLine($"gRPC ошибка: {rpcEx.StatusCode} - {rpcEx.Message}");
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+
         return dto
             ?? new()
             {
