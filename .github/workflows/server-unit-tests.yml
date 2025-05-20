@@ -37,7 +37,7 @@ jobs:
       - name: Find server test projects
         id: find-test-projects
         run: |
-          echo "test_projects=$(find src/Server -name "Server.Module.*.UnitTests.csproj" | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          echo "test_projects=$(find src/Server -name 'Server.Module.*.UnitTests.csproj' | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Restore server test projects
         run: |
