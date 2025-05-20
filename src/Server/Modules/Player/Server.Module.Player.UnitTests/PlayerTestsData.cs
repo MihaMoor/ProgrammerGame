@@ -9,7 +9,7 @@ public partial class PlayerTests
         new()
         {
             { "test1", true, null },
-            { "", false, MainStatsError.NameIsEmpty() },
-            { " ", false, MainStatsError.NameIsEmpty() },
+            { "", false, PlayerError.NameIsEmpty() },
+            { " ", false, PlayerError.NameIsEmpty() },
         };
 }

@@ -8,19 +8,19 @@ namespace WpfClient.Widgets;
 /// <summary>
 /// Interaction logic for .xaml
 /// </summary>
-public partial class MainStatsWidget : Page
+public partial class PlayerWidget : Page
 {
     private readonly CancellationTokenSource _cancellationTokenSource;
-    private readonly MainStats _mainStats;
+    private readonly Player _player;
     private readonly PlayerGrpcClient _playerGrpcClient;
 
-    public MainStatsWidget(PlayerGrpcClient grpcClient)
+    public PlayerWidget(PlayerGrpcClient grpcClient)
     {
-        _mainStats = new();
+        _player = new();
         _playerGrpcClient = grpcClient;
         _cancellationTokenSource = new();
         InitializeComponent();
-        DataContext = _mainStats;
+        DataContext = _player;
         Unloaded += PageUnloaded;
         ConnectToServer();
     }
@@ -34,11 +34,11 @@ public partial class MainStatsWidget : Page
     {
         Dispatcher.Invoke(() =>
         {
-            _mainStats.Name = response.Name;
-            _mainStats.Health = response.Health;
-            _mainStats.Hunger = response.Hunger;
-            _mainStats.Mood = response.Mood;
-            _mainStats.PocketMoney = response.PocketMoney;
+            _player.Name = response.Name;
+            _player.Health = response.Health;
+            _player.Hunger = response.Hunger;
+            _player.Mood = response.Mood;
+            _player.PocketMoney = response.PocketMoney;
         });
     }
 

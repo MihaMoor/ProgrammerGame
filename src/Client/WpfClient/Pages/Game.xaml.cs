@@ -8,7 +8,7 @@ namespace WpfClient.Pages;
 /// </summary>
 public partial class Game : Page
 {
-    public Game(MenuBar menuBar, MainStatsWidget mainStats)
+    public Game(MenuBar menuBar, PlayerWidget mainStats)
     {
         InitializeComponent();
         MenuBarFrame.Navigate(menuBar);

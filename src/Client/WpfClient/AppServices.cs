@@ -38,7 +38,7 @@ public static class AppServices
     private static ServiceCollection ConfigureWidgets(this ServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<MenuBar>();
-        serviceCollection.AddScoped<MainStatsWidget>();
+        serviceCollection.AddScoped<PlayerWidget>();
 
         return serviceCollection;
     }

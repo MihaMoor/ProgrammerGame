@@ -12,14 +12,14 @@ public static class PlayerServiceRegistration
     {
         return services
             .AddSingleton<MainStatsEventListener>()
-            .AddSingleton<IMainStatsChangeNotifier, MainStatsChangeNotifier>()
-            .AddScoped<IMainStatsChangeNotifier>(sp =>
+            .AddSingleton<IPlayerChangeNotifier, MainStatsChangeNotifier>()
+            .AddScoped<IPlayerChangeNotifier>(sp =>
                 sp.GetRequiredService<MainStatsChangeNotifier>()
             )
-            .AddScoped<IMainStatsRepository, MainStatsRepository>()
+            .AddScoped<IPlayerRepository, MainStatsRepository>()
             .AddScoped<
-                IQueryHandler<SubscribeMainStats, IAsyncEnumerable<MainStats>>,
-                SubscribeMainStatsHandler
+                IQueryHandler<SubscribePlayer, IAsyncEnumerable<Player>>,
+                SubscribePlayerHandler
             >();
     }
 }

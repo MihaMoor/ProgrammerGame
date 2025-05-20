@@ -3,13 +3,13 @@ using System.Runtime.CompilerServices;
 
 namespace WpfClient.Widgets;
 
-public class MainStats : INotifyPropertyChanged
+internal sealed class Player : INotifyPropertyChanged
 {
     private uint _health;
     private uint _hunger;
     private uint _mood;
     private double _pocketMoney;
-    private string _name = string.Empty;
+    private string _name = "Unknown";
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

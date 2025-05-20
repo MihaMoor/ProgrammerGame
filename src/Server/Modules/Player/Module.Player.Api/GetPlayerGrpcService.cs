@@ -10,7 +10,7 @@ namespace Server.Module.Player.Api;
 
 internal class GetPlayerGrpcService(
     ILogger<GetPlayerGrpcService> _logger,
-    IQueryHandler<GetMainStatsQuery, MainStats> _handler
+    IQueryHandler<GetPlayerQuery, Domain.Player> _handler
 ) : PlayerService.PlayerServiceBase
 {
     /// <summary>
@@ -26,9 +26,9 @@ internal class GetPlayerGrpcService(
     {
         UUID validatedRequest = Validation.Validate(request, _logger);
 
-        GetMainStatsQuery query = new(new(validatedRequest.Id));
+        GetPlayerQuery query = new(new(validatedRequest.Id));
 
-        Result<MainStats> result = await _handler.Handle(query);
+        Result<Domain.Player> result = await _handler.Handle(query);
 
         if (result.IsFailure)
         {

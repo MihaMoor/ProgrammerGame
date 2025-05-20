@@ -10,7 +10,7 @@ public partial class PlayerTests
     [MemberData(nameof(CreateMainStatsData))]
     public void Создания_основных_характеристик(string name, bool expected, Error? error)
     {
-        Result<MainStats> actual = MainStats.CreatePlayer(name);
+        Result<Domain.Player> actual = Domain.Player.CreatePlayer(name);
 
         Assert.Equal(expected, actual.IsSuccess);
         if (actual.IsFailure)

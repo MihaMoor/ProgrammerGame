@@ -10,7 +10,7 @@ namespace Server.Module.Player.Api;
 
 internal sealed class SubscribePlayerGrpcService(
     ILogger<SubscribePlayerGrpcService> _logger,
-    IQueryHandler<SubscribeMainStats, IAsyncEnumerable<MainStats>> _subscribeHandler
+    IQueryHandler<SubscribePlayer, IAsyncEnumerable<Domain.Player>> _subscribeHandler
 ) : PlayerService.PlayerServiceBase
 {
     public override async Task Subscribe(
@@ -24,9 +24,9 @@ internal sealed class SubscribePlayerGrpcService(
         if (!Guid.TryParse(request.Id, out Guid playerId))
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid player Id"));
 
-        SubscribeMainStats query = new(playerId);
+        SubscribePlayer query = new(playerId);
 
-        Result<IAsyncEnumerable<MainStats>> result = await _subscribeHandler.Handle(
+        Result<IAsyncEnumerable<Domain.Player>> result = await _subscribeHandler.Handle(
             query,
             context.CancellationToken
         );
@@ -43,7 +43,7 @@ internal sealed class SubscribePlayerGrpcService(
         {
             // Обрабатываем поток обновлений и отправляем их клиенту
             await foreach (
-                MainStats? stats in result.Value.WithCancellation(context.CancellationToken)
+                Domain.Player? stats in result.Value.WithCancellation(context.CancellationToken)
             )
             {
                 await responseStream.WriteAsync(stats.ToViewModel());

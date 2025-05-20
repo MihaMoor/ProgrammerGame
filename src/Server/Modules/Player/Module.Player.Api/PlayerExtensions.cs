@@ -5,7 +5,7 @@ namespace Server.Module.Player.Api;
 
 internal static class PlayerExtensions
 {
-    public static PlayerDto ToViewModel(this MainStats stats) =>
+    public static PlayerDto ToViewModel(this Domain.Player stats) =>
         new()
         {
             Name = stats.Name,

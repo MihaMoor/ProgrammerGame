@@ -4,17 +4,17 @@ using Server.Shared.Errors;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class MainStatsRepository(MainStatsEventListener eventListener) : IMainStatsRepository
+public class MainStatsRepository(MainStatsEventListener eventListener) : IPlayerRepository
 {
-    public Task<MainStats?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         // Получаем сущность из хранилища
-        Result<MainStats>? result = MainStats.CreatePlayer($"Player_{id}");
+        Result<Domain.Player>? result = Domain.Player.CreatePlayer($"Player_{id}");
 
         if (result.IsFailure)
-            return Task.FromResult<MainStats?>(null);
+            return Task.FromResult<Player?>(null);
 
-        MainStats? entity = result.Value;
+        Domain.Player? entity = result.Value;
 
         if (entity != null)
         {
@@ -25,7 +25,7 @@ public class MainStatsRepository(MainStatsEventListener eventListener) : IMainSt
         return Task.FromResult(entity);
     }
 
-    public Task SaveAsync(MainStats entity, CancellationToken cancellationToken = default)
+    public Task SaveAsync(Domain.Player entity, CancellationToken cancellationToken = default)
     {
         // Сохраняем сущность в хранилище
         // ...

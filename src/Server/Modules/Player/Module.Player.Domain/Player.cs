@@ -2,14 +2,14 @@
 
 namespace Server.Module.Player.Domain;
 
-public sealed class MainStats
+public sealed class Player
 {
-    public event Action<MainStats>? StatsChanged;
+    public event Action<Player>? StatsChanged;
 
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid MainStatsId { get; init; }
+    public Guid PlayerId { get; init; }
 
     /// <summary>
     /// Имя
@@ -36,7 +36,7 @@ public sealed class MainStats
     /// </summary>
     public decimal PocketMoney { get; private set; }
 
-    private MainStats()
+    private Player()
     {
         Name = string.Empty;
     }
@@ -46,16 +46,16 @@ public sealed class MainStats
     /// </summary>
     /// <param name="name">Имя персонажа</param>
     /// <returns>
-    /// <see cref="Result"/> <see cref="MainStatsError.NameIsEmpty()"/>
+    /// <see cref="Result"/> <see cref="PlayerError.NameIsEmpty()"/>
     /// </returns>
-    public static Result<MainStats> CreatePlayer(string name)
+    public static Result<Player> CreatePlayer(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return Result.Failure<MainStats>(MainStatsError.NameIsEmpty());
+            return Result.Failure<Player>(PlayerError.NameIsEmpty());
 
-        MainStats mainStats = new()
+        Player mainStats = new()
         {
-            MainStatsId = Guid.NewGuid(),
+            PlayerId = Guid.NewGuid(),
             Name = name,
             Health = 100,
             Hunger = 100,

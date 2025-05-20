@@ -14,9 +14,10 @@ message UUID{
 }
 
 message PlayerDto {
-    string name = 1;
-    uint32 health = 2;
-    uint32 hunger = 3;
-    double pocketMoney = 4;
-    uint32 mood = 5;
+    UUID playerId = 1;
+    string name = 2;
+    uint32 health = 3;
+    uint32 hunger = 4;
+    double pocketMoney = 5;
+    uint32 mood = 6;
 }

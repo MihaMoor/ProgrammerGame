@@ -6,12 +6,12 @@ namespace Server.Module.Player.Infrastructure;
 
 public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger Logger)
 {
-    private readonly ConcurrentDictionary<Guid, MainStats> _trackedEntities = new();
+    private readonly ConcurrentDictionary<Guid, Domain.Player> _trackedEntities = new();
 
-    // Этот метод вызывается, когда MainStats загружается из репозитория
-    public void TrackEntity(MainStats entity)
+    // Этот метод вызывается, когда Player загружается из репозитория
+    public void TrackEntity(Domain.Player entity)
     {
-        if (_trackedEntities.TryAdd(entity.MainStatsId, entity))
+        if (_trackedEntities.TryAdd(entity.PlayerId, entity))
         {
             // Подписываемся на события сущности
             entity.StatsChanged += OnEntityChanged;
@@ -19,15 +19,15 @@ public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger L
     }
 
     // Прекращаем отслеживание сущности
-    public void UntrackEntity(MainStats entity)
+    public void UntrackEntity(Domain.Player entity)
     {
-        if (_trackedEntities.TryRemove(entity.MainStatsId, out _))
+        if (_trackedEntities.TryRemove(entity.PlayerId, out _))
         {
             entity.StatsChanged -= OnEntityChanged;
         }
     }
 
-    private void OnEntityChanged(MainStats entity)
+    private void OnEntityChanged(Domain.Player entity)
     {
         // Асинхронно уведомляем всех подписчиков
         Task.Run(async () =>

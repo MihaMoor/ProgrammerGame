@@ -2,12 +2,12 @@
 
 namespace Server.Module.Player.Domain;
 
-public static class MainStatsError
+public static class PlayerError
 {
-    public static Error NotFound(Guid mainStatsId) =>
+    public static Error NotFound(Guid playerId) =>
         new(
             ErrorCode.EntityNotFound,
-            $"The main stats with the Id = '{mainStatsId}' was not found"
+            $"The player with the Id = '{playerId}' was not found"
         );
 
     public static Error NameIsEmpty() =>

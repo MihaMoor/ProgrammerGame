@@ -5,50 +5,50 @@ using Server.Shared.Errors;
 
 namespace Server.Module.Player.Application;
 
-public sealed record GetMainStatsQuery(Guid MainStatsId) : IQuery<MainStats>;
+public sealed record GetPlayerQuery(Guid PlayerId) : IQuery<Domain.Player>;
 
-public sealed class GetMainStatsQueryHandler(IMainStatsRepository mainStatsRepository)
-    : IQueryHandler<GetMainStatsQuery, MainStats>
+public sealed class GetMainStatsQueryHandler(IPlayerRepository playerRepository)
+    : IQueryHandler<GetPlayerQuery, Domain.Player>
 {
-    public async Task<Result<MainStats>> Handle(
-        GetMainStatsQuery playerQuery,
+    public async Task<Result<Domain.Player>> Handle(
+        GetPlayerQuery playerQuery,
         CancellationToken token
     )
     {
-        MainStats? mainStats = await mainStatsRepository.GetAsync(playerQuery.MainStatsId, token);
-        if (mainStats is null)
+        Domain.Player? player = await playerRepository.GetAsync(playerQuery.PlayerId, token);
+        if (player is null)
         {
-            return Result.Failure<MainStats>(MainStatsError.NotFound(playerQuery.MainStatsId));
+            return Result.Failure<Domain.Player>(PlayerError.NotFound(playerQuery.PlayerId));
         }
-        return Result.Success(mainStats);
+        return Result.Success(player);
     }
 }
 
-public sealed record SubscribeMainStats(Guid MainStatsId) : IQuery<IAsyncEnumerable<MainStats>>;
+public sealed record SubscribePlayer(Guid PlayerId) : IQuery<IAsyncEnumerable<Domain.Player>>;
 
-public sealed class SubscribeMainStatsHandler(
-    IMainStatsRepository mainStatsRepository,
-    IMainStatsChangeNotifier notifier
-) : IQueryHandler<SubscribeMainStats, IAsyncEnumerable<MainStats>>
+public sealed class SubscribePlayerHandler(
+    IPlayerRepository playerRepository,
+    IPlayerChangeNotifier notifier
+) : IQueryHandler<SubscribePlayer, IAsyncEnumerable<Domain.Player>>
 {
-    public async Task<Result<IAsyncEnumerable<MainStats>>> Handle(
-        SubscribeMainStats query,
+    public async Task<Result<IAsyncEnumerable<Domain.Player>>> Handle(
+        SubscribePlayer query,
         CancellationToken cancellationToken = default
     )
     {
-        MainStats? mainStats = await mainStatsRepository.GetAsync(
-            query.MainStatsId,
+        Domain.Player? player = await playerRepository.GetAsync(
+            query.PlayerId,
             cancellationToken
         );
-        if (mainStats is null)
+        if (player is null)
         {
-            return Result.Failure<IAsyncEnumerable<MainStats>>(
-                MainStatsError.NotFound(query.MainStatsId)
+            return Result.Failure<IAsyncEnumerable<Domain.Player>>(
+                PlayerError.NotFound(query.PlayerId)
             );
         }
 
         // Создаем канал для передачи обновлений
-        Channel<MainStats> channel = Channel.CreateBounded<MainStats>(
+        Channel<Domain.Player> channel = Channel.CreateBounded<Domain.Player>(
             new BoundedChannelOptions(10) // ёмкость подберите опытным путём
             {
                 FullMode = BoundedChannelFullMode.DropOldest,
@@ -56,11 +56,11 @@ public sealed class SubscribeMainStatsHandler(
         );
 
         // Сразу отправляем текущее состояние
-        await channel.Writer.WriteAsync(mainStats, cancellationToken);
+        await channel.Writer.WriteAsync(player, cancellationToken);
 
         // Регистрируем обработчик изменений и передаем их в канал
         IDisposable subscription = notifier.Subscribe(
-            query.MainStatsId,
+            query.PlayerId,
             updatedStats =>
             {
                 channel.Writer.TryWrite(updatedStats);

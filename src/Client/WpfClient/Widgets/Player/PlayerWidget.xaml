@@ -1,0 +1,107 @@
+﻿<Page x:Class="WpfClient.Widgets.PlayerWidget"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:WpfClient.Widgets"
+      d:DataContext="{d:DesignInstance Type=local:Player}"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Player"
+      Unloaded="PageUnloaded"
+>
+    <GroupBox
+        Header="Основные характеристики"
+        Margin="10"
+        Padding="10">
+        <Grid ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Content="Имя"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="0"
+            />
+            <Label
+                Content="{Binding Name}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="1"
+            />
+
+            <Label
+                Content="Здоровье"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="0"
+            />
+            <Label
+                Content="{Binding Health}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="1"
+            />
+
+            <Label
+                Content="Голод"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="0"
+            />
+            <Label
+                Content="{Binding Hunger}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="1"
+            />
+
+            <Label
+                Content="Настроение"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="0"
+            />
+            <Label
+                Content="{Binding Mood}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="1"
+            />
+
+            <Label
+                Content="Карманные деньги"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="4"
+                Grid.Column="0"
+            />
+            <Label
+                Content="{Binding PocketMoney}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="4"
+                Grid.Column="1"
+            />
+
+        </Grid>
+    </GroupBox>
+</Page>

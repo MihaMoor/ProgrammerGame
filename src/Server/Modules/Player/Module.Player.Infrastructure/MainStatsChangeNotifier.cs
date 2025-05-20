@@ -5,22 +5,22 @@ using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
+public class MainStatsChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
 {
     private readonly ConcurrentDictionary<
         Guid,
-        ConcurrentDictionary<Guid, Func<MainStats, Task>>
+        ConcurrentDictionary<Guid, Func<Domain.Player, Task>>
     > _subscriptions = new();
 
-    public IDisposable Subscribe(Guid mainStatsId, Func<MainStats, Task> handler)
+    public IDisposable Subscribe(Guid mainStatsId, Func<Domain.Player, Task> handler)
     {
         // Создаем уникальный ID для подписки
         Guid subscriptionId = Guid.NewGuid();
 
         // Получаем или создаем внутренний словарь для указанного mainStatsId
-        ConcurrentDictionary<Guid, Func<MainStats, Task>> handlersDict = _subscriptions.GetOrAdd(
+        ConcurrentDictionary<Guid, Func<Player, Task>> handlersDict = _subscriptions.GetOrAdd(
             mainStatsId,
-            _ => new ConcurrentDictionary<Guid, Func<MainStats, Task>>()
+            _ => new ConcurrentDictionary<Guid, Func<Player, Task>>()
         );
 
         ArgumentNullException.ThrowIfNull(handler);
@@ -35,13 +35,13 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         return new Subscription(mainStatsId, subscriptionId, this);
     }
 
-    // Вызывается при изменении MainStats
-    internal async Task OnMainStatsChanged(MainStats stats)
+    // Вызывается при изменении Player
+    internal async Task OnMainStatsChanged(Domain.Player stats)
     {
         if (
             _subscriptions.TryGetValue(
-                stats.MainStatsId,
-                out ConcurrentDictionary<Guid, Func<MainStats, Task>>? handlersDict
+                stats.PlayerId,
+                out ConcurrentDictionary<Guid, Func<Player, Task>>? handlersDict
             )
         )
         {
@@ -55,8 +55,8 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
     }
 
     private static async Task SafeInvokeAsync(
-        Func<MainStats, Task> handler,
-        MainStats stats,
+        Func<Domain.Player, Task> handler,
+        Domain.Player stats,
         ILogger logger
     )
     {
@@ -66,7 +66,7 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Ошибка при обработке события изменения MainStats");
+            logger.LogError(ex, "Ошибка при обработке события изменения Player");
         }
     }
 
@@ -76,7 +76,7 @@ public class MainStatsChangeNotifier(ILogger _logger) : IMainStatsChangeNotifier
         if (
             _subscriptions.TryGetValue(
                 mainStatsId,
-                out ConcurrentDictionary<Guid, Func<MainStats, Task>>? handlersDict
+                out ConcurrentDictionary<Guid, Func<Player, Task>>? handlersDict
             )
         )
         {
