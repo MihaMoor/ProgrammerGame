@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
-using Server.Module.Player.Domain;
 using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
@@ -18,9 +17,9 @@ public class MainStatsChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
         Guid subscriptionId = Guid.NewGuid();
 
         // Получаем или создаем внутренний словарь для указанного mainStatsId
-        ConcurrentDictionary<Guid, Func<Player, Task>> handlersDict = _subscriptions.GetOrAdd(
+        ConcurrentDictionary<Guid, Func<Domain.Player, Task>> handlersDict = _subscriptions.GetOrAdd(
             mainStatsId,
-            _ => new ConcurrentDictionary<Guid, Func<Player, Task>>()
+            _ => new ConcurrentDictionary<Guid, Func<Domain.Player, Task>>()
         );
 
         ArgumentNullException.ThrowIfNull(handler);
@@ -41,7 +40,7 @@ public class MainStatsChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
         if (
             _subscriptions.TryGetValue(
                 stats.PlayerId,
-                out ConcurrentDictionary<Guid, Func<Player, Task>>? handlersDict
+                out ConcurrentDictionary<Guid, Func<Domain.Player, Task>>? handlersDict
             )
         )
         {
@@ -76,7 +75,7 @@ public class MainStatsChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
         if (
             _subscriptions.TryGetValue(
                 mainStatsId,
-                out ConcurrentDictionary<Guid, Func<Player, Task>>? handlersDict
+                out ConcurrentDictionary<Guid, Func<Domain.Player, Task>>? handlersDict
             )
         )
         {

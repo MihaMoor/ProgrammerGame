@@ -16,8 +16,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Shared\Shared.MapEndpoints\Shared.EndpointMapper.csproj" />
-    <ProjectReference Include="..\Module.Player.Application\Module.Player.Application.csproj" />
-    <ProjectReference Include="..\Module.Player.GrpcContracts\Module.Player.GrpcContracts.csproj" />
-    <ProjectReference Include="..\Module.Player.Infrastructure\Module.Player.Infrastructure.csproj" />
+    <ProjectReference Include="..\Module.Player.Application\Server.Module.Player.Application.csproj" />
+    <ProjectReference Include="..\Module.Player.GrpcContracts\Server.Module.Player.GrpcContracts.csproj" />
+    <ProjectReference Include="..\Module.Player.Infrastructure\Server.Module.Player.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

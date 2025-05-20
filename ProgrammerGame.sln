@@ -29,15 +29,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{DA8B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Player", "Player", "{E9B23FDB-28DE-4863-9750-331A6FE430FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Player.Domain", "src\Server\Modules\Player\Module.Player.Domain\Module.Player.Domain.csproj", "{318A75FC-3DA9-4960-8887-BBC4C97D062D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.Domain", "src\Server\Modules\Player\Module.Player.Domain\Server.Module.Player.Domain.csproj", "{318A75FC-3DA9-4960-8887-BBC4C97D062D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Player.Api", "src\Server\Modules\Player\Module.Player.Api\Module.Player.Api.csproj", "{B60B375A-92C0-4440-938C-853B6ABDDC43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.Api", "src\Server\Modules\Player\Module.Player.Api\Server.Module.Player.Api.csproj", "{B60B375A-92C0-4440-938C-853B6ABDDC43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Player.GrpcContracts", "src\Server\Modules\Player\Module.Player.GrpcContracts\Module.Player.GrpcContracts.csproj", "{53F7FC5F-9C39-4605-8E9C-7A93F638536B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.GrpcContracts", "src\Server\Modules\Player\Module.Player.GrpcContracts\Server.Module.Player.GrpcContracts.csproj", "{53F7FC5F-9C39-4605-8E9C-7A93F638536B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Player.Application", "src\Server\Modules\Player\Module.Player.Application\Module.Player.Application.csproj", "{4C0BB5F1-FC4E-41F9-90A1-85705AFDF9FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.Application", "src\Server\Modules\Player\Module.Player.Application\Server.Module.Player.Application.csproj", "{4C0BB5F1-FC4E-41F9-90A1-85705AFDF9FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.Player.Infrastructure", "src\Server\Modules\Player\Module.Player.Infrastructure\Module.Player.Infrastructure.csproj", "{2B2C2104-36A7-422E-9D85-424C4B3A7B3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.Infrastructure", "src\Server\Modules\Player\Module.Player.Infrastructure\Server.Module.Player.Infrastructure.csproj", "{2B2C2104-36A7-422E-9D85-424C4B3A7B3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Shared.Errors", "src\Shared\Server.Shared.Errors\Server.Shared.Errors.csproj", "{9D197F93-6A5F-48DA-9C87-E55B76DC4E4E}"
 EndProject

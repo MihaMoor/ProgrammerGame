@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Server.Module.Player.Application;
-using Server.Module.Player.Domain;
 using Server.Module.Player.Infrastructure;
 using Server.Shared.Cqrs;
 
@@ -18,7 +17,7 @@ public static class PlayerServiceRegistration
             )
             .AddScoped<IPlayerRepository, MainStatsRepository>()
             .AddScoped<
-                IQueryHandler<SubscribePlayer, IAsyncEnumerable<Player>>,
+                IQueryHandler<SubscribePlayer, IAsyncEnumerable<Domain.Player>>,
                 SubscribePlayerHandler
             >();
     }

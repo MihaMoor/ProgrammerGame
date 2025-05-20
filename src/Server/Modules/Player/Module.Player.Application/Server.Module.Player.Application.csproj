@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Shared\Server.Shared.Cqrs\Server.Shared.Cqrs.csproj" />
-    <ProjectReference Include="..\Module.Player.Domain\Module.Player.Domain.csproj" />
+    <ProjectReference Include="..\Module.Player.Domain\Server.Module.Player.Domain.csproj" />
   </ItemGroup>
 
 </Project>

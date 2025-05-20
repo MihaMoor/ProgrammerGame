@@ -12,7 +12,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Module.Player.Domain\Module.Player.Domain.csproj" />
+    <ProjectReference Include="..\Module.Player.Domain\Server.Module.Player.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

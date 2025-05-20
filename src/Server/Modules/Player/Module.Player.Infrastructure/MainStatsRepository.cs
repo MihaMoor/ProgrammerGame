@@ -1,5 +1,4 @@
 ﻿using Server.Module.Player.Application;
-using Server.Module.Player.Domain;
 using Server.Shared.Errors;
 
 namespace Server.Module.Player.Infrastructure;
@@ -12,7 +11,7 @@ public class MainStatsRepository(MainStatsEventListener eventListener) : IPlayer
         Result<Domain.Player>? result = Domain.Player.CreatePlayer($"Player_{id}");
 
         if (result.IsFailure)
-            return Task.FromResult<Player?>(null);
+            return Task.FromResult<Domain.Player?>(null);
 
         Domain.Player? entity = result.Value;
 
