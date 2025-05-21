@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package server.module.player.grpccontracts.v1;
+package src.server.module.player.servermoduleplayergrpccontracts.v1;
 
 option csharp_namespace = "Server.Module.Player.GrpcContracts.V1";
 
-import "V1/Player.proto";
+import "Player.proto";
 
 service CreatePlayerService {
     rpc Create(CreatePlayerCommand) returns (PlayerDto);
