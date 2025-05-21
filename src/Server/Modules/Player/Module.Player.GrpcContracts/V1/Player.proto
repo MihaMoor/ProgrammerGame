@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package server.module.player.moduleplayergrpccontracts.player.v1;
+package server.module.player.grpccontracts.v1;
 
-option csharp_namespace = "Server.Module.Player.GrpcContracts.Player.V1";
+option csharp_namespace = "Server.Module.Player.GrpcContracts.V1";
 
 service PlayerService {
     rpc Get(UUID) returns (PlayerDto);

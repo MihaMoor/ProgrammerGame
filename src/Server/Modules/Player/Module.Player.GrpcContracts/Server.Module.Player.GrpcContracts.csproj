@@ -13,7 +13,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="Player.proto" />
-    <Protobuf Include="CreatePlayer.proto" />
+    <Protobuf Include="V1/Player.proto" />
+    <Protobuf Include="V1/CreatePlayer.proto" />
   </ItemGroup>
 </Project>
