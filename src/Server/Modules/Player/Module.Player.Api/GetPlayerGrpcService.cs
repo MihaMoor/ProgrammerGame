@@ -1,8 +1,7 @@
 ﻿using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
-using Server.Module.Player.Domain;
-using Server.Module.Player.GrpcContracts.Player.V1;
+using Server.Module.Player.GrpcContracts.V1;
 using Server.Shared.Cqrs;
 using Server.Shared.Errors;
 

@@ -12,8 +12,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <Protobuf Include="V1/Player.proto" />
-    <Protobuf Include="V1/CreatePlayer.proto" />
+    <Protobuf Include="V1\Player.proto" />
+    <Protobuf Include="V1\CreatePlayer.proto" />
   </ItemGroup>
+
 </Project>

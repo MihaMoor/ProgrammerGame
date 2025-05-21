@@ -1,5 +1,4 @@
-﻿using Server.Module.Player.Domain;
-using Server.Module.Player.GrpcContracts.Player.V1;
+﻿using Server.Module.Player.GrpcContracts.V1;
 
 namespace Server.Module.Player.Api;
 

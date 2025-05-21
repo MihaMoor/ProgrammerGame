@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Client.Infrastructure.Clients;
-using Server.Module.Player.GrpcContracts.Player.V1;
+using Server.Module.Player.GrpcContracts.V1;
 
 namespace WpfClient.Widgets;
 

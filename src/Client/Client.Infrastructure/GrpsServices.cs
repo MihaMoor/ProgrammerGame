@@ -1,6 +1,6 @@
 ﻿using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Server.Module.Player.GrpcContracts.Player.V1;
+using Server.Module.Player.GrpcContracts.V1;
 
 namespace Client.Infrastructure;
 

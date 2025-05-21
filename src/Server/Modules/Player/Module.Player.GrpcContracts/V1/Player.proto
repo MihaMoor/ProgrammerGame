@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package src.server.module.player.servermoduleplayergrpccontracts.v1;
+package server.module.player.grpccontracts.v1;
 
 option csharp_namespace = "Server.Module.Player.GrpcContracts.V1";
 
