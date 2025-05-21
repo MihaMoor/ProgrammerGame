@@ -1,5 +1,4 @@
-﻿using Server.Module.Player.Domain;
-using Server.Shared.Errors;
+﻿using Server.Shared.Errors;
 
 namespace Server.Module.Player.UnitTests;
 

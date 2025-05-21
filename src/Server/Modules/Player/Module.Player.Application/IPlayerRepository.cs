@@ -1,6 +1,4 @@
-﻿using Server.Module.Player.Domain;
-
-namespace Server.Module.Player.Application;
+﻿namespace Server.Module.Player.Application;
 
 public interface IPlayerRepository
 {

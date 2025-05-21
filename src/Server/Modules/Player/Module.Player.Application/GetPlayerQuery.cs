@@ -7,7 +7,7 @@ namespace Server.Module.Player.Application;
 
 public sealed record GetPlayerQuery(Guid PlayerId) : IQuery<Domain.Player>;
 
-public sealed class GetMainStatsQueryHandler(IPlayerRepository playerRepository)
+public sealed class GetPlayerQueryHandler(IPlayerRepository playerRepository)
     : IQueryHandler<GetPlayerQuery, Domain.Player>
 {
     public async Task<Result<Domain.Player>> Handle(
