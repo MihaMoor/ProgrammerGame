@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class MainStatsChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
+public class PlayerChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
 {
     private readonly ConcurrentDictionary<
         Guid,
@@ -94,7 +94,7 @@ public class MainStatsChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
     private class Subscription(
         Guid mainStatsId,
         Guid subscriptionId,
-        MainStatsChangeNotifier notifier
+        PlayerChangeNotifier notifier
     ) : IDisposable
     {
         private bool _disposed;

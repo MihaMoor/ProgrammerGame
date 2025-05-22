@@ -3,7 +3,7 @@ using Server.Shared.Errors;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class MainStatsRepository(MainStatsEventListener eventListener) : IPlayerRepository
+public class PlayerRepository(PlayerEventListener eventListener) : IPlayerRepository
 {
     public Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {

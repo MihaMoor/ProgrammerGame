@@ -4,7 +4,7 @@ using Server.Module.Player.Domain;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class MainStatsEventListener(MainStatsChangeNotifier _notifier, ILogger Logger)
+public class PlayerEventListener(PlayerChangeNotifier _notifier, ILogger Logger)
 {
     private readonly ConcurrentDictionary<Guid, Domain.Player> _trackedEntities = new();
 

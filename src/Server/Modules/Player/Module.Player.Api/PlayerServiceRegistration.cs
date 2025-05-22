@@ -10,12 +10,12 @@ public static class PlayerServiceRegistration
     public static IServiceCollection AddPlayerServices(this IServiceCollection services)
     {
         return services
-            .AddSingleton<MainStatsEventListener>()
-            .AddSingleton<IPlayerChangeNotifier, MainStatsChangeNotifier>()
+            .AddSingleton<PlayerEventListener>()
+            .AddSingleton<IPlayerChangeNotifier, PlayerChangeNotifier>()
             .AddScoped<IPlayerChangeNotifier>(sp =>
-                sp.GetRequiredService<MainStatsChangeNotifier>()
+                sp.GetRequiredService<PlayerChangeNotifier>()
             )
-            .AddScoped<IPlayerRepository, MainStatsRepository>()
+            .AddScoped<IPlayerRepository, PlayerRepository>()
             .AddScoped<
                 IQueryHandler<SubscribePlayer, IAsyncEnumerable<Domain.Player>>,
                 SubscribePlayerHandler
