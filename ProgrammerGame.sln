@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.Integr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.Infrastructure.EfCore", "src\Server\Modules\Player\Server.Module.Player.Infrastructure.EfCore\Server.Module.Player.Infrastructure.EfCore.csproj", "{3DE12462-DA33-42E8-84BB-D79F403C9673}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Module.Player.Infrastructure.EfCore.Migrations", "src\Server\Modules\Player\Server.Module.Player.Infrastructure.EfCore.Migrations\Server.Module.Player.Infrastructure.EfCore.Migrations.csproj", "{20CCD8CA-32A5-4B4B-990E-8DF56B45F7F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,10 @@ Global
 		{3DE12462-DA33-42E8-84BB-D79F403C9673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DE12462-DA33-42E8-84BB-D79F403C9673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DE12462-DA33-42E8-84BB-D79F403C9673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20CCD8CA-32A5-4B4B-990E-8DF56B45F7F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20CCD8CA-32A5-4B4B-990E-8DF56B45F7F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20CCD8CA-32A5-4B4B-990E-8DF56B45F7F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20CCD8CA-32A5-4B4B-990E-8DF56B45F7F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +143,7 @@ Global
 		{8A887751-CA3F-4637-AC0D-7213CF740B57} = {E9B23FDB-28DE-4863-9750-331A6FE430FB}
 		{9F139CD7-E147-429A-8683-DDAB3F448923} = {E9B23FDB-28DE-4863-9750-331A6FE430FB}
 		{3DE12462-DA33-42E8-84BB-D79F403C9673} = {E9B23FDB-28DE-4863-9750-331A6FE430FB}
+		{20CCD8CA-32A5-4B4B-990E-8DF56B45F7F4} = {E9B23FDB-28DE-4863-9750-331A6FE430FB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BDDA671-1A8A-4305-B616-A5449BD7CE3A}

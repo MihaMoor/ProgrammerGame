@@ -9,6 +9,8 @@ public partial class PlayerTests
         new()
         {
             { "test1", true, null },
+            { "Игрок с русским именем", true, null },
+            { "Player with very long name that might cause issues if there are restrictions", true, null },
             { "", false, PlayerError.NameIsEmpty() },
             { " ", false, PlayerError.NameIsEmpty() },
         };

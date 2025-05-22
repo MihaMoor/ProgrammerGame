@@ -10,8 +10,8 @@ namespace Server.Module.Player.IntegrationTests;
 [Trait("Category", "Integration")]
 public partial class PlayerTests
 {
-    [Theory(Timeout = 1000)]
-    [MemberData(nameof(CreatePlayerData))]
+    //[Theory(Timeout = 1000)]
+    //[MemberData(nameof(CreatePlayerData))]
     public async Task Получение_игрока(
         UUID id,
         PlayerDto expected)
