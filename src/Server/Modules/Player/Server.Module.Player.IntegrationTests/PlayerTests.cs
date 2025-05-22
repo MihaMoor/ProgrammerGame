@@ -1,23 +1,28 @@
-﻿using Server.Module.Player.Application;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using Server.Module.Player.Api;
+using Server.Module.Player.Application;
+using Server.Module.Player.GrpcContracts.V1;
 using Server.Shared.Cqrs;
-using Server.Shared.Errors;
 
 namespace Server.Module.Player.IntegrationTests;
 
 [Trait("Category", "Integration")]
-public partial class PlayerTests(IQueryHandler<GetPlayerQuery, Domain.Player> queryHandler)
+public partial class PlayerTests
 {
     [Theory(Timeout = 1000)]
     [MemberData(nameof(CreatePlayerData))]
     public async Task Получение_игрока(
-        GetPlayerQuery query,
-        Domain.Player expected)
+        UUID id,
+        PlayerDto expected)
     {
-        Result<Domain.Player> playerResult = await queryHandler.Handle(query);
+        // Arrange
+        Mock<ILogger<GetPlayerGrpcService>> mockLogger = new();
+        Mock<IPlayerRepository> playerRepositoryMock = new();
+        IQueryHandler<GetPlayerQuery, Domain.Player> queryHandler = new GetPlayerQueryHandler(playerRepositoryMock.Object);
 
-        Assert.True(playerResult.IsSuccess);
-
-        Domain.Player player = playerResult.Value;
+        GetPlayerGrpcService service = new(mockLogger.Object, queryHandler);
+        PlayerDto player = await service.Get(id, null!);
 
         Assert.Equal(expected.Name, player.Name);
         Assert.Equal(expected.Health, player.Health);
@@ -29,11 +34,25 @@ public partial class PlayerTests(IQueryHandler<GetPlayerQuery, Domain.Player> qu
 
 public partial class PlayerTests
 {
-    public static TheoryData<GetPlayerQuery, Domain.Player> CreatePlayerData => new()
+    public static TheoryData<UUID, PlayerDto> CreatePlayerData => new()
     {
         {
-            new(Guid.NewGuid()),
-            Domain.Player.CreatePlayer("Test1").Value
+            new()
+            {
+                Id = Guid.NewGuid().ToString(),
+            },
+            new()
+            {
+                PlayerId = new()
+                {
+                    Id = Guid.NewGuid().ToString()
+                },
+                Name = "Test1",
+                Health = 100,
+                Hunger = 100,
+                Mood = 100,
+                PocketMoney = 99.99,
+            }
         }
     };
 }

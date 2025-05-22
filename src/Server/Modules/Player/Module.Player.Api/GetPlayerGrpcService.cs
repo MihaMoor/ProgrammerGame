@@ -7,7 +7,7 @@ using Server.Shared.Errors;
 
 namespace Server.Module.Player.Api;
 
-internal class GetPlayerGrpcService(
+public class GetPlayerGrpcService(
     ILogger<GetPlayerGrpcService> _logger,
     IQueryHandler<GetPlayerQuery, Domain.Player> _handler
 ) : PlayerService.PlayerServiceBase
