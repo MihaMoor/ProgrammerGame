@@ -3,15 +3,15 @@ using Server.Shared.Errors;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class PlayerRepository(PlayerEventListener eventListener) : IPlayerRepository
+public class PlayerRepository(PlayerEventListener eventListener, IPostgreSqlContext postgreSqlContext) : IPlayerRepository
 {
-    public Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         // Получаем сущность из хранилища
-        Result<Domain.Player>? result = Domain.Player.CreatePlayer($"Player_{id}");
+        Result<Domain.Player>? result = await postgreSqlContext.GetAsync(id, cancellationToken);
 
         if (result.IsFailure)
-            return Task.FromResult<Domain.Player?>(null);
+            return null;
 
         Domain.Player? entity = result.Value;
 
@@ -21,7 +21,7 @@ public class PlayerRepository(PlayerEventListener eventListener) : IPlayerReposi
             eventListener.TrackEntity(entity);
         }
 
-        return Task.FromResult(entity);
+        return entity;
     }
 
     public Task SaveAsync(Domain.Player entity, CancellationToken cancellationToken = default)
@@ -34,4 +34,9 @@ public class PlayerRepository(PlayerEventListener eventListener) : IPlayerReposi
 
         return Task.CompletedTask;
     }
+}
+
+public interface IPostgreSqlContext
+{
+    Task<Domain.Player> GetAsync(Guid id, CancellationToken cancellationToken = default);
 }
