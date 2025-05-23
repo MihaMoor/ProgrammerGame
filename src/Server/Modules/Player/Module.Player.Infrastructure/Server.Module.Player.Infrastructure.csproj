@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Module.Player.Application\Server.Module.Player.Application.csproj" />
     <ProjectReference Include="..\Module.Player.Domain\Server.Module.Player.Domain.csproj" />
+    <ProjectReference Include="..\Server.Module.Player.Infrastructure.EfCore\Server.Module.Player.Infrastructure.EfCore.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,42 +1,38 @@
 ﻿using Server.Module.Player.Application;
+using Server.Module.Player.Infrastructure.EfCore;
 using Server.Shared.Errors;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class PlayerRepository(PlayerEventListener eventListener, IPostgreSqlContext postgreSqlContext) : IPlayerRepository
+public class PlayerRepository(PlayerEventListener eventListener, Context context) : IPlayerRepository
 {
     public async Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         // Получаем сущность из хранилища
-        Result<Domain.Player>? result = await postgreSqlContext.GetAsync(id, cancellationToken);
+        Result<PlayerEntity>? result = await context.PlayerEntities.FindAsync(id, cancellationToken);
 
         if (result.IsFailure)
             return null;
 
-        Domain.Player? entity = result.Value;
+        Domain.Player? player = result.Value.ToPlayerDomain();
 
-        if (entity != null)
+        if (player != null)
         {
             // Начинаем отслеживать изменения в загруженной сущности
-            eventListener.TrackEntity(entity);
+            eventListener.TrackEntity(player);
         }
 
-        return entity;
+        return player;
     }
 
-    public Task SaveAsync(Domain.Player entity, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(Domain.Player model, CancellationToken cancellationToken = default)
     {
-        // Сохраняем сущность в хранилище
-        // ...
+        await context.AddAsync(model.ToPlayerEntity());
+        await context.SaveChangesAsync();
 
         // Убеждаемся, что сущность отслеживается
-        eventListener.TrackEntity(entity);
+        eventListener.TrackEntity(model);
 
-        return Task.CompletedTask;
+        return;
     }
-}
-
-public interface IPostgreSqlContext
-{
-    Task<Domain.Player> GetAsync(Guid id, CancellationToken cancellationToken = default);
 }

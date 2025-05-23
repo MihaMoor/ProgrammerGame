@@ -36,6 +36,11 @@ public sealed class Player
     /// </summary>
     public decimal PocketMoney { get; private set; }
 
+    /// <summary>
+    /// Статус, жив ли игрок
+    /// </summary>
+    public bool IsAlive { get; private set; }
+
     private Player()
     {
         Name = string.Empty;
@@ -61,6 +66,7 @@ public sealed class Player
             Hunger = 100,
             Mood = 100,
             PocketMoney = 99.99m,
+            IsAlive = true
         };
 
         return Result.Success(mainStats);
@@ -71,6 +77,9 @@ public sealed class Player
     /// </summary>
     public void ChangeHealth(int delta)
     {
+        if(delta < 0)
+            return;
+
         uint prevValue = Health;
         int newValue = (int)Health + delta;
         Health = (uint)Math.Clamp(newValue, 0, 100);
@@ -114,6 +123,19 @@ public sealed class Player
         PocketMoney = Math.Max(0, PocketMoney + (decimal)delta);
 
         if (PocketMoney != prevValue)
+            StatsChanged?.Invoke(this);
+    }
+
+    /// <summary>
+    /// Изменяет статус жив ли игрок
+    /// </summary>
+    /// <param name="isAlive"></param>
+    public void ChangeIsAlive(bool isAlive)
+    {
+        bool prevValue = IsAlive;
+        IsAlive = isAlive;
+
+        if(IsAlive != isAlive)
             StatsChanged?.Invoke(this);
     }
 }

@@ -1,6 +1,5 @@
-﻿using System.Collections.Concurrent;
-using Microsoft.Extensions.Logging;
-using Server.Module.Player.Domain;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
 
