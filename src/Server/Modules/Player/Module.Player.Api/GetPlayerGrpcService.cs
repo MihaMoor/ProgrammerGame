@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using Server.Module.Player.GrpcContracts.V1;
@@ -20,6 +20,14 @@ public class GetPlayerGrpcService(
     /// <exception cref="RpcException">
     /// Выбрасывается со статусом <see cref="StatusCode.InvalidArgument"/>
     /// при null или пустом Id у <paramref name="request"/>.
+    /// <summary>
+    /// Handles a gRPC request to retrieve player information by UUID.
+    /// </summary>
+    /// <param name="request">The UUID of the player to retrieve.</param>
+    /// <param name="context">The gRPC server call context.</param>
+    /// <returns>A <see cref="PlayerDto"/> representing the requested player.</returns>
+    /// <exception cref="RpcException">
+    /// Thrown if the request UUID is invalid or if the player cannot be retrieved due to a domain error.
     /// </exception>
     public override async Task<PlayerDto> Get(UUID request, ServerCallContext context)
     {

@@ -1,4 +1,4 @@
-﻿using Server.Shared.Errors;
+using Server.Shared.Errors;
 
 namespace Server.Module.Player.Domain;
 
@@ -41,6 +41,9 @@ public sealed class Player
     /// </summary>
     public bool IsAlive { get; private set; }
 
+    /// <summary>
+    /// Initializes a new instance of the Player class with default values.
+    /// </summary>
     private Player()
     {
         Name = string.Empty;
@@ -52,6 +55,12 @@ public sealed class Player
     /// <param name="name">Имя персонажа</param>
     /// <returns>
     /// <see cref="Result"/> <see cref="PlayerError.NameIsEmpty()"/>
+    /// <summary>
+    /// Creates a new player with the specified name and default stats.
+    /// </summary>
+    /// <param name="name">The name of the player to create.</param>
+    /// <returns>
+    /// A <c>Result&lt;Player&gt;</c> containing the new player if successful, or a failure result if the name is null, empty, or whitespace.
     /// </returns>
     public static Result<Player> CreatePlayer(string name)
     {
@@ -74,7 +83,10 @@ public sealed class Player
 
     /// <summary>
     /// Изменяет значение здоровья с ограничением от 0 до 100
+    /// <summary>
+    /// Increases the player's health by the specified amount, clamping the result between 0 and 100. Triggers the StatsChanged event if the health value changes. Negative deltas are ignored.
     /// </summary>
+    /// <param name="delta">The amount to increase health by; must be non-negative.</param>
     public void ChangeHealth(int delta)
     {
         if(delta < 0)
@@ -90,7 +102,10 @@ public sealed class Player
 
     /// <summary>
     /// Изменяет значение голода с ограничением от 0 до 100
+    /// <summary>
+    /// Adjusts the player's hunger level by the specified amount, clamping the result between 0 and 100. Triggers the StatsChanged event if the value changes.
     /// </summary>
+    /// <param name="delta">The amount to change the hunger level by (can be positive or negative).</param>
     public void ChangeHunger(int delta)
     {
         uint prevValue = Hunger;
@@ -103,7 +118,10 @@ public sealed class Player
 
     /// <summary>
     /// Изменяет значение настроения с ограничением от 0 до 100
+    /// <summary>
+    /// Adjusts the player's mood by the specified delta, clamping the result between 0 and 100. Triggers the StatsChanged event if the mood value changes.
     /// </summary>
+    /// <param name="delta">The amount to change the mood by (can be positive or negative).</param>
     public void ChangeMood(int delta)
     {
         uint prevValue = Mood;
@@ -116,7 +134,10 @@ public sealed class Player
 
     /// <summary>
     /// Изменяет количество карманных денег
+    /// <summary>
+    /// Adjusts the player's pocket money by the specified amount, ensuring it does not fall below zero. Triggers the StatsChanged event if the value changes.
     /// </summary>
+    /// <param name="delta">The amount to add to the player's pocket money. Can be negative.</param>
     public void ChangePocketMoney(double delta)
     {
         decimal prevValue = PocketMoney;
@@ -129,7 +150,10 @@ public sealed class Player
     /// <summary>
     /// Изменяет статус жив ли игрок
     /// </summary>
-    /// <param name="isAlive"></param>
+    /// <summary>
+    /// Updates the player's alive status and triggers the StatsChanged event if the status changes.
+    /// </summary>
+    /// <param name="isAlive">The new alive status to set for the player.</param>
     public void ChangeIsAlive(bool isAlive)
     {
         bool prevValue = IsAlive;
