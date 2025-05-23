@@ -1,4 +1,4 @@
-﻿namespace Server.Api;
+namespace Server.Api;
 
 public class AppSettings
 {
@@ -15,6 +15,10 @@ public class PostgreSql
     public required string Username { get; set; }
     public required string Password { get; set; }
 
+    /// <summary>
+    /// Builds and returns a PostgreSQL connection string using the configured host, port, database, username, and password.
+    /// </summary>
+    /// <returns>A connection string suitable for initializing a PostgreSQL database connection.</returns>
     public string CreateConnectionString()
     {
         Npgsql.NpgsqlConnectionStringBuilder builder = new()
@@ -44,7 +48,10 @@ public class Logstash
     /// <summary>
     /// Получить url адрес подключения
     /// </summary>
-    /// <returns>url</returns>
+    /// <summary>
+/// Returns a <see cref="Uri"/> instance constructed from the configured URL.
+/// </summary>
+/// <returns>A <see cref="Uri"/> representing the configured endpoint.</returns>
     public Uri GetUri() => new(Url);
 }
 
@@ -58,6 +65,9 @@ public class Elasticsearch
     /// <summary>
     /// Получить url адрес подключения
     /// </summary>
-    /// <returns>url</returns>
+    /// <summary>
+/// Returns a <see cref="Uri"/> instance constructed from the configured URL.
+/// </summary>
+/// <returns>A <see cref="Uri"/> representing the configured endpoint.</returns>
     public Uri GetUri() => new(Url);
 }

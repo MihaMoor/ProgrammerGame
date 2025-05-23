@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+using Grpc.Core;
 using Server.Module.Player.GrpcContracts.V1;
 
 namespace Client.Infrastructure.Clients;
@@ -6,6 +6,12 @@ namespace Client.Infrastructure.Clients;
 public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient client)
     : GrpcClient<PlayerService.PlayerServiceClient>(adress, client)
 {
+    /// <summary>
+    /// Retrieves a player profile from the gRPC service and invokes the provided handler with the result.
+    /// </summary>
+    /// <param name="handler">A delegate to process the retrieved <see cref="PlayerDto"/>.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>The retrieved <see cref="PlayerDto"/>, or a default player profile if retrieval fails.</returns>
     public PlayerDto Get(Action<PlayerDto> handler, CancellationToken cancellationToken)
     {
         PlayerDto? dto = null;

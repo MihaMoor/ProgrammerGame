@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
@@ -7,7 +7,10 @@ public class PlayerEventListener(PlayerChangeNotifier _notifier, ILogger Logger)
 {
     private readonly ConcurrentDictionary<Guid, Domain.Player> _trackedEntities = new();
 
-    // Этот метод вызывается, когда Player загружается из репозитория
+    /// <summary>
+    /// Begins tracking the specified player entity and subscribes to its stats change events.
+    /// </summary>
+    /// <param name="entity">The player entity to track.</param>
     public void TrackEntity(Domain.Player entity)
     {
         if (_trackedEntities.TryAdd(entity.PlayerId, entity))
@@ -17,7 +20,10 @@ public class PlayerEventListener(PlayerChangeNotifier _notifier, ILogger Logger)
         }
     }
 
-    // Прекращаем отслеживание сущности
+    /// <summary>
+    /// Stops tracking the specified player entity and unsubscribes from its stats change events.
+    /// </summary>
+    /// <param name="entity">The player entity to untrack.</param>
     public void UntrackEntity(Domain.Player entity)
     {
         if (_trackedEntities.TryRemove(entity.PlayerId, out _))
@@ -26,6 +32,9 @@ public class PlayerEventListener(PlayerChangeNotifier _notifier, ILogger Logger)
         }
     }
 
+    /// <summary>
+    /// Handles a tracked player's stats change event by asynchronously notifying subscribers of the update.
+    /// </summary>
     private void OnEntityChanged(Domain.Player entity)
     {
         // Асинхронно уведомляем всех подписчиков

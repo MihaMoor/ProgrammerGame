@@ -1,4 +1,4 @@
-﻿using System.Threading.Channels;
+using System.Threading.Channels;
 using Server.Module.Player.Domain;
 using Server.Shared.Cqrs;
 using Server.Shared.Errors;
@@ -10,6 +10,12 @@ public sealed record GetPlayerQuery(Guid PlayerId) : IQuery<Domain.Player>;
 public sealed class GetPlayerQueryHandler(IPlayerRepository playerRepository)
     : IQueryHandler<GetPlayerQuery, Domain.Player>
 {
+    /// <summary>
+    /// Handles a query to retrieve a player by their unique identifier.
+    /// </summary>
+    /// <param name="playerQuery">The query containing the player's unique identifier.</param>
+    /// <param name="token">A cancellation token for the operation.</param>
+    /// <returns>A result containing the player if found; otherwise, a failure result with a not-found error.</returns>
     public async Task<Result<Domain.Player>> Handle(
         GetPlayerQuery playerQuery,
         CancellationToken token
@@ -31,6 +37,14 @@ public sealed class SubscribePlayerHandler(
     IPlayerChangeNotifier notifier
 ) : IQueryHandler<SubscribePlayer, IAsyncEnumerable<Domain.Player>>
 {
+    /// <summary>
+    /// Subscribes to real-time updates for a player and returns an asynchronous stream of player state changes.
+    /// </summary>
+    /// <param name="query">The subscription request containing the player's unique identifier.</param>
+    /// <param name="cancellationToken">Token to cancel the subscription and release resources.</param>
+    /// <returns>
+    /// A result containing an asynchronous enumerable of player updates if the player exists; otherwise, a failure result indicating the player was not found.
+    /// </returns>
     public async Task<Result<IAsyncEnumerable<Domain.Player>>> Handle(
         SubscribePlayer query,
         CancellationToken cancellationToken = default

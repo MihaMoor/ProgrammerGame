@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Server.Api;
@@ -7,6 +7,9 @@ namespace Server.Module.Player.Infrastructure.EfCore.Migrations;
 
 public class Programm()
 {
+    /// <summary>
+    /// Entry point for the application that loads configuration from appsettings.json and checks for the presence of required application settings.
+    /// </summary>
     public static void Main()
     {
         IConfigurationBuilder builder = new ConfigurationBuilder()
@@ -26,6 +29,11 @@ public class Programm()
 
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Context>
 {
+    /// <summary>
+    /// Creates a new <see cref="Context"/> instance configured with settings from the "AppSettings" section of appsettings.json for design-time operations.
+    /// </summary>
+    /// <param name="args">Command-line arguments (not used).</param>
+    /// <returns>A configured <see cref="Context"/> instance.</returns>
     public Context CreateDbContext(string[] args)
     {
         IConfigurationBuilder builder = new ConfigurationBuilder()

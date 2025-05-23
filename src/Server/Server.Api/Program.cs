@@ -9,6 +9,10 @@ public class Program
 {
     private const ulong DefaultQueueLimitBytes = 104_857_600UL;
 
+    /// <summary>
+    /// Entry point for the ASP.NET Core application, configuring services, middleware, logging, and starting the web server.
+    /// </summary>
+    /// <param name="args">Command-line arguments for application configuration.</param>
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -42,6 +46,12 @@ public class Program
         app.Run();
     }
 
+    /// <summary>
+    /// Configures logging and Elasticsearch integration for the application using settings from the "AppSettings" configuration section.
+    /// </summary>
+    /// <remarks>
+    /// If "AppSettings" is not present, sets up Serilog to log to the console only. Otherwise, initializes an Elasticsearch client and configures Serilog to log to both the console and a Logstash HTTP endpoint, applying a queue size limit. Registers the Elasticsearch client as a singleton service.
+    /// </remarks>
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
