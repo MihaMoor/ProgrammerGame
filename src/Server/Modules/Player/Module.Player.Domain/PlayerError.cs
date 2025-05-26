@@ -12,4 +12,16 @@ public static class PlayerError
 
     public static Error NameIsEmpty() =>
         new(ErrorCode.IsEmpty, $"The player's name cannot be empty");
+
+    public static Error HealthOutOfRange() =>
+        new(ErrorCode.OutOfRange, $"The health must be between 0 and 100");
+
+    public static Error MoodOutOfRange() =>
+        new(ErrorCode.OutOfRange, $"The mood must be between 0 and 100");
+
+    public static Error HungerOutOfRange() =>
+        new(ErrorCode.OutOfRange, $"The hunger must be between 0 and 100");
+
+    public static Error InitializationFailed(List<Error> errors) =>
+        new(ErrorCode.InitializationFailed, $"{errors.Select(x => $"{x.Code}: {x.Description}\n")}");
 }

@@ -9,7 +9,7 @@ public sealed class Player
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid PlayerId { get; init; }
+    public Guid PlayerId { get; private set; }
 
     /// <summary>
     /// Имя
@@ -19,17 +19,17 @@ public sealed class Player
     /// <summary>
     /// Здоровье
     /// </summary>
-    public uint Health { get; private set; }
+    public int Health { get; private set; }
 
     /// <summary>
     /// Голод
     /// </summary>
-    public uint Hunger { get; private set; }
+    public int Hunger { get; private set; }
 
     /// <summary>
     /// Настроение
     /// </summary>
-    public uint Mood { get; private set; }
+    public int Mood { get; private set; }
 
     /// <summary>
     /// Карманные деньги
@@ -43,7 +43,60 @@ public sealed class Player
 
     private Player()
     {
-        Name = string.Empty;
+        Name = "Unknown";
+    }
+
+    public static Result<Player> CreatePlayer(
+        Guid playerId,
+        string name,
+        int health,
+        int hunger,
+        int mood,
+        decimal pocketMoney,
+        bool isAlive)
+    {
+        List<Result> validations = [];
+
+        if (isAlive)
+        {
+            validations.AddRange(
+                [
+                    ValidateName(name),
+                    ValidateHealth(health),
+                    ValidateHunger(hunger),
+                    ValidateMood(mood)
+                ]
+            );
+        }
+        else
+        {
+            validations.Add(ValidateName(name));
+        }
+
+        if (validations.Count != 0)
+        {
+            return Result.Failure<Player>(
+                PlayerError.InitializationFailed(
+                    validations
+                    .Where(x => x.IsFailure)
+                    .Select(x => x.Error)
+                    .ToList()
+                    )
+                );
+        }
+
+        Player player = new()
+        {
+            PlayerId = playerId,
+            Name = name,
+            Health = health,
+            Hunger = hunger,
+            Mood = mood,
+            PocketMoney = pocketMoney,
+            IsAlive = isAlive
+        };
+
+        return Result.Success(player);
     }
 
     /// <summary>
@@ -51,25 +104,62 @@ public sealed class Player
     /// </summary>
     /// <param name="name">Имя персонажа</param>
     /// <returns>
-    /// <see cref="Result"/> <see cref="PlayerError.NameIsEmpty()"/>
+    /// <see cref="Error"/> <see cref="PlayerError.NameIsEmpty()"/>
     /// </returns>
     public static Result<Player> CreatePlayer(string name)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            return Result.Failure<Player>(PlayerError.NameIsEmpty());
+        Result validationNameResult = ValidateName(name);
+        if (validationNameResult.IsFailure)
+        {
+            return Result.Failure<Player>(validationNameResult.Error);
+        }
 
         Player mainStats = new()
         {
-            PlayerId = Guid.NewGuid(),
+            PlayerId = Guid.CreateVersion7(),
             Name = name,
             Health = 100,
-            Hunger = 100,
             Mood = 100,
+            Hunger = 100,
             PocketMoney = 99.99m,
-            IsAlive = true
+            IsAlive = true,
         };
 
         return Result.Success(mainStats);
+    }
+
+    private static Result ValidateName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return Result.Failure(PlayerError.NameIsEmpty());
+        return Result.Success(name);
+    }
+
+    private static Result ValidateHealth(int health)
+    {
+        if (health < 0 || health > 100)
+        {
+            return Result.Failure(PlayerError.HealthOutOfRange());
+        }
+        return Result.Success(health);
+    }
+
+    private static Result ValidateMood(int mood)
+    {
+        if (mood < 0 || mood > 100)
+        {
+            return Result.Failure(PlayerError.MoodOutOfRange());
+        }
+        return Result.Success(mood);
+    }
+
+    private static Result ValidateHunger(int hunger)
+    {
+        if (hunger < 0 || hunger > 100)
+        {
+            return Result.Failure(PlayerError.HungerOutOfRange());
+        }
+        return Result.Success(hunger);
     }
 
     /// <summary>
@@ -77,12 +167,12 @@ public sealed class Player
     /// </summary>
     public void ChangeHealth(int delta)
     {
-        if(delta < 0)
+        if (delta < 0)
             return;
 
-        uint prevValue = Health;
-        int newValue = (int)Health + delta;
-        Health = (uint)Math.Clamp(newValue, 0, 100);
+        int prevValue = Health;
+        int newValue = Health + delta;
+        Health = Math.Clamp(newValue, 0, 100);
 
         if (Health != prevValue)
             StatsChanged?.Invoke(this);
@@ -93,9 +183,9 @@ public sealed class Player
     /// </summary>
     public void ChangeHunger(int delta)
     {
-        uint prevValue = Hunger;
-        int newValue = (int)Hunger + delta;
-        Hunger = (uint)Math.Clamp(newValue, 0, 100);
+        int prevValue = Hunger;
+        int newValue = Hunger + delta;
+        Hunger = Math.Clamp(newValue, 0, 100);
 
         if (Hunger != prevValue)
             StatsChanged?.Invoke(this);
@@ -106,9 +196,9 @@ public sealed class Player
     /// </summary>
     public void ChangeMood(int delta)
     {
-        uint prevValue = Mood;
-        int newValue = (int)Mood + delta;
-        Mood = (uint)Math.Clamp(newValue, 0, 100);
+        int prevValue = Mood;
+        int newValue = Mood + delta;
+        Mood = Math.Clamp(newValue, 0, 100);
 
         if (Mood != prevValue)
             StatsChanged?.Invoke(this);
@@ -135,7 +225,7 @@ public sealed class Player
         bool prevValue = IsAlive;
         IsAlive = isAlive;
 
-        if(IsAlive != isAlive)
+        if (IsAlive != prevValue)
             StatsChanged?.Invoke(this);
     }
 }

@@ -18,9 +18,9 @@ public sealed class GetPlayerQueryHandler(IPlayerRepository playerRepository)
         Domain.Player? player = await playerRepository.GetAsync(playerQuery.PlayerId, token);
         if (player is null)
         {
-            return Result.Failure<Domain.Player>(PlayerError.NotFound(playerQuery.PlayerId));
+            return Error.Failure<Domain.Player>(PlayerError.NotFound(playerQuery.PlayerId));
         }
-        return Result.Success(player);
+        return Error.Success(player);
     }
 }
 
@@ -42,7 +42,7 @@ public sealed class SubscribePlayerHandler(
         );
         if (player is null)
         {
-            return Result.Failure<IAsyncEnumerable<Domain.Player>>(
+            return Error.Failure<IAsyncEnumerable<Domain.Player>>(
                 PlayerError.NotFound(query.PlayerId)
             );
         }
@@ -76,6 +76,6 @@ public sealed class SubscribePlayerHandler(
         });
 
         // Возвращаем асинхронный поток данных
-        return Result.Success(channel.Reader.ReadAllAsync(cancellationToken));
+        return Error.Success(channel.Reader.ReadAllAsync(cancellationToken));
     }
 }

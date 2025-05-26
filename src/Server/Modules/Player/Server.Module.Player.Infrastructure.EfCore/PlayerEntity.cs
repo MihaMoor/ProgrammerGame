@@ -1,13 +1,11 @@
-﻿using Server.Shared.Errors;
-
-namespace Server.Module.Player.Infrastructure.EfCore;
+﻿namespace Server.Module.Player.Infrastructure.EfCore;
 
 public sealed record PlayerEntity(
     Guid PlayerId,
     string Name,
-    uint Health,
-    uint Hunger,
-    uint Mood,
+    int Health,
+    int Hunger,
+    int Mood,
     decimal PocketMoney,
     bool IsAlive);
 
@@ -15,11 +13,18 @@ public static class PlayerEntityExtensions
 {
     public static Domain.Player ToPlayerDomain(this PlayerEntity playerEntity)
     {
-        Result<Domain.Player> playerResult = Domain.Player.CreatePlayer(playerEntity.Name);
+        var playerResult = Domain.Player.CreatePlayer(
+            playerEntity.PlayerId,
+            playerEntity.Name,
+            playerEntity.Health,
+            playerEntity.Hunger,
+            playerEntity.Mood,
+            playerEntity.PocketMoney,
+            playerEntity.IsAlive);
 
         if (playerResult.IsFailure)
         {
-            throw new Exception($"Player with Id='{playerEntity.PlayerId}' is dead!");
+            throw new Exception($"Failed to create player with Id='{playerEntity.PlayerId}': {playerResult.Error}");
         }
 
         return playerResult.Value;

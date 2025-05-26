@@ -6,4 +6,6 @@ public enum ErrorCode
     EntityNotFound,
     IsEmpty,
     NullValue,
+    OutOfRange,
+    InitializationFailed,
 }
