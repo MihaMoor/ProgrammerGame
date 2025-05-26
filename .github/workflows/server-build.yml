@@ -22,18 +22,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '9.x'
-
-      - name: Build Module.Player.Domain
-        working-directory: src/Server/Modules/Player/Module.Player.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Module.Player.Application
-        working-directory: src/Server/Modules/Player/Module.Player.Application
-        run: dotnet build --configuration Release
-        
-      - name: Build Module.Player.Infrastructure
-        working-directory: src/Server/Modules/Player/Module.Player.Infrastructure
-        run: dotnet build --configuration Release
         
       - name: Build Module.Player.Api
         working-directory: src/Server/Modules/Player/Module.Player.Api

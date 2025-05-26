@@ -4,20 +4,18 @@ package server.module.player.grpccontracts.v1;
 
 option csharp_namespace = "Server.Module.Player.GrpcContracts.V1";
 
-service PlayerService {
-    rpc Get(UUID) returns (PlayerDto);
-    rpc Subscribe(UUID) returns (stream PlayerDto);
-}
+import "google/type/money.proto";
 
-message UUID{
-    string id = 1;
+service PlayerService {
+    rpc Get(string) returns (PlayerDto);
+    rpc Subscribe(string) returns (stream PlayerDto);
 }
 
 message PlayerDto {
-    UUID playerId = 1;
+    string playerId = 1;
     string name = 2;
     int32 health = 3;
     int32 hunger = 4;
     int32 mood = 5;
-    double pocketMoney = 6;
+    google.type.Money pocketMoney = 6;
 }
