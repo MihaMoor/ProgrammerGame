@@ -1,8 +1,7 @@
 ﻿using Client.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using WpfClient.Pages;
-using WpfClient.Widgets.MenuBar;
-using WpfClient.Widgets.PlayerWidget;
+using WpfClient.Widgets;
 
 namespace WpfClient;
 
@@ -12,7 +11,7 @@ public static class AppServices
 
     public static void Configure()
     {
-        var serviceCollection = new ServiceCollection();
+        ServiceCollection serviceCollection = new();
 
         serviceCollection
             .ConfigureServices()

@@ -1,30 +1,29 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Shared.GrpcContracts;
+﻿using Grpc.Core;
+using Server.Module.Player.GrpcContracts.V1;
 
 namespace Client.Infrastructure.Clients;
 
 public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient client)
     : GrpcClient<PlayerService.PlayerServiceClient>(adress, client)
 {
-    public async Task<PlayerDto> GetAsync(
-        Action<PlayerDto> handler,
-        CancellationToken cancellationToken
-    )
+    public PlayerDto Get(Action<PlayerDto> handler, CancellationToken cancellationToken)
     {
         PlayerDto? dto = null;
         try
         {
-            using var call = Client.GetAsync(new Empty(), cancellationToken: cancellationToken);
-            while (await call.ResponseStream.MoveNext(cancellationToken))
-            {
-                dto = call.ResponseStream.Current;
-                handler(dto);
-            }
+            UUID uUID = new() { Id = Guid.NewGuid().ToString() };
+            dto = Client.Get(uUID, cancellationToken: cancellationToken);
+
+            handler?.Invoke(dto);
         }
-        catch (Exception)
+        catch (RpcException rpcEx)
         {
             // Logging or send message to server for registration bug
-            //logger.LogCritical(ex, ex.Message);
+            Console.WriteLine($"gRPC ошибка: {rpcEx.StatusCode} - {rpcEx.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
         }
 
         return dto
@@ -33,7 +32,6 @@ public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient c
                 Name = "Unknown",
                 Health = 100,
                 Hunger = 100,
-                Money = 99.99,
                 Mood = 100,
                 PocketMoney = 0.01,
             };

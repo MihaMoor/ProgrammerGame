@@ -1,0 +1,58 @@
+name: .NET Server Unit Tests
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/Server/**'
+      - 'src/Shared/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'src/Server/**'
+      - 'src/Shared/**'
+
+jobs:
+  server-unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('src/Server/**/*.csproj', 'src/Shared/**/*.csproj') }}
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4.3.1
+        with:
+          dotnet-version: '9.0.x'
+
+      # Находим и обрабатываем все Server.Module.*.UnitTests проекты
+      - name: Find server test projects
+        id: find-test-projects
+        run: |
+          echo "test_projects=$(find src/Server -name 'Server.Module.*.UnitTests.csproj' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+
+      - name: Restore server test projects
+        run: |
+          for project in ${{ steps.find-test-projects.outputs.test_projects }}; do
+            dotnet restore "$project"
+          done
+
+      - name: Build server test projects
+        run: |
+          for project in ${{ steps.find-test-projects.outputs.test_projects }}; do
+            dotnet build "$project" --configuration Release --no-restore
+          done
+
+      - name: Run server unit tests
+        run: |
+          for project in ${{ steps.find-test-projects.outputs.test_projects }}; do
+            dotnet test "$project" --configuration Release --no-build --filter "Category=Unit" --verbosity normal
+          done

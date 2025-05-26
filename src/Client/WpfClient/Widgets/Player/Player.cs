@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WpfClient.Widgets.PlayerWidget;
+namespace WpfClient.Widgets;
 
-internal class Player : INotifyPropertyChanged
+internal sealed class Player : INotifyPropertyChanged
 {
-    private uint _health;
-    private uint _hunger;
-    private double _money;
-    private uint _mood;
+    private int _health;
+    private int _hunger;
+    private int _mood;
     private double _pocketMoney;
-    private string _name;
+    private string _name = "Unknown";
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -34,7 +33,7 @@ internal class Player : INotifyPropertyChanged
         }
     }
 
-    public uint Health
+    public int Health
     {
         get => _health;
         set
@@ -43,7 +42,7 @@ internal class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public uint Hunger
+    public int Hunger
     {
         get => _hunger;
         set
@@ -52,16 +51,7 @@ internal class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public double Money
-    {
-        get => _money;
-        set
-        {
-            _money = Math.Round(value, 2);
-            OnPropertyChanged();
-        }
-    }
-    public uint Mood
+    public int Mood
     {
         get => _mood;
         set

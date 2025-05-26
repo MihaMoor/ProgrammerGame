@@ -1,32 +1,19 @@
 using Elastic.Clients.Elasticsearch;
 using Prometheus;
 using Serilog;
-using Server.Api.Services;
+using Shared.EndpointMapper;
 
 namespace Server.Api;
 
 public class Program
 {
+    private const ulong DefaultQueueLimitBytes = 104_857_600UL;
+
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-        // Создание клиента Elasticsearch
-        var elasticsearchOptions = new ElasticsearchClientSettings(
-            new Uri("http://localhost:9200")
-        );
-        var elasticsearchClient = new ElasticsearchClient(elasticsearchOptions);
-        Log.Logger = new LoggerConfiguration()
-            .Enrich.FromLogContext()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .WriteTo.Http(
-                "http://logstash:5044",
-                queueLimitBytes: 104857600 //100 Mb
-            )
-            .CreateLogger();
-        builder.Logging.ClearProviders();
-        builder.Host.UseSerilog();
+        ConfigureELK(builder);
 
         // Add services to the container.
         builder.Services.AddGrpc();
@@ -34,7 +21,9 @@ public class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
-        var app = builder.Build();
+        builder.Services.AddEndpoints();
+
+        WebApplication app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -48,8 +37,48 @@ public class Program
         app.UseAuthorization();
 
         app.MapMetrics();
-        app.MapGrpcServices();
+        app.MapEndpoints();
 
         app.Run();
+    }
+
+    private static void ConfigureELK(WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+        AppSettings? appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
+
+        if (appSettings == null)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
+            builder.Logging.ClearProviders();
+            builder.Host.UseSerilog();
+            return;
+        }
+
+        // Создание клиента Elasticsearch
+        ElasticsearchClientSettings elasticsearchOptions = new(
+            appSettings.Elasticsearch?.GetUri() ?? new Uri("http://localhost:9200")
+        );
+        ElasticsearchClient elasticsearchClient = new(elasticsearchOptions);
+
+        ulong queueLimitBytes = appSettings.Logstash?.QueueLimitBytes ?? DefaultQueueLimitBytes;
+
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.Http(
+                appSettings.Logstash?.Url ?? "http://logstash:5044",
+                (long?)(queueLimitBytes is > long.MaxValue ? long.MaxValue : (long)queueLimitBytes)
+                    ?? 104_857_600
+            )
+            .CreateLogger();
+        builder.Services.AddSingleton(elasticsearchClient);
+        builder.Logging.ClearProviders();
+        builder.Host.UseSerilog();
     }
 }

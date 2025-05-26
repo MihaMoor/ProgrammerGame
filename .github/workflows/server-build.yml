@@ -3,11 +3,15 @@ name: .NET Server Build
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'src/Server/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - 'src/Server/**'
 
 jobs:
-  build:
+  build-server:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,29 +22,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '9.x'
-
-      - name: Build Server.Player.Domain
-        working-directory: src/Server/Server.Player.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Server.User.Domain
-        working-directory: src/Server/Server.User.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Server.Bank.Domain
-        working-directory: src/Server/Server.Bank.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Server.Education.Domain
-        working-directory: src/Server/Server.Education.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Server.Job.Domain
-        working-directory: src/Server/Server.User.Domain
-        run: dotnet build --configuration Release
-
-      - name: Build Server.WorkPlace.Domain
-        working-directory: src/Server/Server.WorkPlace.Domain
+        
+      - name: Build Module.Player.Api
+        working-directory: src/Server/Modules/Player/Module.Player.Api
         run: dotnet build --configuration Release
 
       - name: Build Server.Api

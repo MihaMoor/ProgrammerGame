@@ -1,5 +1,6 @@
 ﻿using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
+using Server.Module.Player.GrpcContracts.V1;
 
 namespace Client.Infrastructure;
 
@@ -21,9 +22,16 @@ public static class GrpsServices
         this ServiceCollection serviceCollection
     )
     {
-        serviceCollection.AddScoped(x => new Shared.GrpcContracts.PlayerService.PlayerServiceClient(
-            x.GetRequiredService<GrpcChannel>()
-        ));
+        serviceCollection.AddScoped(
+            x => new PlayerService.PlayerServiceClient(
+                x.GetRequiredService<GrpcChannel>()
+            )
+        );
+        serviceCollection.AddScoped(
+            x => new CreatePlayerService.CreatePlayerServiceClient(
+                x.GetRequiredService<GrpcChannel>()
+            )
+        );
 
         return serviceCollection;
     }
@@ -35,8 +43,8 @@ public static class GrpsServices
     {
         serviceCollection.AddScoped(x =>
         {
-            var client =
-                x.GetRequiredService<Shared.GrpcContracts.PlayerService.PlayerServiceClient>();
+            PlayerService.PlayerServiceClient client =
+                x.GetRequiredService<PlayerService.PlayerServiceClient>();
             return new Clients.PlayerGrpcClient(adress, client);
         });
 
