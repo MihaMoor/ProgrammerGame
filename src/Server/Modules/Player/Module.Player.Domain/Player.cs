@@ -120,7 +120,7 @@ public sealed class Player
             Name = name,
             Health = 100,
             Mood = 100,
-            Hunger = 100,
+            Hunger = 0,
             PocketMoney = 99.99m,
             IsAlive = true,
         };
@@ -167,9 +167,6 @@ public sealed class Player
     /// </summary>
     public void ChangeHealth(int delta)
     {
-        if (delta < 0)
-            return;
-
         int prevValue = Health;
         int newValue = Health + delta;
         Health = Math.Clamp(newValue, 0, 100);
@@ -207,10 +204,10 @@ public sealed class Player
     /// <summary>
     /// Изменяет количество карманных денег
     /// </summary>
-    public void ChangePocketMoney(double delta)
+    public void ChangePocketMoney(decimal delta)
     {
         decimal prevValue = PocketMoney;
-        PocketMoney = Math.Max(0, PocketMoney + (decimal)delta);
+        PocketMoney = Math.Max(0, PocketMoney + delta);
 
         if (PocketMoney != prevValue)
             StatsChanged?.Invoke(this);

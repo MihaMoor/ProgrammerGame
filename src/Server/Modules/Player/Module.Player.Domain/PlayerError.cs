@@ -23,5 +23,5 @@ public static class PlayerError
         new(ErrorCode.OutOfRange, $"The hunger must be between 0 and 100");
 
     public static Error InitializationFailed(List<Error> errors) =>
-        new(ErrorCode.InitializationFailed, $"{errors.Select(x => $"{x.Code}: {x.Description}\n")}");
+        new(ErrorCode.InitializationFailed, string.Join("\n", errors.Select(x => $"{x.Code}: {x.Description}")));
 }

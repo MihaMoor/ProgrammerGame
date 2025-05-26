@@ -5,9 +5,9 @@ namespace WpfClient.Widgets;
 
 internal sealed class Player : INotifyPropertyChanged
 {
-    private uint _health;
-    private uint _hunger;
-    private uint _mood;
+    private int _health;
+    private int _hunger;
+    private int _mood;
     private double _pocketMoney;
     private string _name = "Unknown";
 
@@ -33,7 +33,7 @@ internal sealed class Player : INotifyPropertyChanged
         }
     }
 
-    public uint Health
+    public int Health
     {
         get => _health;
         set
@@ -42,7 +42,7 @@ internal sealed class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public uint Hunger
+    public int Hunger
     {
         get => _hunger;
         set
@@ -51,7 +51,7 @@ internal sealed class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public uint Mood
+    public int Mood
     {
         get => _mood;
         set
