@@ -1,6 +1,7 @@
 using Elastic.Clients.Elasticsearch;
 using Prometheus;
 using Serilog;
+using Server.Module.Player.Api;
 using Shared.EndpointMapper;
 using System.Reflection;
 
@@ -13,6 +14,7 @@ public class Program
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
         LoadAllReferencedAssemblies();
 
@@ -24,6 +26,8 @@ public class Program
             options.IgnoreUnknownServices = true; // Отключает "Unimplemented service"
             options.EnableDetailedErrors = true;
         });
+        builder.Services.AddPlayerServices(builder.Configuration);
+
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
@@ -51,7 +55,6 @@ public class Program
 
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
-        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
         AppSettings? appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
 
         if (appSettings == null)

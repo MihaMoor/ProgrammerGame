@@ -10,9 +10,7 @@ public static class PlayerEndpoint
     {
         public void MapEndpoints(IEndpointRouteBuilder app)
         {
-            app.MapGrpcService<GetPlayerGrpcService>();
-            app.MapGrpcService<CreatePlayerGrpcService>();
-            app.MapGrpcService<SubscribePlayerGrpcService>();
+            app.MapGrpcService<PlayerGrpcService>();
         }
     }
 }

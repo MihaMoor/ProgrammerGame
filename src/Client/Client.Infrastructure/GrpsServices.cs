@@ -27,11 +27,6 @@ public static class GrpsServices
                 x.GetRequiredService<GrpcChannel>()
             )
         );
-        serviceCollection.AddScoped(
-            x => new CreatePlayerService.CreatePlayerServiceClient(
-                x.GetRequiredService<GrpcChannel>()
-            )
-        );
 
         return serviceCollection;
     }

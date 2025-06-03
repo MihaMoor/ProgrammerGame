@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
+using Server.Module.Player.Application;
 using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class PlayerEventListener(PlayerChangeNotifier _notifier, ILogger Logger)
+public class PlayerEventListener(IPlayerChangeNotifier _notifier, ILogger<PlayerEventListener> Logger)
 {
     private readonly ConcurrentDictionary<Guid, Domain.Player> _trackedEntities = new();
 

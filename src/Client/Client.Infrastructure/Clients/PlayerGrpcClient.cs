@@ -11,7 +11,7 @@ public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient c
         PlayerDto? dto = null;
         try
         {
-            UUID uUID = new() { PlayerId = Guid.NewGuid().ToString() };
+            UUID uUID = new() { PlayerId = "01973485-47c7-7cbc-834f-ec060fbb5e75" };
             dto = Client.Get(uUID, cancellationToken: cancellationToken);
 
             handler?.Invoke(dto);
@@ -36,7 +36,7 @@ public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient c
                 PocketMoney = new()
                 {
                     Units = 0,
-                    Nanos = (int)(0.01 * 1_000_000_000)
+                    Nanos = 10_000_000 // 0.01 = 10 миллионов нано-единиц
                 },
             };
     }

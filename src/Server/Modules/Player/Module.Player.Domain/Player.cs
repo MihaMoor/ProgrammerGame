@@ -73,7 +73,7 @@ public sealed class Player
             validations.Add(ValidateName(name));
         }
 
-        if (validations.Count != 0)
+        if (validations.Where(x => x.IsFailure).Any())
         {
             return Result.Failure<Player>(
                 PlayerError.InitializationFailed(

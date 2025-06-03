@@ -17,11 +17,11 @@ public partial class PlayerTests
         PlayerDto expected)
     {
         // Arrange
-        Mock<ILogger<GetPlayerGrpcService>> mockLogger = new();
+        Mock<ILogger<PlayerGrpcService>> mockLogger = new();
         Mock<IPlayerRepository> playerRepositoryMock = new();
         IQueryHandler<GetPlayerQuery, Domain.Player> queryHandler = new GetPlayerQueryHandler(playerRepositoryMock.Object);
 
-        GetPlayerGrpcService service = new(mockLogger.Object, queryHandler);
+        PlayerGrpcService service = new(mockLogger.Object, queryHandler);
         PlayerDto player = await service.Get(id, null!);
 
         Assert.Equal(expected.Name, player.Name);

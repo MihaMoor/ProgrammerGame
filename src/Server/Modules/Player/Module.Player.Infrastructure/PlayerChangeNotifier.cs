@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace Server.Module.Player.Infrastructure;
 
-public class PlayerChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
+public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlayerChangeNotifier
 {
     private readonly ConcurrentDictionary<
         Guid,
@@ -35,7 +35,7 @@ public class PlayerChangeNotifier(ILogger _logger) : IPlayerChangeNotifier
     }
 
     // Вызывается при изменении Player
-    internal async Task OnMainStatsChanged(Domain.Player stats)
+    public async Task OnMainStatsChanged(Domain.Player stats)
     {
         if (
             _subscriptions.TryGetValue(

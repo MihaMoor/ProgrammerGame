@@ -9,6 +9,7 @@ import "money.proto";
 service PlayerService {
     rpc Get(UUID) returns (PlayerDto);
     rpc Subscribe(UUID) returns (stream PlayerDto);
+    rpc Create(CreatePlayerCommand) returns (PlayerDto);
 }
 
 message UUID {
@@ -22,4 +23,8 @@ message PlayerDto {
     int32 hunger = 4;
     int32 mood = 5;
     google.type.Money pocketMoney = 6;
+}
+
+message CreatePlayerCommand {
+    string name = 1;
 }
