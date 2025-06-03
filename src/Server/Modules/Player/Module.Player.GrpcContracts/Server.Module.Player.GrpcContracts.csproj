@@ -17,6 +17,7 @@
   <ItemGroup>
     <Protobuf Include="V1\Player.proto" />
     <Protobuf Include="V1\CreatePlayer.proto" />
+    <!--<Protobuf Include="money.proto" />-->
   </ItemGroup>
 
 </Project>

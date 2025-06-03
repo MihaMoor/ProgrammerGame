@@ -10,6 +10,7 @@
 
     <Menu x:Name="MenuPanel" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <MenuItem Header="Файл">
+            <MenuItem Header="Перезапуск" Click="Restart"/>
             <MenuItem Header="Выход" Click="ApplicationQuit"/>
         </MenuItem>
         <MenuItem Header="О нас" Click="About"/>

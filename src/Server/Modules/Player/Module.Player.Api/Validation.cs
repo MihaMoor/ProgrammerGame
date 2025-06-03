@@ -14,7 +14,7 @@ internal class Validation
             logger.LogError($"{StatusCode.InvalidArgument}, {message}");
             throw new RpcException(new Status(StatusCode.InvalidArgument, message));
         }
-        if (string.IsNullOrWhiteSpace(request.Id) || request.Id == Guid.Empty.ToString())
+        if (string.IsNullOrWhiteSpace(request.PlayerId) || request.PlayerId == Guid.Empty.ToString())
         {
             string message = "Player ID cannot be empty";
             logger.LogError($"{StatusCode.InvalidArgument}, {message}");

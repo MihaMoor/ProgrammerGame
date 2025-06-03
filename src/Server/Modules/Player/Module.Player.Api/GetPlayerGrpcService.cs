@@ -23,9 +23,13 @@ public class GetPlayerGrpcService(
     /// </exception>
     public override async Task<PlayerDto> Get(UUID request, ServerCallContext context)
     {
+        _logger.LogCritical("AAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!");
+        Console.WriteLine("AAAAAAAAAAAA!!!!");
+
         UUID validatedRequest = Validation.Validate(request, _logger);
 
-        GetPlayerQuery query = new(new(validatedRequest.Id));
+        GetPlayerQuery query = new(new(validatedRequest.PlayerId));
+
 
         Result<Domain.Player> result = await _handler.Handle(query);
 

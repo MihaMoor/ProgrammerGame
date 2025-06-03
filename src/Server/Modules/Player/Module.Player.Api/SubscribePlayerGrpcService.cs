@@ -18,9 +18,9 @@ internal sealed class SubscribePlayerGrpcService(
         ServerCallContext context
     )
     {
-        _logger.LogInformation("Subscribe request received for player {PlayerId}", request.Id);
+        _logger.LogInformation("Subscribe request received for player {PlayerId}", request.PlayerId);
 
-        if (!Guid.TryParse(request.Id, out Guid playerId))
+        if (!Guid.TryParse(request.PlayerId, out Guid playerId))
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid player Id"));
 
         SubscribePlayer query = new(playerId);

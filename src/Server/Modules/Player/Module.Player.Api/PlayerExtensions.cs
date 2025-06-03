@@ -7,12 +7,12 @@ internal static class PlayerExtensions
     public static PlayerDto ToViewModel(this Domain.Player stats) =>
         new()
         {
-            PlayerId = stats.Id,
+            PlayerId = stats.PlayerId.ToString(),
             Name = stats.Name,
             Health = stats.Health,
             Hunger = stats.Hunger,
             Mood = stats.Mood,
-            PocketMoney = MoneyConverter.ToMoney(player.PocketMoney)
+            PocketMoney = MoneyConverter.ToMoney(stats.PocketMoney)
         };
 }
 

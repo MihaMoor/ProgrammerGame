@@ -27,5 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Shared.MapEndpoints\Shared.EndpointMapper.csproj" />
+    <ProjectReference Include="..\Modules\Player\Module.Player.Api\Server.Module.Player.Api.csproj" />
   </ItemGroup>
 </Project>

@@ -39,19 +39,20 @@ public partial class PlayerTests
         {
             new()
             {
-                Id = Guid.NewGuid().ToString(),
+                PlayerId = Guid.NewGuid().ToString(),
             },
             new()
             {
-                PlayerId = new()
-                {
-                    Id = Guid.NewGuid().ToString()
-                },
+                PlayerId = Guid.NewGuid().ToString(),
                 Name = "Test1",
                 Health = 100,
                 Hunger = 100,
                 Mood = 100,
-                PocketMoney = 99.99,
+                PocketMoney =
+                {
+                    Units = 99,
+                    Nanos = (int)(0.99 * 1_000_000_000)
+                },
             }
         }
     };

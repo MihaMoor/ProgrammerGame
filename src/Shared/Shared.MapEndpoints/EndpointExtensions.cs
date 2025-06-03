@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Reflection;
 
 namespace Shared.EndpointMapper;
 
@@ -10,24 +10,17 @@ public static class EndpointExtensions
 {
     public static IServiceCollection AddEndpoints(this IServiceCollection services)
     {
-        Assembly? entryAssembly = Assembly.GetEntryAssembly();
-        List<Assembly> referencedAssemblies =
-            entryAssembly?.GetReferencedAssemblies().Select(Assembly.Load).ToList() ?? [];
+        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-        // Добавляем текущую сборку и сборку приложения
-        referencedAssemblies.Add(Assembly.GetExecutingAssembly());
-        if (entryAssembly != null)
-            referencedAssemblies.Add(entryAssembly);
-
-        foreach (var assembly in referencedAssemblies)
+        foreach (var assembly in assemblies)
         {
-            services.AddEndpoints(assembly);
+            services.AddEndpointsFromAssembly(assembly);
         }
 
         return services;
     }
 
-    public static IServiceCollection AddEndpoints(
+    private static IServiceCollection AddEndpointsFromAssembly(
         this IServiceCollection services,
         Assembly assembly
     )

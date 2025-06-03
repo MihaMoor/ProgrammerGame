@@ -2,6 +2,7 @@ using Elastic.Clients.Elasticsearch;
 using Prometheus;
 using Serilog;
 using Shared.EndpointMapper;
+using System.Reflection;
 
 namespace Server.Api;
 
@@ -13,10 +14,16 @@ public class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+        LoadAllReferencedAssemblies();
+
         ConfigureELK(builder);
 
         // Add services to the container.
-        builder.Services.AddGrpc();
+        builder.Services.AddGrpc(options =>
+        {
+            options.IgnoreUnknownServices = true; // Отключает "Unimplemented service"
+            options.EnableDetailedErrors = true;
+        });
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
@@ -80,5 +87,37 @@ public class Program
         builder.Services.AddSingleton(elasticsearchClient);
         builder.Logging.ClearProviders();
         builder.Host.UseSerilog();
+    }
+
+    private static void LoadAllReferencedAssemblies()
+    {
+        List<Assembly> loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+        string[] loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
+
+        // Ищем все DLL в папке приложения
+        string[] referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+        List<string> toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
+
+        toLoad.ForEach(path =>
+        {
+            try
+            {
+                // Загружаем сборку
+                Assembly assembly = Assembly.LoadFrom(path);
+
+                // Загружаем все её зависимости
+                foreach (var referenced in assembly.GetReferencedAssemblies())
+                {
+                    if (!loadedAssemblies.Any(a => a.FullName == referenced.FullName))
+                    {
+                        Assembly.Load(referenced);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка загрузки сборки {path}: {ex.Message}");
+            }
+        });
     }
 }

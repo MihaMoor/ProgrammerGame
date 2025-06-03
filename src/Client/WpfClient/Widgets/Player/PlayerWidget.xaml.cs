@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Client.Infrastructure.Clients;
+using Google.Type;
 using Server.Module.Player.GrpcContracts.V1;
 
 namespace WpfClient.Widgets;
@@ -38,7 +39,7 @@ public partial class PlayerWidget : Page
             _player.Health = response.Health;
             _player.Hunger = response.Hunger;
             _player.Mood = response.Mood;
-            _player.PocketMoney = response.PocketMoney;
+            _player.PocketMoney = ConvertGoogleMoney(response.PocketMoney);
         });
     }
 
@@ -46,4 +47,7 @@ public partial class PlayerWidget : Page
     {
         _cancellationTokenSource.Cancel();
     }
+
+    private double ConvertGoogleMoney(Money money)
+        => money.Units + money.Nanos / 1_000_000_000.0;
 }

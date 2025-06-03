@@ -21,4 +21,9 @@ public static class PlayerServiceRegistration
                 SubscribePlayerHandler
             >();
     }
+
+    public static void Test()
+    {
+
+    }
 }
