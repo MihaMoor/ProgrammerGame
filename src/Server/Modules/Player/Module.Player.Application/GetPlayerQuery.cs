@@ -11,11 +11,13 @@ public sealed class GetPlayerQueryHandler(IPlayerRepository playerRepository)
     : IQueryHandler<GetPlayerQuery, Domain.Player>
 {
     /// <summary>
-    /// Handles a query to retrieve a player by their unique identifier.
+    /// Обрабатывает запрос на получение игрока по его уникальному идентификатору.
     /// </summary>
-    /// <param name="playerQuery">The query containing the player ID to retrieve.</param>
-    /// <param name="token">A cancellation token for the operation.</param>
-    /// <returns>A result containing the player if found; otherwise, a failure result indicating the player was not found.</returns>
+    /// <param name="playerQuery">Запрос, содержащий идентификатор игрока для получения.</param>
+    /// <param name="token">Токен отмены для операции.</param>
+    /// <returns>
+    /// Результат, содержащий игрока, если он найден; в противном случае, результат сбоя, указывающий, что игрок не найден.
+    /// </returns>
     public async Task<Result<Domain.Player>> Handle(
         GetPlayerQuery playerQuery,
         CancellationToken token
@@ -38,12 +40,12 @@ public sealed class SubscribePlayerHandler(
 ) : IQueryHandler<SubscribePlayer, IAsyncEnumerable<Domain.Player>>
 {
     /// <summary>
-    /// Handles a subscription request for real-time updates to a player's state.
+    /// Обрабатывает запрос на подписку для получения обновлений состояния игрока в реальном времени.
     /// </summary>
-    /// <param name="query">The subscription query specifying the player to observe.</param>
-    /// <param name="cancellationToken">Token to signal cancellation of the subscription.</param>
+    /// <param name="query">Запрос подписки, указывающий игрока для наблюдения.</param>
+    /// <param name="cancellationToken">Токен для сигнализации об отмене подписки.</param>
     /// <returns>
-    /// A result containing an asynchronous stream of player updates if the player exists; otherwise, a failure result indicating the player was not found.
+    /// Результат, содержащий асинхронный поток обновлений игрока, если игрок существует; в противном случае, результат сбоя, указывающий, что игрок не найден.
     /// </returns>
     public async Task<Result<IAsyncEnumerable<Domain.Player>>> Handle(
         SubscribePlayer query,

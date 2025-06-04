@@ -6,11 +6,11 @@ public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient c
     : GrpcClient<PlayerService.PlayerServiceClient>(adress, client)
 {
     /// <summary>
-    /// Retrieves a player by a fixed player ID using gRPC, optionally invoking a handler with the result.
+    /// Получает игрока по фиксированному идентификатору с использованием gRPC, с возможностью обработки результата через указанный обработчик.
     /// </summary>
-    /// <param name="handler">An optional delegate to process the retrieved <see cref="PlayerDto"/>.</param>
-    /// <param name="cancellationToken">Token to observe while waiting for the operation to complete.</param>
-    /// <returns>The <see cref="PlayerDto"/> corresponding to the fixed player ID.</returns>
+    /// <param name="handler">Необязательный делегат для обработки полученного <see cref="PlayerDto"/>.</param>
+    /// <param name="cancellationToken">Токен отмены для наблюдения за выполнением операции.</param>
+    /// <returns>Объект <see cref="PlayerDto"/>, соответствующий фиксированному идентификатору игрока.</returns>
     public async Task<PlayerDto> GetAsync(
         Action<PlayerDto> handler,
         CancellationToken cancellationToken)

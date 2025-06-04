@@ -8,10 +8,10 @@ public interface IQueryHandler<TQuery, TResponse>
     where TQuery : IQuery<TResponse>
 {
     /// <summary>
-/// Handles the specified query asynchronously and returns the result.
-/// </summary>
-/// <param name="query">The query to process.</param>
-/// <param name="cancellationToken">Optional token to cancel the operation.</param>
-/// <returns>A task representing the asynchronous operation, containing the result of the query.</returns>
-Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken = default);
+    /// Обрабатывает указанный запрос асинхронно и возвращает результат.
+    /// </summary>
+    /// <param name="query">Запрос для обработки.</param>
+    /// <param name="cancellationToken">Необязательный токен для отмены операции.</param>
+    /// <returns>Задача, представляющая асинхронную операцию, содержащая результат запроса.</returns>
+    Task<Result<TResponse>> Handle(TQuery query, CancellationToken cancellationToken = default);
 }

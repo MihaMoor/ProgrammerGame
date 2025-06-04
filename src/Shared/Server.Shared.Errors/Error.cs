@@ -8,8 +8,8 @@ public record Error(ErrorCode Code, string Description)
     public static implicit operator Result(Error error) => Result.Failure(error);
 
     /// <summary>
-/// Converts this error into a failure <see cref="Result"/> containing the current error.
-/// </summary>
-/// <returns>A failure <see cref="Result"/> with this error.</returns>
-public Result ToResult() => Result.Failure(this);
+    /// Преобразует эту ошибку в неудачный <see cref="Result"/>, содержащий текущую ошибку.
+    /// </summary>
+    /// <returns>Неудачный <see cref="Result"/> с этой ошибкой.</returns>
+    public Result ToResult() => Result.Failure(this);
 }

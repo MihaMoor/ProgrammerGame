@@ -16,7 +16,8 @@ public partial class PlayerWidget : Page
     private readonly PlayerGrpcClient _playerGrpcClient;
 
     /// <summary>
-    /// Initializes a new instance of the PlayerWidget page, sets up data binding, event handling, and begins retrieving player information from the server.
+    /// »нициализирует новый экземпл€р страницы PlayerWidget, настраивает прив€зку данных, обработку событий
+    /// и начинает получение информации об игроке с сервера.
     /// </summary>
     public PlayerWidget(PlayerGrpcClient grpcClient)
     {
@@ -30,7 +31,7 @@ public partial class PlayerWidget : Page
     }
 
     /// <summary>
-    /// Initiates an asynchronous request to retrieve player data from the server and processes the response using a callback.
+    /// »нициирует асинхронный запрос на получение данных игрока с сервера и обрабатывает ответ с использованием callback-функции.
     /// </summary>
     private void ConnectToServer()
     {
@@ -38,9 +39,9 @@ public partial class PlayerWidget : Page
     }
 
     /// <summary>
-    /// Updates the player model with data received from the server.
+    /// ќбновл€ет модель игрока данными, полученными с сервера.
     /// </summary>
-    /// <param name="response">The player data transfer object containing updated player information.</param>
+    /// <param name="response">DTO (объект передачи данных) игрока, содержащий обновленную информацию об игроке.</param>
     private void HandlePlayerGet(PlayerDto response)
     {
         Dispatcher.Invoke(() =>
@@ -54,7 +55,7 @@ public partial class PlayerWidget : Page
     }
 
     /// <summary>
-    /// Handles the page's Unloaded event by canceling any ongoing asynchronous operations.
+    /// ќбрабатывает событие Unloaded страницы, отмен€€ все выполн€ющиес€ асинхронные операции.
     /// </summary>
     private void PageUnloaded(object sender, RoutedEventArgs e)
     {
@@ -62,10 +63,10 @@ public partial class PlayerWidget : Page
     }
 
     /// <summary>
-        /// Converts a Google <c>Money</c> object to a <c>double</c> representing the total monetary value.
-        /// </summary>
-        /// <param name="money">The <c>Money</c> object containing units and nanos.</param>
-        /// <returns>The combined monetary value as a <c>double</c>.</returns>
-        private double ConvertGoogleMoney(Money money)
+    /// ѕреобразует объект Google <c>Money</c> в значение <c>double</c>, представл€ющее общую денежную сумму.
+    /// </summary>
+    /// <param name="money">ќбъект <c>Money</c>, содержащий единицы (units) и нано-единицы (nanos).</param>
+    /// <returns>—уммарное денежное значение в виде <c>double</c>.</returns>
+    private double ConvertGoogleMoney(Money money)
         => money.Units + money.Nanos / 1_000_000_000.0;
 }

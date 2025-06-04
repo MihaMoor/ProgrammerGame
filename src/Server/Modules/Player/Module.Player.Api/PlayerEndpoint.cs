@@ -9,7 +9,7 @@ public static class PlayerEndpoint
     public sealed class Endpoint : IEndpoint
     {
         /// <summary>
-        /// Registers the PlayerGrpcService with the application's endpoint routing system.
+        /// Регистрирует PlayerGrpcService в системе маршрутизации конечных точек приложения.
         /// </summary>
         public void MapEndpoints(IEndpointRouteBuilder app)
         {

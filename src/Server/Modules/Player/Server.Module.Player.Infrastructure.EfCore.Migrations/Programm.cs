@@ -8,7 +8,7 @@ namespace Server.Module.Player.Infrastructure.EfCore.Migrations;
 public class Programm()
 {
     /// <summary>
-    /// Entry point for the application that loads configuration from "appsettings.json" and checks for the presence of the "AppSettings" section.
+    /// Точка входа в приложение, которая загружает конфигурацию из файла "appsettings.json" и проверяет наличие раздела "AppSettings".
     /// </summary>
     public static void Main()
     {
@@ -30,10 +30,10 @@ public class Programm()
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Context>
 {
     /// <summary>
-    /// Creates a new <see cref="Context"/> instance configured with settings from "appsettings.json" for design-time operations.
+    /// Создает новый экземпляр <see cref="Context"/>, настроенный с использованием настроек из файла "appsettings.json" для операций проектирования.
     /// </summary>
-    /// <param name="args">Command-line arguments (not used).</param>
-    /// <returns>A configured <see cref="Context"/> for use with Entity Framework Core tools.</returns>
+    /// <param name="args">Аргументы командной строки (не используются).</param>
+    /// <returns>Настроенный экземпляр <see cref="Context"/> для использования с инструментами Entity Framework Core.</returns>
     public Context CreateDbContext(string[] args)
     {
         IConfigurationBuilder builder = new ConfigurationBuilder()

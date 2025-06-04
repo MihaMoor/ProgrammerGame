@@ -9,9 +9,9 @@ namespace Shared.EndpointMapper;
 public static class EndpointExtensions
 {
     /// <summary>
-    /// Registers all implementations of <see cref="IEndpoint"/> found in the currently loaded assemblies as transient services.
+    /// Регистрирует все реализации <see cref="IEndpoint"/>, найденные в загруженных в данный момент сборках, в качестве временных служб (transient).
     /// </summary>
-    /// <returns>The updated <see cref="IServiceCollection"/> for chaining.</returns>
+    /// <returns>Объект <see cref="IServiceCollection"/> с добавленными службами для цепочного вызова.</returns>
     public static IServiceCollection AddEndpoints(this IServiceCollection services)
     {
         Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -25,10 +25,11 @@ public static class EndpointExtensions
     }
 
     /// <summary>
-    /// Registers all non-abstract, non-interface types implementing <see cref="IEndpoint"/> from the specified assembly as transient services.
+    /// Регистрирует все нефреймворковые типы, реализующие <see cref="IEndpoint"/>, из указанной сборки как временные службы (transient).
+    /// Типы должны быть не абстрактными и не интерфейсами.
     /// </summary>
-    /// <param name="assembly">The assembly to scan for <see cref="IEndpoint"/> implementations.</param>
-    /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
+    /// <param name="assembly">Сборка, в которой осуществляется поиск реализаций <see cref="IEndpoint"/>.</param>
+    /// <returns>Объект <see cref="IServiceCollection"/> с добавленными службами для дальнейшего использования и цепочного вызова.</returns>
     private static IServiceCollection AddEndpointsFromAssembly(
         this IServiceCollection services,
         Assembly assembly
@@ -48,12 +49,12 @@ public static class EndpointExtensions
     }
 
     /// <summary>
-    /// Maps all registered <see cref="IEndpoint"/> implementations to the application's routing system.
+    /// Регистрирует все зарегистрированные реализации <see cref="IEndpoint"/> в системе маршрутизации приложения.
     /// </summary>
     /// <param name="routeGroupBuilder">
-    /// Optional route group builder to use for endpoint mapping. If not provided, the application's route builder is used.
+    /// Необязательный объект для группировки маршрутов. Если не предоставлен, используется основной маршрутизатор приложения.
     /// </param>
-    /// <returns>The <see cref="WebApplication"/> instance for chaining.</returns>
+    /// <returns>Экземпляр <see cref="WebApplication"/> для цепочного вызова методов.</returns>
     public static IApplicationBuilder MapEndpoints(
         this WebApplication app,
         RouteGroupBuilder? routeGroupBuilder = null

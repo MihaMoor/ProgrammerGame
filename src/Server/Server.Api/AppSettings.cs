@@ -29,13 +29,10 @@ public class Logstash
     public ulong QueueLimitBytes { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает URL-адрес конечной точки Logstash в виде объекта <see cref="Uri"/>.
     /// </summary>
-    /// <summary>
-    /// Returns the Logstash endpoint URL as a <see cref="Uri"/>.
-    /// </summary>
-    /// <returns>The absolute <see cref="Uri"/> parsed from the <c>Url</c> property.</returns>
-    /// <exception cref="ArgumentException">Thrown if the <c>Url</c> property is not a valid absolute URL.</exception>
+    /// <returns>Абсолютный <see cref="Uri"/>, разобранный из свойства <c>Url</c>.</returns>
+    /// <exception cref="ArgumentException">Выбрасывается, если значение свойства <c>Url</c> не является допустимым абсолютным URL.</exception>
     public Uri GetUri()
     {
         if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri))
@@ -52,11 +49,8 @@ public class Elasticsearch
     public required string Url { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает объект <see cref="Uri"/>, созданный на основе настроенного URL-адреса конечной точки Elasticsearch.
     /// </summary>
-    /// <summary>
-/// Returns a <see cref="Uri"/> object constructed from the configured Elasticsearch endpoint URL.
-/// </summary>
-/// <returns>A <see cref="Uri"/> representing the Elasticsearch endpoint.</returns>
+    /// <returns>Объект <see cref="Uri"/>, представляющий конечную точку Elasticsearch.</returns>
     public Uri GetUri() => new(Url);
 }

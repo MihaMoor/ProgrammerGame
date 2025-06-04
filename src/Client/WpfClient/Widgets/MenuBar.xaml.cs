@@ -15,13 +15,13 @@ public partial class MenuBar : Page
     }
 
     /// <summary>
-        /// Shuts down the current application instance in response to a UI event.
-        /// </summary>
-        private void ApplicationQuit(object sender, RoutedEventArgs e) =>
+    /// Завершает работу текущего экземпляра приложения в ответ на событие пользовательского интерфейса.
+    /// </summary>
+    private void ApplicationQuit(object sender, RoutedEventArgs e) =>
         Application.Current.Shutdown();
 
     /// <summary>
-    /// Restarts the application by launching a new instance and shutting down the current one.
+    /// Перезапускает приложение, запуская новый экземпляр и завершая текущий.
     /// </summary>
     private void Restart(object sensder, RoutedEventArgs e)
     {
@@ -30,8 +30,8 @@ public partial class MenuBar : Page
     }
 
     /// <summary>
-        /// Displays an informational message box with details about the application.
-        /// </summary>
-        private void About(object sender, RoutedEventArgs e) =>
+    /// Отображает информационное окно сообщения с деталями о приложении.
+    /// </summary>
+    private void About(object sender, RoutedEventArgs e) =>
         MessageBox.Show("Здрасте...", "О нас", MessageBoxButton.OK, MessageBoxImage.Information);
 }

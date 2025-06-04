@@ -14,11 +14,11 @@ public class PostgreSql
     public required string Password { get; set; }
 
     /// <summary>
-    /// Constructs and returns a PostgreSQL connection string using the configured properties.
+    /// Конструирует и возвращает строку подключения к PostgreSQL с использованием настроенных свойств.
     /// </summary>
-    /// <returns>A PostgreSQL connection string based on the current settings.</returns>
+    /// <returns>Строка подключения к PostgreSQL на основе текущих настроек.</returns>
     /// <exception cref="ArgumentException">
-    /// Thrown if <c>Host</c>, <c>Database</c>, or <c>Username</c> is null, empty, or consists only of whitespace.
+    /// Возникает, если <c>Host</c>, <c>Database</c> или <c>Username</c> равны null, пусты или состоят только из пробелов.
     /// </exception>
     public string CreateConnectionString()
     {

@@ -9,9 +9,9 @@ public class PlayerEventListener(IPlayerChangeNotifier _notifier, ILogger<Player
     private readonly ConcurrentDictionary<Guid, Domain.Player> _trackedEntities = new();
 
     /// <summary>
-    /// Begins tracking the specified player entity and subscribes to its stats change events.
+    /// Начинает отслеживать указанный объект игрока и подписывается на события изменения его характеристик.
     /// </summary>
-    /// <param name="entity">The player entity to track.</param>
+    /// <param name="entity">Объект игрока для отслеживания.</param>
     public void TrackEntity(Domain.Player entity)
     {
         if (_trackedEntities.TryAdd(entity.PlayerId, entity))
@@ -22,9 +22,9 @@ public class PlayerEventListener(IPlayerChangeNotifier _notifier, ILogger<Player
     }
 
     /// <summary>
-    /// Stops tracking the specified player entity and unsubscribes from its StatsChanged event.
+    /// Прекращает отслеживание указанного объекта игрока и отписывается от его события изменения характеристик (StatsChanged).
     /// </summary>
-    /// <param name="entity">The player entity to stop tracking.</param>
+    /// <param name="entity">Объект игрока, которого необходимо перестать отслеживать.</param>
     public void UntrackEntity(Domain.Player entity)
     {
         if (_trackedEntities.TryRemove(entity.PlayerId, out _))
@@ -34,9 +34,9 @@ public class PlayerEventListener(IPlayerChangeNotifier _notifier, ILogger<Player
     }
 
     /// <summary>
-    /// Handles the player's stats change event by asynchronously notifying subscribers of the update.
+    /// Обрабатывает событие изменения характеристик игрока, асинхронно уведомляя подписчиков об обновлении.
     /// </summary>
-    /// <param name="entity">The player entity whose stats have changed.</param>
+    /// <param name="entity">Объект игрока, у которого изменились характеристики.</param>
     private void OnEntityChanged(Domain.Player entity)
     {
         // Асинхронно уведомляем всех подписчиков

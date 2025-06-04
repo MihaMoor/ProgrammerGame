@@ -5,11 +5,11 @@ namespace Server.Module.Player.Api;
 internal static class PlayerExtensions
 {
     /// <summary>
-        /// Converts a <see cref="Domain.Player"/> instance to a <see cref="PlayerDto"/> for API responses.
-        /// </summary>
-        /// <param name="stats">The player domain model to convert.</param>
-        /// <returns>A <see cref="PlayerDto"/> representing the player's data.</returns>
-        public static PlayerDto ToViewModel(this Domain.Player stats) =>
+    /// Преобразует экземпляр <see cref="Domain.Player"/> в <see cref="PlayerDto"/> для использования в ответах API.
+    /// </summary>
+    /// <param name="stats">Доменная модель игрока для преобразования.</param>
+    /// <returns><see cref="PlayerDto"/>, представляющий данные игрока.</returns>
+    public static PlayerDto ToViewModel(this Domain.Player stats) =>
         new()
         {
             PlayerId = stats.PlayerId.ToString(),
@@ -26,11 +26,12 @@ public static class MoneyConverter
     private const string DefaultCurrency = "RUB";
 
     /// <summary>
-    /// Converts a decimal monetary amount to a <see cref="Google.Type.Money"/> object, splitting the value into units and nanos and handling negative amounts according to the Money specification.
+    /// Преобразует десятичную денежную сумму в объект <see cref="Google.Type.Money"/>, разделяя значение на единицы (units) и нано-единицы (nanos)
+    /// с обработкой отрицательных сумм в соответствии со спецификацией Money.
     /// </summary>
-    /// <param name="amount">The monetary amount to convert.</param>
-    /// <param name="currencyCode">The ISO 4217 currency code. Defaults to "RUB".</param>
-    /// <returns>A <see cref="Google.Type.Money"/> instance representing the specified amount and currency.</returns>
+    /// <param name="amount">Денежная сумма для преобразования.</param>
+    /// <param name="currencyCode">Код валюты по стандарту ISO 4217. По умолчанию "RUB".</param>
+    /// <returns>Экземпляр <see cref="Google.Type.Money"/>, представляющий указанную сумму и валюту.</returns>
     public static Google.Type.Money ToMoney(decimal amount, string currencyCode = DefaultCurrency)
     {
         long units = (long)Math.Truncate(Math.Abs(amount));
@@ -60,10 +61,10 @@ public static class MoneyConverter
     }
 
     /// <summary>
-    /// Converts a <see cref="Google.Type.Money"/> object to its decimal monetary value.
+    /// Преобразует объект <see cref="Google.Type.Money"/> в десятичное представление денежной суммы.
     /// </summary>
-    /// <param name="money">The <see cref="Google.Type.Money"/> instance to convert. If null, returns 0.</param>
-    /// <returns>The decimal representation of the monetary amount, preserving sign and fractional value.</returns>
+    /// <param name="money">Экземпляр <see cref="Google.Type.Money"/> для преобразования. Если null, возвращает 0.</param>
+    /// <returns>Десятичное представление денежной суммы с сохранением знака и дробной части.</returns>
     public static decimal FromMoney(Google.Type.Money money)
     {
         if (money == null)

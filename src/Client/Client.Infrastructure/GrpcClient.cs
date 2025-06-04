@@ -15,12 +15,13 @@ public class GrpcClient<TClient> : IDisposable
     protected TClient Client { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="GrpcClient{TClient}"/> class with the specified gRPC client and server address.
+    /// Инициализирует новый экземпляр класса <see cref="GrpcClient{TClient}"/> с указанным gRPC-клиентом и адресом сервера.
     /// </summary>
-    /// <param name="adress">The address of the gRPC server.</param>
-    /// <param name="client">The gRPC client instance to use for communication.</param>
+    /// <param name="adress">Адрес gRPC-сервера.</param>
+    /// <param name="client">Экземпляр gRPC-клиента для взаимодействия с сервером.</param>
     /// <remarks>
-    /// Sets up the gRPC channel and configures an asynchronous retry policy for transient errors such as server unavailability or deadline exceeded.
+    /// Настраивает gRPC-канал и конфигурирует политику повторных попыток для обработки временных ошибок,
+    /// таких как недоступность сервера или превышение времени ожидания.
     /// </remarks>
     public GrpcClient(string adress, TClient client)
     {
@@ -48,10 +49,11 @@ public class GrpcClient<TClient> : IDisposable
     }
 
     /// <summary>
-    /// Releases the managed resources used by the GrpcClient instance.
+    /// Освобождает управляемые ресурсы, используемые экземпляром GrpcClient.
     /// </summary>
     /// <param name="disposing">
-    /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
+    /// Значение true позволяет освободить как управляемые, так и неуправляемые ресурсы;
+    /// значение false - только неуправляемые ресурсы.
     /// </param>
     protected virtual void Dispose(bool disposing)
     {
@@ -59,27 +61,23 @@ public class GrpcClient<TClient> : IDisposable
         {
             if (disposing)
             {
-                // TODO: dispose managed state (managed objects)
                 _channel.Dispose();
                 _handler.Dispose();
             }
 
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
             _disposedValue = true;
         }
     }
 
-    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
     ~GrpcClient()
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        // Не изменяйте этот код. Поместите код очистки в метод 'Dispose(bool disposing)'
         Dispose(disposing: false);
     }
 
     public void Dispose()
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        // Не изменяйте этот код. Поместите код очистки в метод 'Dispose(bool disposing)'
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }

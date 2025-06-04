@@ -7,18 +7,18 @@ public class Context : DbContext
     public DbSet<PlayerEntity> PlayerEntities { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Context"/> class and ensures the database is created.
+    /// Инициализирует новый экземпляр класса <see cref="Context"/> и гарантирует создание базы данных.
     /// </summary>
-    /// <param name="options">The options to be used by the DbContext.</param>
+    /// <param name="options">Параметры, используемые для конфигурации DbContext.</param>
     public Context(DbContextOptions options) : base(options)
     {
         Database.EnsureCreated();
     }
 
     /// <summary>
-    /// Configures the entity mappings for the database context using the provided model builder.
+    /// Настраивает сопоставление сущностей для контекста базы данных с использованием предоставленного построителя модели.
     /// </summary>
-    /// <param name="modelBuilder">The builder used to construct the model for the context.</param>
+    /// <param name="modelBuilder">Построитель, используемый для создания модели для контекста.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new PlayerConfiguration());

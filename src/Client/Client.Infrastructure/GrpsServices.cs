@@ -19,10 +19,10 @@ public static class GrpsServices
     }
 
     /// <summary>
-    /// Registers the PlayerService gRPC client as a scoped service in the service collection.
+    /// Регистрирует gRPC-клиент PlayerService как scoped-сервис в коллекции сервисов.
     /// </summary>
-    /// <param name="serviceCollection">The service collection to configure.</param>
-    /// <returns>The updated service collection.</returns>
+    /// <param name="serviceCollection">Коллекция сервисов для настройки.</param>
+    /// <returns>Обновленная коллекция сервисов.</returns>
     private static ServiceCollection ConfigureContractServiceClients(
         this ServiceCollection serviceCollection
     )
@@ -37,10 +37,10 @@ public static class GrpsServices
     }
 
     /// <summary>
-    /// Registers a scoped <c>PlayerGrpcClient</c> using the specified address and a resolved <c>PlayerServiceClient</c>.
+    /// Регистрирует <c>PlayerGrpcClient</c> как scoped-сервис, используя указанный адрес и созданный экземпляр <c>PlayerServiceClient</c>.
     /// </summary>
-    /// <param name="adress">The gRPC server address used to initialize the client.</param>
-    /// <returns>The updated <c>ServiceCollection</c> with the <c>PlayerGrpcClient</c> registration.</returns>
+    /// <param name="adress">Адрес gRPC-сервера для инициализации клиента.</param>
+    /// <returns>Обновленная коллекция сервисов <c>ServiceCollection</c> с регистрацией <c>PlayerGrpcClient</c>.</returns>
     private static ServiceCollection ConfigureGrpcClients(
         this ServiceCollection serviceCollection,
         string adress

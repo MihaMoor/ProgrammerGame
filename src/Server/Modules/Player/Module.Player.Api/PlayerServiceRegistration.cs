@@ -11,11 +11,11 @@ namespace Server.Module.Player.Api;
 public static class PlayerServiceRegistration
 {
     /// <summary>
-    /// Registers player-related services and configures the player database context using settings from the provided configuration.
+    /// –егистрирует сервисы, св€занные с игроком, и настраивает контекст базы данных игрока с использованием настроек из предоставленной конфигурации.
     /// </summary>
-    /// <param name="configuration">Application configuration containing the "PlayerSettings" section.</param>
-    /// <returns>The updated <see cref="IServiceCollection"/> with player services registered.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if the "PlayerSettings" configuration section is missing.</exception>
+    /// <param name="configuration"> онфигураци€ приложени€, содержаща€ раздел "PlayerSettings".</param>
+    /// <returns>ќбновлЄнна€ коллекци€ сервисов <see cref="IServiceCollection"/> с зарегистрированными сервисами игрока.</returns>
+    /// <exception cref="InvalidOperationException">¬озникает, если в конфигурации отсутствует раздел "PlayerSettings".</exception>
     public static IServiceCollection AddPlayerServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<PlayerSettings>(configuration.GetRequiredSection("PlayerSettings"));

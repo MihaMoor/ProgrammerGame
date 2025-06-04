@@ -7,12 +7,12 @@ namespace Server.Module.Player.Api;
 internal class Validation
 {
     /// <summary>
-    /// Validates a UUID request, ensuring it is not null and contains a valid, non-empty PlayerId.
+    /// ѕровер€ет запрос UUID, обеспечива€ его непустоту и наличие допустимого, непустого идентификатора игрока.
     /// </summary>
-    /// <param name="request">The UUID request to validate.</param>
-    /// <returns>The validated UUID request.</returns>
+    /// <param name="request">«апрос UUID дл€ проверки.</param>
+    /// <returns>ѕроверенный запрос UUID.</returns>
     /// <exception cref="RpcException">
-    /// Thrown if the request is null or if the PlayerId is null, empty, whitespace, or equals the empty GUID.
+    /// ¬озникает, если запрос равен null или если идентификатор игрока равен null, пуст, содержит только пробелы или равен пустому GUID.
     /// </exception>
     internal static UUID Validate(UUID request, ILogger logger)
     {

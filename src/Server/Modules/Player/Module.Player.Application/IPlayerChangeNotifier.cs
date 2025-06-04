@@ -3,16 +3,17 @@ namespace Server.Module.Player.Application;
 public interface IPlayerChangeNotifier
 {
     /// <summary>
-/// Subscribes to changes for a specific player and registers a handler to be invoked when the player's data changes.
-/// </summary>
-/// <param name="playerId">The unique identifier of the player to monitor for changes.</param>
-/// <param name="handler">An asynchronous handler to execute when the player's data is updated.</param>
-/// <returns>An <see cref="IDisposable"/> that can be used to cancel the subscription.</returns>
+    /// Подписывается на изменения для конкретного игрока и регистрирует обработчик, который вызывается при изменении данных игрока.
+    /// </summary>
+    /// <param name="playerId">Уникальный идентификатор игрока, за изменениями которого нужно следить.</param>
+    /// <param name="handler">Асинхронный обработчик, который выполняется при обновлении данных игрока.</param>
+    /// <returns>Объект <see cref="IDisposable"/>, который можно использовать для отмены подписки.</returns>
     IDisposable Subscribe(Guid playerId, Func<Domain.Player, Task> handler);
+
     /// <summary>
-/// Notifies that the main statistics of the specified player have changed.
-/// </summary>
-/// <param name="player">The player whose main statistics have been updated.</param>
-/// <returns>A task representing the asynchronous notification operation.</returns>
-Task OnMainStatsChanged(Domain.Player player);
+    /// Уведомляет о том, что основные статистические данные указанного игрока изменились.
+    /// </summary>
+    /// <param name="player">Игрок, основные статистические данные которого были обновлены.</param>
+    /// <returns>Задача, представляющая асинхронную операцию уведомления.</returns>
+    Task OnMainStatsChanged(Domain.Player player);
 }

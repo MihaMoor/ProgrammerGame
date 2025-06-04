@@ -16,9 +16,9 @@ public class PostgreSql
     public required string Password { get; set; }
 
     /// <summary>
-    /// Constructs and returns a PostgreSQL connection string using the configured host, port, database, username, and password.
+    /// Создает и возвращает строку подключения к PostgreSQL, используя настроенные параметры хоста, порта, базы данных, имени пользователя и пароля.
     /// </summary>
-    /// <returns>A PostgreSQL connection string based on the current configuration.</returns>
+    /// <returns>Строка подключения к PostgreSQL на основе текущих настроек.</returns>
     public string CreateConnectionString()
     {
         Npgsql.NpgsqlConnectionStringBuilder builder = new()
@@ -46,12 +46,9 @@ public class Logstash
     public ulong QueueLimitBytes { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает объект <see cref="Uri"/>, созданный из настроенного URL.
     /// </summary>
-    /// <summary>
-/// Returns a <see cref="Uri"/> object constructed from the configured URL.
-/// </summary>
-/// <returns>A <see cref="Uri"/> representing the endpoint URL.</returns>
+    /// <returns>Объект <see cref="Uri"/>, представляющий URL конечной точки.</returns>
     public Uri GetUri() => new(Url);
 }
 
@@ -63,11 +60,8 @@ public class Elasticsearch
     public required string Url { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает объект <see cref="Uri"/>, созданный на основе настроенного URL.
     /// </summary>
-    /// <summary>
-/// Returns a <see cref="Uri"/> object constructed from the configured URL.
-/// </summary>
-/// <returns>A <see cref="Uri"/> representing the endpoint URL.</returns>
+    /// <returns>Объект <see cref="Uri"/>, представляющий URL конечной точки.</returns>
     public Uri GetUri() => new(Url);
 }

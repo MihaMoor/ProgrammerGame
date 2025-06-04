@@ -10,7 +10,8 @@ public static class AppServices
     public static ServiceProvider? ServiceProvider { get; private set; }
 
     /// <summary>
-    /// Configures and builds the application's dependency injection service provider with all required services, gRPC clients, pages, and widgets.
+    /// Настраивает и создает поставщик сервисов dependency injection приложения со всеми необходимыми сервисами,
+    /// gRPC-клиентами, страницами и виджетами.
     /// </summary>
     public static void Configure()
     {
@@ -32,7 +33,7 @@ public static class AppServices
 
     private static ServiceCollection ConfigurePages(this ServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<MainWindow>(); // или transient/singleton по требованиям вашего проекта
+        serviceCollection.AddSingleton<MainWindow>();
         serviceCollection.AddScoped<Game>();
 
         return serviceCollection;

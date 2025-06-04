@@ -3,15 +3,10 @@ namespace Server.Module.Player.Application;
 public interface IPlayerRepository
 {
     /// <summary>
-    /// Получение игрока по Id.
+    /// Асинхронно извлекает сущность игрока по её уникальному идентификатору.
     /// </summary>
-    /// <param name="id">Id игрока</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <summary>
-/// Asynchronously retrieves a player entity by its unique identifier.
-/// </summary>
-/// <param name="id">The unique identifier of the player to retrieve.</param>
-/// <param name="cancellationToken">Optional token to cancel the operation.</param>
-/// <returns>The player entity if found; otherwise, null.</returns>
+    /// <param name="id">Уникальный идентификатор игрока для извлечения.</param>
+    /// <param name="cancellationToken">Необязательный токен для отмены операции.</param>
+    /// <returns>Сущность игрока, если найдена; в противном случае, null.</returns>
     Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 }

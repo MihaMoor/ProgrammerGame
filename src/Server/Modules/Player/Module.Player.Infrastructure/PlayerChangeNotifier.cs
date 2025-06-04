@@ -12,13 +12,15 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
     > _subscriptions = new();
 
     /// <summary>
-    /// Subscribes an asynchronous handler to receive notifications when the specified player's state changes.
+    /// Подписывает асинхронный обработчик на получение уведомлений об изменении состояния указанного игрока.
     /// </summary>
-    /// <param name="playerId">The unique identifier of the player to subscribe to.</param>
-    /// <param name="handler">The asynchronous handler to invoke when the player's state changes.</param>
-    /// <returns>An <see cref="IDisposable"/> that can be used to unsubscribe the handler.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="handler"/> is null.</exception>
-    /// <exception cref="InvalidOperationException">Thrown if a subscription ID collision occurs (extremely rare).</exception>
+    /// <param name="playerId">Уникальный идентификатор игрока для подписки.</param>
+    /// <param name="handler">Асинхронный обработчик, вызываемый при изменении состояния игрока.</param>
+    /// <returns><see cref="IDisposable"/>, который может быть использован для отписки обработчика.</returns>
+    /// <exception cref="ArgumentNullException">Выбрасывается, если <paramref name="handler"/> равен null.</exception>
+    /// <exception cref="InvalidOperationException">
+    /// Выбрасывается при коллизии идентификаторов подписки (крайне редко).
+    /// </exception>
     public IDisposable Subscribe(Guid playerId, Func<Domain.Player, Task> handler)
     {
         // Создаем уникальный ID для подписки
@@ -43,11 +45,12 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
     }
 
     /// <summary>
-    /// Notifies all subscribed handlers of a change to the specified player's main stats.
+    /// Уведомляет все подписанные обработчики об изменении основных характеристик указанного игрока.
     /// </summary>
-    /// <param name="stats">The player whose main stats have changed.</param>
+    /// <param name="stats">Игрок, основные характеристики которого изменились.</param>
     /// <remarks>
-    /// Invokes all registered handlers for the player's ID in parallel. If no handlers are registered, no action is taken.
+    /// Вызывает все зарегистрированные обработчики для идентификатора игрока параллельно.
+    /// Если обработчики не зарегистрированы, никаких действий не предпринимается.
     /// </remarks>
     public async Task OnMainStatsChanged(Domain.Player stats)
     {
@@ -70,7 +73,7 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
     }
 
     /// <summary>
-    /// Invokes the specified handler asynchronously with the given player stats, logging any exceptions that occur.
+    /// Асинхронно вызывает указанный обработчик с переданными характеристиками игрока, регистрируя любые возникающие исключения.
     /// </summary>
     private static async Task SafeInvokeAsync(
         Func<Domain.Player, Task> handler,
@@ -89,10 +92,10 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
     }
 
     /// <summary>
-    /// Removes a subscription handler for the specified player and subscription IDs.
+    /// Удаляет обработчик подписки для указанного игрока и идентификаторов подписки.
     /// </summary>
-    /// <param name="mainStatsId">The unique identifier of the player.</param>
-    /// <param name="subscriptionId">The unique identifier of the subscription to remove.</param>
+    /// <param name="mainStatsId">Уникальный идентификатор игрока.</param>
+    /// <param name="subscriptionId">Уникальный идентификатор подписки для удаления.</param>
     internal void Unsubscribe(Guid mainStatsId, Guid subscriptionId)
     {
         // Если для playerId есть словарь обработчиков
@@ -129,7 +132,7 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
         private bool _disposed;
 
         /// <summary>
-        /// Unsubscribes from player change notifications and releases the subscription.
+        /// Отписывается от уведомлений об изменениях игрока и освобождает подписку.
         /// </summary>
         public void Dispose()
         {

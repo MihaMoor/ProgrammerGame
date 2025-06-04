@@ -14,21 +14,13 @@ public class PlayerGrpcService(
 ) : PlayerService.PlayerServiceBase
 {
     /// <summary>
-    /// Обрабатывает gRPC-запрос получения игрока.
+    /// Получает информацию об игроке для указанного идентификатора игрока.
     /// </summary>
-    /// <param name="request">UUID запроса.</param>
-    /// <returns>Информация об игроке.</returns>
+    /// <param name="request">UUID, содержащий идентификатор игрока для получения.</param>
+    /// <param name="context">Контекст вызова сервера gRPC.</param>
+    /// <returns>Данные игрока в виде <see cref="PlayerDto"/>.</returns>
     /// <exception cref="RpcException">
-    /// Выбрасывается со статусом <see cref="StatusCode.InvalidArgument"/>
-    /// при null или пустом Id у <paramref name="request"/>.
-    /// <summary>
-    /// Retrieves player information for the specified player ID.
-    /// </summary>
-    /// <param name="request">The UUID containing the player ID to retrieve.</param>
-    /// <param name="context">The gRPC server call context.</param>
-    /// <returns>The player data as a <see cref="PlayerDto"/>.</returns>
-    /// <exception cref="RpcException">
-    /// Thrown if the player cannot be found or if validation fails, with an appropriate gRPC status code.
+    /// Возникает, если игрок не найден или если проверка не удалась, с соответствующим кодом состояния gRPC.
     /// </exception>
     public override async Task<PlayerDto> Get(UUID request, ServerCallContext context)
     {
@@ -50,15 +42,16 @@ public class PlayerGrpcService(
     }
 
     /// <summary>
-    /// Streams real-time updates of a player's data to the client as they become available.
+    /// Потоковая передача обновлений данных игрока клиенту в режиме реального времени по мере их появления.
     /// </summary>
-    /// <param name="request">The request containing the player ID to subscribe to.</param>
-    /// <param name="responseStream">The server stream used to send player updates to the client.</param>
-    /// <param name="context">The gRPC server call context.</param>
+    /// <param name="request">Запрос, содержащий идентификатор игрока для подписки.</param>
+    /// <param name="responseStream">Серверный поток, используемый для отправки обновлений игрока клиенту.</param>
+    /// <param name="context">Контекст вызова сервера gRPC.</param>
     /// <remarks>
-    /// Throws an <see cref="RpcException"/> with <see cref="StatusCode.InvalidArgument"/> if the player ID is invalid,
-    /// or with an appropriate status code if subscription fails or a streaming error occurs.
+    /// Генерирует исключение <see cref="RpcException"/> с <see cref="StatusCode.InvalidArgument"/>, если идентификатор игрока недействителен,
+    /// или с соответствующим кодом состояния, если подписка не удалась или произошла ошибка потоковой передачи.
     /// </remarks>
+
     public override async Task Subscribe(
         UUID request,
         IServerStreamWriter<PlayerDto> responseStream,
@@ -105,11 +98,11 @@ public class PlayerGrpcService(
     }
 
     /// <summary>
-    /// Handles a request to create a new player by logging the command and delegating to the base implementation.
+    /// Обрабатывает запрос на создание нового игрока, регистрируя команду и передавая её на базовую реализацию.
     /// </summary>
-    /// <param name="request">The command containing player creation details.</param>
-    /// <param name="context">The gRPC server call context.</param>
-    /// <returns>A task representing the asynchronous operation, with the created player's data.</returns>
+    /// <param name="request">Команда, содержащая детали создания игрока.</param>
+    /// <param name="context">Контекст вызова сервера gRPC.</param>
+    /// <returns>Задача, представляющая асинхронную операцию, с данными созданного игрока.</returns>
     public override Task<PlayerDto> Create(CreatePlayerCommand request, ServerCallContext context)
     {
         _logger.LogInformation(request.ToString());

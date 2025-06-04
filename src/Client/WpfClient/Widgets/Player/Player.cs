@@ -13,6 +13,9 @@ internal sealed class Player : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    /// <summary>
+    /// Имя
+    /// </summary>
     public string Name
     {
         get => _name;
@@ -23,6 +26,9 @@ internal sealed class Player : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Карманные деньги
+    /// </summary>
     public double PocketMoney
     {
         get => _pocketMoney;
@@ -33,6 +39,9 @@ internal sealed class Player : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Здоровье
+    /// </summary>
     public int Health
     {
         get => _health;
@@ -42,6 +51,10 @@ internal sealed class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    /// <summary>
+    /// Голод
+    /// </summary>
     public int Hunger
     {
         get => _hunger;
@@ -51,6 +64,10 @@ internal sealed class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    /// <summary>
+    /// Настроение
+    /// </summary>
     public int Mood
     {
         get => _mood;
@@ -62,9 +79,9 @@ internal sealed class Player : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Raises the PropertyChanged event to notify listeners that a property value has changed.
+    /// Вызывает событие PropertyChanged для уведомления подписчиков об изменении значения свойства.
     /// </summary>
-    /// <param name="propertyName">The name of the property that changed. Automatically set to the caller's name if not specified.</param>
+    /// <param name="propertyName">Имя изменившегося свойства. Автоматически устанавливается в имя вызывающего свойства, если не указано явно.</param>
     internal void OnPropertyChanged([CallerMemberName] string propertyName = null!)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

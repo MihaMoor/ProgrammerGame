@@ -7,11 +7,11 @@ namespace Server.Module.Player.Infrastructure;
 public class PlayerRepository(PlayerEventListener eventListener, Context context) : IPlayerRepository
 {
     /// <summary>
-    /// Asynchronously retrieves a player domain model by its unique identifier.
+    /// Асинхронно получает модель домена игрока по его уникальному идентификатору.
     /// </summary>
-    /// <param name="id">The unique identifier of the player.</param>
-    /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
-    /// <returns>The player domain model if found; otherwise, null.</returns>
+    /// <param name="id">Уникальный идентификатор игрока.</param>
+    /// <param name="cancellationToken">Токен для отмены асинхронной операции.</param>
+    /// <returns>Модель домена игрока, если она найдена; иначе null.</returns>
     public async Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         // Получаем сущность из хранилища
@@ -34,10 +34,10 @@ public class PlayerRepository(PlayerEventListener eventListener, Context context
     }
 
     /// <summary>
-    /// Saves or updates a player domain model in the database asynchronously.
+    /// Асинхронно сохраняет или обновляет модель домена игрока в базе данных.
     /// </summary>
-    /// <param name="model">The player domain model to be saved or updated.</param>
-    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <param name="model">Модель домена игрока, которую необходимо сохранить или обновить.</param>
+    /// <param name="cancellationToken">Токен для отслеживания запросов отмены.</param>
     public async Task SaveAsync(Domain.Player model, CancellationToken cancellationToken = default)
     {
         PlayerEntity playerEntity = model.ToPlayerEntity();

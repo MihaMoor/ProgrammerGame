@@ -5,8 +5,8 @@ namespace Shared.EndpointMapper;
 public interface IEndpoint
 {
     /// <summary>
-/// Configures and maps endpoints using the provided route builder.
-/// </summary>
-/// <param name="app">The route builder to which endpoints will be mapped.</param>
-void MapEndpoints(IEndpointRouteBuilder app);
+    /// Ќастраивает и регистрирует конечные точки с использованием предоставленного маршрутизатора (route builder).
+    /// </summary>
+    /// <param name="app">ћаршрутизатор (route builder), к которому будут добавлены конечные точки.</param>
+    void MapEndpoints(IEndpointRouteBuilder app);
 }

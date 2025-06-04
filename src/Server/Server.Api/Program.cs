@@ -12,9 +12,9 @@ public class Program
     private const ulong DefaultQueueLimitBytes = 104_857_600UL;
 
     /// <summary>
-    /// Configures and runs the web application, setting up services, logging, gRPC, OpenAPI, endpoints, and middleware.
+    /// Настраивает и запускает веб-приложение, включая настройку служб, логирования, gRPC, OpenAPI, конечных точек и промежуточного программного обеспечения.
     /// </summary>
-    /// <param name="args">Command-line arguments for application configuration.</param>
+    /// <param name="args">Аргументы командной строки для конфигурации приложения.</param>
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -58,10 +58,10 @@ public class Program
     }
 
     /// <summary>
-    /// Configures Elasticsearch and Serilog logging for the application using settings from the "AppSettings" configuration section.
+    /// Настраивает Elasticsearch и логирование Serilog для приложения, используя параметры из раздела конфигурации "AppSettings".
     /// </summary>
     /// <remarks>
-    /// If "AppSettings" is not present, logging is set up to output to the console only. Otherwise, this method initializes an Elasticsearch client and configures Serilog to write logs to both the console and a Logstash HTTP endpoint, applying queue limits as specified in the configuration. The Elasticsearch client is registered as a singleton service.
+    /// Если раздел "AppSettings" отсутствует, логирование настраивается только для вывода в консоль. В противном случае этот метод инициализирует клиента Elasticsearch и настраивает Serilog для записи логов как в консоль, так и в HTTP-ендпоинт Logstash, с учетом лимитов очереди, указанных в конфигурации. Клиент Elasticsearch регистрируется как синглтон-сервис.
     /// </remarks>
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
@@ -103,10 +103,10 @@ public class Program
     }
 
     /// <summary>
-    /// Loads all DLL assemblies in the application's base directory and their dependencies that are not already loaded into the current AppDomain.
+    /// Загружает все DLL-ассамблеи из базовой директории приложения и их зависимости, которые еще не загружены в текущий AppDomain.
     /// </summary>
     /// <remarks>
-    /// This method ensures that all referenced assemblies and their dependencies are available at runtime by dynamically loading any missing DLLs from the application's directory. Any errors encountered during loading are written to the console.
+    /// Этот метод обеспечивает наличие всех управляемых сборок и их зависимостей во время выполнения, динамически загружая отсутствующие DLL из каталога приложения. Ошибки, возникающие при загрузке, выводятся в консоль.
     /// </remarks>
     private static void LoadAllReferencedAssemblies()
     {
