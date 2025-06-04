@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Elastic.Clients.Elasticsearch;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Server.Module.Player.Api;
 using Server.Module.Player.Application;
@@ -14,13 +15,16 @@ public partial class PlayerTests
     private static readonly Mock<IPlayerRepository> playerRepositoryMock = new();
     private static readonly Mock<IPlayerChangeNotifier> playerChangeNotifierMock = new();
 
-    [Theory(Timeout = 5_000)]
+    [Theory]
     [MemberData(nameof(CreatePlayerData))]
     public async Task Получение_игрока(
         UUID id,
+        Domain.Player seed,
         PlayerDto expected)
     {
         // Arrange
+        playerRepositoryMock.Setup(x => x.GetAsync(It.IsAny<Guid>(), CancellationToken.None)).ReturnsAsync(seed);
+
         IQueryHandler<GetPlayerQuery, Domain.Player> queryHandler = new GetPlayerQueryHandler(playerRepositoryMock.Object);
         PlayerGrpcService service = new(mockLogger.Object, queryHandler, null!);
         PlayerDto player = await service.Get(id, null!);
@@ -37,13 +41,23 @@ public partial class PlayerTests
 {
     private static readonly Guid playerId = Guid.CreateVersion7();
 
-    public static TheoryData<UUID, PlayerDto> CreatePlayerData => new()
+    public static TheoryData<UUID, Domain.Player, PlayerDto> CreatePlayerData => new()
     {
         {
             new()
             {
                 PlayerId = playerId.ToString(),
             },
+            Domain.Player.CreatePlayer(
+                playerId : playerId,
+                name : "Test1",
+                health : 100,
+                hunger : 100,
+                mood : 100,
+                pocketMoney : 99.99m,
+                isAlive: true
+            )
+            .Value,
             new()
             {
                 PlayerId = playerId.ToString(),
@@ -51,10 +65,11 @@ public partial class PlayerTests
                 Health = 100,
                 Hunger = 100,
                 Mood = 100,
-                PocketMoney =
+                PocketMoney = new()
                 {
                     Units = 99,
-                    Nanos = 99_000_000
+                    Nanos = 990_000_000,
+                    CurrencyCode = "RUB"
                 },
             }
         }

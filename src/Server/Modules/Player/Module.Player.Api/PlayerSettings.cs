@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Server.Module.Player.Api;
+﻿namespace Server.Module.Player.Api;
 
 internal class PlayerSettings
 {
