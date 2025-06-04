@@ -1,4 +1,4 @@
-﻿using Client.Infrastructure;
+using Client.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using WpfClient.Pages;
 using WpfClient.Widgets;
@@ -9,6 +9,10 @@ public static class AppServices
 {
     public static ServiceProvider? ServiceProvider { get; private set; }
 
+    /// <summary>
+    /// Настраивает и создает поставщик сервисов dependency injection приложения со всеми необходимыми сервисами,
+    /// gRPC-клиентами, страницами и виджетами.
+    /// </summary>
     public static void Configure()
     {
         ServiceCollection serviceCollection = new();
@@ -29,7 +33,7 @@ public static class AppServices
 
     private static ServiceCollection ConfigurePages(this ServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<MainWindow>(); // или transient/singleton по требованиям вашего проекта
+        serviceCollection.AddSingleton<MainWindow>();
         serviceCollection.AddScoped<Game>();
 
         return serviceCollection;

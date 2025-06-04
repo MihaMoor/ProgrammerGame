@@ -1,4 +1,4 @@
-﻿namespace Server.Api;
+namespace Server.Api;
 
 public class AppSettings
 {
@@ -15,6 +15,10 @@ public class PostgreSql
     public required string Username { get; set; }
     public required string Password { get; set; }
 
+    /// <summary>
+    /// Создает и возвращает строку подключения к PostgreSQL, используя настроенные параметры хоста, порта, базы данных, имени пользователя и пароля.
+    /// </summary>
+    /// <returns>Строка подключения к PostgreSQL на основе текущих настроек.</returns>
     public string CreateConnectionString()
     {
         Npgsql.NpgsqlConnectionStringBuilder builder = new()
@@ -42,9 +46,9 @@ public class Logstash
     public ulong QueueLimitBytes { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает объект <see cref="Uri"/>, созданный из настроенного URL.
     /// </summary>
-    /// <returns>url</returns>
+    /// <returns>Объект <see cref="Uri"/>, представляющий URL конечной точки.</returns>
     public Uri GetUri() => new(Url);
 }
 
@@ -56,8 +60,8 @@ public class Elasticsearch
     public required string Url { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает объект <see cref="Uri"/>, созданный на основе настроенного URL.
     /// </summary>
-    /// <returns>url</returns>
+    /// <returns>Объект <see cref="Uri"/>, представляющий URL конечной точки.</returns>
     public Uri GetUri() => new(Url);
 }

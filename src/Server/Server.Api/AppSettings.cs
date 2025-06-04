@@ -1,4 +1,4 @@
-﻿namespace Server.Api;
+namespace Server.Api;
 
 public class AppSettings
 {
@@ -29,9 +29,10 @@ public class Logstash
     public ulong QueueLimitBytes { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает URL-адрес конечной точки Logstash в виде объекта <see cref="Uri"/>.
     /// </summary>
-    /// <returns>url</returns>
+    /// <returns>Абсолютный <see cref="Uri"/>, разобранный из свойства <c>Url</c>.</returns>
+    /// <exception cref="ArgumentException">Выбрасывается, если значение свойства <c>Url</c> не является допустимым абсолютным URL.</exception>
     public Uri GetUri()
     {
         if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri))
@@ -48,8 +49,8 @@ public class Elasticsearch
     public required string Url { get; set; }
 
     /// <summary>
-    /// Получить url адрес подключения
+    /// Возвращает объект <see cref="Uri"/>, созданный на основе настроенного URL-адреса конечной точки Elasticsearch.
     /// </summary>
-    /// <returns>url</returns>
+    /// <returns>Объект <see cref="Uri"/>, представляющий конечную точку Elasticsearch.</returns>
     public Uri GetUri() => new(Url);
 }

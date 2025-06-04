@@ -1,4 +1,4 @@
-п»їusing Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Server.Module.Player.Application;
@@ -10,6 +10,12 @@ namespace Server.Module.Player.Api;
 
 public static class PlayerServiceRegistration
 {
+    /// <summary>
+    /// Регистрирует сервисы, связанные с игроком, и настраивает контекст базы данных игрока с использованием настроек из предоставленной конфигурации.
+    /// </summary>
+    /// <param name="configuration">Конфигурация приложения, содержащая раздел "PlayerSettings".</param>
+    /// <returns>Обновлённая коллекция сервисов <see cref="IServiceCollection"/> с зарегистрированными сервисами игрока.</returns>
+    /// <exception cref="InvalidOperationException">Возникает, если в конфигурации отсутствует раздел "PlayerSettings".</exception>
     public static IServiceCollection AddPlayerServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<PlayerSettings>(configuration.GetRequiredSection("PlayerSettings"));

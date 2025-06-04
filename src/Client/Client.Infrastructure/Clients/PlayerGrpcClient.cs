@@ -1,10 +1,16 @@
-п»їusing Server.Module.Player.GrpcContracts.V1;
+using Server.Module.Player.GrpcContracts.V1;
 
 namespace Client.Infrastructure.Clients;
 
 public class PlayerGrpcClient(string adress, PlayerService.PlayerServiceClient client)
     : GrpcClient<PlayerService.PlayerServiceClient>(adress, client)
 {
+    /// <summary>
+    /// Получает игрока по фиксированному идентификатору с использованием gRPC, с возможностью обработки результата через указанный обработчик.
+    /// </summary>
+    /// <param name="handler">Необязательный делегат для обработки полученного <see cref="PlayerDto"/>.</param>
+    /// <param name="cancellationToken">Токен отмены для наблюдения за выполнением операции.</param>
+    /// <returns>Объект <see cref="PlayerDto"/>, соответствующий фиксированному идентификатору игрока.</returns>
     public async Task<PlayerDto> GetAsync(
         Action<PlayerDto> handler,
         CancellationToken cancellationToken)

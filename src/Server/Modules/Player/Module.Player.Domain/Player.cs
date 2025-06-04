@@ -1,4 +1,4 @@
-﻿using Server.Shared.Errors;
+using Server.Shared.Errors;
 
 namespace Server.Module.Player.Domain;
 
@@ -41,11 +41,27 @@ public sealed class Player
     /// </summary>
     public bool IsAlive { get; private set; }
 
+    /// <summary>
+    /// Инициализирует новый экземпляр класса <see cref="Player"/> с именем, установленным на "Unknown".
+    /// </summary>
     private Player()
     {
         Name = "Unknown";
     }
 
+    /// <summary>
+    /// Создает новый экземпляр <see cref="Player"/> с указанными атрибутами, выполняя проверку всех свойств.
+    /// </summary>
+    /// <param name="playerId">Уникальный идентификатор игрока.</param>
+    /// <param name="name">Имя игрока. Не должно быть пустым или содержать только пробелы.</param>
+    /// <param name="health">Уровень здоровья игрока (от 0 до 100, если жив).</param>
+    /// <param name="hunger">Уровень голода игрока (от 0 до 100, если жив).</param>
+    /// <param name="mood">Уровень настроения игрока (от 0 до 100, если жив).</param>
+    /// <param name="pocketMoney">Количество карманных денег игрока.</param>
+    /// <param name="isAlive">Указывает, жив ли игрок. Если true, проверяются здоровье, голод и настроение.</param>
+    /// <returns>
+    /// <see cref="Result{Player}"/>, содержащий созданного игрока в случае успеха, или результат сбоя с агрегированными ошибками проверки.
+    /// </returns>
     public static Result<Player> CreatePlayer(
         Guid playerId,
         string name,
@@ -100,11 +116,11 @@ public sealed class Player
     }
 
     /// <summary>
-    /// Создание основных характеристик
+    /// Создает нового игрока с указанным именем и стандартными характеристиками.
     /// </summary>
-    /// <param name="name">Имя персонажа</param>
+    /// <param name="name">Имя создаваемого игрока.</param>
     /// <returns>
-    /// <see cref="Error"/> <see cref="PlayerError.NameIsEmpty()"/>
+    /// <see cref="Result{Player}"/>, содержащий нового игрока, если имя допустимо; в противном случае, результат сбоя с ошибкой проверки.
     /// </returns>
     public static Result<Player> CreatePlayer(string name)
     {
@@ -128,6 +144,11 @@ public sealed class Player
         return Result.Success(mainStats);
     }
 
+    /// <summary>
+    /// Проверяет, что предоставленное имя игрока не является пустым, не содержит только пробелы или не равно null.
+    /// </summary>
+    /// <param name="name">Имя игрока для проверки.</param>
+    /// <returns>Успешный результат, если имя допустимо; в противном случае, результат сбоя с конкретной ошибкой.</returns>
     private static Result ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -135,6 +156,11 @@ public sealed class Player
         return Result.Success(name);
     }
 
+    /// <summary>
+    /// Проверяет, что значение здоровья находится в диапазоне от 0 до 100 включительно.
+    /// </summary>
+    /// <param name="health">Значение здоровья для проверки.</param>
+    /// <returns>Успешный результат, если значение допустимо; в противном случае, результат сбоя с ошибкой выхода за пределы диапазона.</returns>
     private static Result ValidateHealth(int health)
     {
         if (health < 0 || health > 100)
@@ -144,6 +170,11 @@ public sealed class Player
         return Result.Success(health);
     }
 
+    /// <summary>
+    /// Проверяет, что значение настроения находится в диапазоне от 0 до 100 включительно.
+    /// </summary>
+    /// <param name="mood">Значение настроения для проверки.</param>
+    /// <returns>Успешный результат, если значение допустимо; в противном случае, результат сбоя с ошибкой выхода за пределы диапазона.</returns>
     private static Result ValidateMood(int mood)
     {
         if (mood < 0 || mood > 100)
@@ -153,6 +184,11 @@ public sealed class Player
         return Result.Success(mood);
     }
 
+    /// <summary>
+    /// Проверяет, что значение голода находится в диапазоне от 0 до 100 включительно.
+    /// </summary>
+    /// <param name="hunger">Значение голода для проверки.</param>
+    /// <returns>Успешный результат, если значение допустимо; в противном случае, результат сбоя с ошибкой выхода за пределы диапазона.</returns>
     private static Result ValidateHunger(int hunger)
     {
         if (hunger < 0 || hunger > 100)
@@ -163,8 +199,10 @@ public sealed class Player
     }
 
     /// <summary>
-    /// Изменяет значение здоровья с ограничением от 0 до 100
+    /// Корректирует здоровье игрока на указанную величину, ограничивая результат значениями от 0 до 100.
+    /// Вызывает событие StatsChanged, если значение здоровья изменяется.
     /// </summary>
+    /// <param name="delta">Величина, на которую изменяется здоровье. Положительное значение увеличивает, отрицательное уменьшает.</param>
     public void ChangeHealth(int delta)
     {
         int prevValue = Health;
@@ -176,8 +214,10 @@ public sealed class Player
     }
 
     /// <summary>
-    /// Изменяет значение голода с ограничением от 0 до 100
+    /// Изменяет уровень голода игрока на указанную величину, ограничивая результат значениями от 0 до 100.
+    /// Вызывает событие StatsChanged, если значение голода изменяется.
     /// </summary>
+    /// <param name="delta">Величина, на которую изменяется уровень голода. Положительное значение увеличивает голод, отрицательное уменьшает.</param>
     public void ChangeHunger(int delta)
     {
         int prevValue = Hunger;
@@ -189,8 +229,10 @@ public sealed class Player
     }
 
     /// <summary>
-    /// Изменяет значение настроения с ограничением от 0 до 100
+    /// Корректирует настроение игрока на указанную величину, ограничивая результат значениями от 0 до 100.
+    /// Вызывает событие StatsChanged, если значение настроения изменяется.
     /// </summary>
+    /// <param name="delta">Величина, на которую изменяется настроение.</param>
     public void ChangeMood(int delta)
     {
         int prevValue = Mood;
@@ -202,8 +244,10 @@ public sealed class Player
     }
 
     /// <summary>
-    /// Изменяет количество карманных денег
+    /// Изменяет количество карманных денег игрока на указанную величину, обеспечивая, чтобы оно не стало меньше нуля.
+    /// Вызывает событие StatsChanged, если значение изменяется.
     /// </summary>
+    /// <param name="delta">Величина, на которую увеличиваются или уменьшаются карманные деньги игрока.</param>
     public void ChangePocketMoney(decimal delta)
     {
         decimal prevValue = PocketMoney;
@@ -214,9 +258,9 @@ public sealed class Player
     }
 
     /// <summary>
-    /// Изменяет статус жив ли игрок
+    /// Обновляет статус жизни игрока и вызывает событие StatsChanged, если значение изменяется.
     /// </summary>
-    /// <param name="isAlive"></param>
+    /// <param name="isAlive">Новый статус жизни, который нужно установить для игрока.</param>
     public void ChangeIsAlive(bool isAlive)
     {
         bool prevValue = IsAlive;

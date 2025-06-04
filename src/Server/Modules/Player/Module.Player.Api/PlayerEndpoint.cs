@@ -1,4 +1,4 @@
-п»їusing Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Shared.EndpointMapper;
 
@@ -8,6 +8,9 @@ public static class PlayerEndpoint
 {
     public sealed class Endpoint : IEndpoint
     {
+        /// <summary>
+        /// Регистрирует PlayerGrpcService в системе маршрутизации конечных точек приложения.
+        /// </summary>
         public void MapEndpoints(IEndpointRouteBuilder app)
         {
             app.MapGrpcService<PlayerGrpcService>();

@@ -1,4 +1,4 @@
-п»їusing Grpc.Net.Client;
+using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Server.Module.Player.GrpcContracts.V1;
 
@@ -18,6 +18,11 @@ public static class GrpsServices
         return serviceCollection;
     }
 
+    /// <summary>
+    /// Регистрирует gRPC-клиент PlayerService как scoped-сервис в коллекции сервисов.
+    /// </summary>
+    /// <param name="serviceCollection">Коллекция сервисов для настройки.</param>
+    /// <returns>Обновленная коллекция сервисов.</returns>
     private static ServiceCollection ConfigureContractServiceClients(
         this ServiceCollection serviceCollection
     )
@@ -31,6 +36,11 @@ public static class GrpsServices
         return serviceCollection;
     }
 
+    /// <summary>
+    /// Регистрирует <c>PlayerGrpcClient</c> как scoped-сервис, используя указанный адрес и созданный экземпляр <c>PlayerServiceClient</c>.
+    /// </summary>
+    /// <param name="adress">Адрес gRPC-сервера для инициализации клиента.</param>
+    /// <returns>Обновленная коллекция сервисов <c>ServiceCollection</c> с регистрацией <c>PlayerGrpcClient</c>.</returns>
     private static ServiceCollection ConfigureGrpcClients(
         this ServiceCollection serviceCollection,
         string adress

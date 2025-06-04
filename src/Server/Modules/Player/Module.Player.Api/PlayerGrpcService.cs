@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using Server.Module.Player.GrpcContracts.V1;
@@ -14,13 +14,13 @@ public class PlayerGrpcService(
 ) : PlayerService.PlayerServiceBase
 {
     /// <summary>
-    /// Обрабатывает gRPC-запрос получения игрока.
+    /// Получает информацию об игроке для указанного идентификатора игрока.
     /// </summary>
-    /// <param name="request">UUID запроса.</param>
-    /// <returns>Информация об игроке.</returns>
+    /// <param name="request">UUID, содержащий идентификатор игрока для получения.</param>
+    /// <param name="context">Контекст вызова сервера gRPC.</param>
+    /// <returns>Данные игрока в виде <see cref="PlayerDto"/>.</returns>
     /// <exception cref="RpcException">
-    /// Выбрасывается со статусом <see cref="StatusCode.InvalidArgument"/>
-    /// при null или пустом Id у <paramref name="request"/>.
+    /// Возникает, если игрок не найден или если проверка не удалась, с соответствующим кодом состояния gRPC.
     /// </exception>
     public override async Task<PlayerDto> Get(UUID request, ServerCallContext context)
     {
@@ -40,6 +40,17 @@ public class PlayerGrpcService(
 
         return result.Value.ToViewModel();
     }
+
+    /// <summary>
+    /// Потоковая передача обновлений данных игрока клиенту в режиме реального времени по мере их появления.
+    /// </summary>
+    /// <param name="request">Запрос, содержащий идентификатор игрока для подписки.</param>
+    /// <param name="responseStream">Серверный поток, используемый для отправки обновлений игрока клиенту.</param>
+    /// <param name="context">Контекст вызова сервера gRPC.</param>
+    /// <remarks>
+    /// Генерирует исключение <see cref="RpcException"/> с <see cref="StatusCode.InvalidArgument"/>, если идентификатор игрока недействителен,
+    /// или с соответствующим кодом состояния, если подписка не удалась или произошла ошибка потоковой передачи.
+    /// </remarks>
 
     public override async Task Subscribe(
         UUID request,
@@ -86,6 +97,12 @@ public class PlayerGrpcService(
         }
     }
 
+    /// <summary>
+    /// Обрабатывает запрос на создание нового игрока, регистрируя команду и передавая её на базовую реализацию.
+    /// </summary>
+    /// <param name="request">Команда, содержащая детали создания игрока.</param>
+    /// <param name="context">Контекст вызова сервера gRPC.</param>
+    /// <returns>Задача, представляющая асинхронную операцию, с данными созданного игрока.</returns>
     public override Task<PlayerDto> Create(CreatePlayerCommand request, ServerCallContext context)
     {
         _logger.LogInformation(request.ToString());

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using System.Collections.Concurrent;
 
@@ -8,7 +8,10 @@ public class PlayerEventListener(IPlayerChangeNotifier _notifier, ILogger<Player
 {
     private readonly ConcurrentDictionary<Guid, Domain.Player> _trackedEntities = new();
 
-    // Этот метод вызывается, когда Player загружается из репозитория
+    /// <summary>
+    /// Начинает отслеживать указанный объект игрока и подписывается на события изменения его характеристик.
+    /// </summary>
+    /// <param name="entity">Объект игрока для отслеживания.</param>
     public void TrackEntity(Domain.Player entity)
     {
         if (_trackedEntities.TryAdd(entity.PlayerId, entity))
@@ -18,7 +21,10 @@ public class PlayerEventListener(IPlayerChangeNotifier _notifier, ILogger<Player
         }
     }
 
-    // Прекращаем отслеживание сущности
+    /// <summary>
+    /// Прекращает отслеживание указанного объекта игрока и отписывается от его события изменения характеристик (StatsChanged).
+    /// </summary>
+    /// <param name="entity">Объект игрока, которого необходимо перестать отслеживать.</param>
     public void UntrackEntity(Domain.Player entity)
     {
         if (_trackedEntities.TryRemove(entity.PlayerId, out _))
@@ -27,6 +33,10 @@ public class PlayerEventListener(IPlayerChangeNotifier _notifier, ILogger<Player
         }
     }
 
+    /// <summary>
+    /// Обрабатывает событие изменения характеристик игрока, асинхронно уведомляя подписчиков об обновлении.
+    /// </summary>
+    /// <param name="entity">Объект игрока, у которого изменились характеристики.</param>
     private void OnEntityChanged(Domain.Player entity)
     {
         // Асинхронно уведомляем всех подписчиков

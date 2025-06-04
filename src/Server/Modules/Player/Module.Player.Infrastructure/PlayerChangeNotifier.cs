@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using System.Collections.Concurrent;
 
@@ -11,6 +11,16 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
         ConcurrentDictionary<Guid, Func<Domain.Player, Task>>
     > _subscriptions = new();
 
+    /// <summary>
+    /// Подписывает асинхронный обработчик на получение уведомлений об изменении состояния указанного игрока.
+    /// </summary>
+    /// <param name="playerId">Уникальный идентификатор игрока для подписки.</param>
+    /// <param name="handler">Асинхронный обработчик, вызываемый при изменении состояния игрока.</param>
+    /// <returns><see cref="IDisposable"/>, который может быть использован для отписки обработчика.</returns>
+    /// <exception cref="ArgumentNullException">Выбрасывается, если <paramref name="handler"/> равен null.</exception>
+    /// <exception cref="InvalidOperationException">
+    /// Выбрасывается при коллизии идентификаторов подписки (крайне редко).
+    /// </exception>
     public IDisposable Subscribe(Guid playerId, Func<Domain.Player, Task> handler)
     {
         // Создаем уникальный ID для подписки
@@ -34,7 +44,14 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
         return new Subscription(playerId, subscriptionId, this);
     }
 
-    // Вызывается при изменении Player
+    /// <summary>
+    /// Уведомляет все подписанные обработчики об изменении основных характеристик указанного игрока.
+    /// </summary>
+    /// <param name="stats">Игрок, основные характеристики которого изменились.</param>
+    /// <remarks>
+    /// Вызывает все зарегистрированные обработчики для идентификатора игрока параллельно.
+    /// Если обработчики не зарегистрированы, никаких действий не предпринимается.
+    /// </remarks>
     public async Task OnMainStatsChanged(Domain.Player stats)
     {
         ArgumentNullException.ThrowIfNull(stats);
@@ -55,6 +72,9 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
         }
     }
 
+    /// <summary>
+    /// Асинхронно вызывает указанный обработчик с переданными характеристиками игрока, регистрируя любые возникающие исключения.
+    /// </summary>
     private static async Task SafeInvokeAsync(
         Func<Domain.Player, Task> handler,
         Domain.Player stats,
@@ -71,6 +91,11 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
         }
     }
 
+    /// <summary>
+    /// Удаляет обработчик подписки для указанного игрока и идентификаторов подписки.
+    /// </summary>
+    /// <param name="mainStatsId">Уникальный идентификатор игрока.</param>
+    /// <param name="subscriptionId">Уникальный идентификатор подписки для удаления.</param>
     internal void Unsubscribe(Guid mainStatsId, Guid subscriptionId)
     {
         // Если для playerId есть словарь обработчиков
@@ -106,6 +131,9 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
     {
         private bool _disposed;
 
+        /// <summary>
+        /// Отписывается от уведомлений об изменениях игрока и освобождает подписку.
+        /// </summary>
         public void Dispose()
         {
             if (!_disposed)

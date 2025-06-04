@@ -1,4 +1,4 @@
-﻿using System.Threading.Channels;
+using System.Threading.Channels;
 using Server.Module.Player.Domain;
 using Server.Shared.Cqrs;
 using Server.Shared.Errors;
@@ -10,6 +10,14 @@ public sealed record GetPlayerQuery(Guid PlayerId) : IQuery<Domain.Player>;
 public sealed class GetPlayerQueryHandler(IPlayerRepository playerRepository)
     : IQueryHandler<GetPlayerQuery, Domain.Player>
 {
+    /// <summary>
+    /// Обрабатывает запрос на получение игрока по его уникальному идентификатору.
+    /// </summary>
+    /// <param name="playerQuery">Запрос, содержащий идентификатор игрока для получения.</param>
+    /// <param name="token">Токен отмены для операции.</param>
+    /// <returns>
+    /// Результат, содержащий игрока, если он найден; в противном случае, результат сбоя, указывающий, что игрок не найден.
+    /// </returns>
     public async Task<Result<Domain.Player>> Handle(
         GetPlayerQuery playerQuery,
         CancellationToken token
@@ -31,6 +39,14 @@ public sealed class SubscribePlayerHandler(
     IPlayerChangeNotifier notifier
 ) : IQueryHandler<SubscribePlayer, IAsyncEnumerable<Domain.Player>>
 {
+    /// <summary>
+    /// Обрабатывает запрос на подписку для получения обновлений состояния игрока в реальном времени.
+    /// </summary>
+    /// <param name="query">Запрос подписки, указывающий игрока для наблюдения.</param>
+    /// <param name="cancellationToken">Токен для сигнализации об отмене подписки.</param>
+    /// <returns>
+    /// Результат, содержащий асинхронный поток обновлений игрока, если игрок существует; в противном случае, результат сбоя, указывающий, что игрок не найден.
+    /// </returns>
     public async Task<Result<IAsyncEnumerable<Domain.Player>>> Handle(
         SubscribePlayer query,
         CancellationToken cancellationToken = default

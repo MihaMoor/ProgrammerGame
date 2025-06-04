@@ -1,4 +1,4 @@
-п»їusing Grpc.Core;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.GrpcContracts.V1;
 
@@ -6,6 +6,14 @@ namespace Server.Module.Player.Api;
 
 internal class Validation
 {
+    /// <summary>
+    /// Проверяет запрос UUID, обеспечивая его непустоту и наличие допустимого, непустого идентификатора игрока.
+    /// </summary>
+    /// <param name="request">Запрос UUID для проверки.</param>
+    /// <returns>Проверенный запрос UUID.</returns>
+    /// <exception cref="RpcException">
+    /// Возникает, если запрос равен null или если идентификатор игрока равен null, пуст, содержит только пробелы или равен пустому GUID.
+    /// </exception>
     internal static UUID Validate(UUID request, ILogger logger)
     {
         if (request == null)

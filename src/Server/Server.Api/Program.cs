@@ -11,6 +11,10 @@ public class Program
 {
     private const ulong DefaultQueueLimitBytes = 104_857_600UL;
 
+    /// <summary>
+    /// Настраивает и запускает веб-приложение, включая настройку служб, логирования, gRPC, OpenAPI, конечных точек и промежуточного программного обеспечения.
+    /// </summary>
+    /// <param name="args">Аргументы командной строки для конфигурации приложения.</param>
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -53,6 +57,12 @@ public class Program
         app.Run();
     }
 
+    /// <summary>
+    /// Настраивает Elasticsearch и логирование Serilog для приложения, используя параметры из раздела конфигурации "AppSettings".
+    /// </summary>
+    /// <remarks>
+    /// Если раздел "AppSettings" отсутствует, логирование настраивается только для вывода в консоль. В противном случае этот метод инициализирует клиента Elasticsearch и настраивает Serilog для записи логов как в консоль, так и в HTTP-ендпоинт Logstash, с учетом лимитов очереди, указанных в конфигурации. Клиент Elasticsearch регистрируется как синглтон-сервис.
+    /// </remarks>
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
         AppSettings? appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
@@ -92,6 +102,12 @@ public class Program
         builder.Host.UseSerilog();
     }
 
+    /// <summary>
+    /// Загружает все DLL-ассамблеи из базовой директории приложения и их зависимости, которые еще не загружены в текущий AppDomain.
+    /// </summary>
+    /// <remarks>
+    /// Этот метод обеспечивает наличие всех управляемых сборок и их зависимостей во время выполнения, динамически загружая отсутствующие DLL из каталога приложения. Ошибки, возникающие при загрузке, выводятся в консоль.
+    /// </remarks>
     private static void LoadAllReferencedAssemblies()
     {
         List<Assembly> loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
