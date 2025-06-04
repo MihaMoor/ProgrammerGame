@@ -1,4 +1,4 @@
-﻿namespace Server.Module.Player.Api;
+namespace Server.Module.Player.Api;
 
 internal class PlayerSettings
 {
@@ -13,6 +13,13 @@ public class PostgreSql
     public required string Username { get; set; }
     public required string Password { get; set; }
 
+    /// <summary>
+    /// Constructs and returns a PostgreSQL connection string using the configured properties.
+    /// </summary>
+    /// <returns>A PostgreSQL connection string based on the current settings.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <c>Host</c>, <c>Database</c>, or <c>Username</c> is null, empty, or consists only of whitespace.
+    /// </exception>
     public string CreateConnectionString()
     {
         if (string.IsNullOrWhiteSpace(Host))

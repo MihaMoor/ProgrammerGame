@@ -1,4 +1,4 @@
-﻿namespace Server.Shared.Errors;
+namespace Server.Shared.Errors;
 
 public record Error(ErrorCode Code, string Description)
 {
@@ -7,5 +7,9 @@ public record Error(ErrorCode Code, string Description)
 
     public static implicit operator Result(Error error) => Result.Failure(error);
 
-    public Result ToResult() => Result.Failure(this);
+    /// <summary>
+/// Converts this error into a failure <see cref="Result"/> containing the current error.
+/// </summary>
+/// <returns>A failure <see cref="Result"/> with this error.</returns>
+public Result ToResult() => Result.Failure(this);
 }

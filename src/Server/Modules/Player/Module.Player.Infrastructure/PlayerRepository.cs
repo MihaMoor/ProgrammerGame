@@ -1,4 +1,4 @@
-﻿using Server.Module.Player.Application;
+using Server.Module.Player.Application;
 using Server.Module.Player.Infrastructure.EfCore;
 using Server.Shared.Errors;
 
@@ -6,6 +6,12 @@ namespace Server.Module.Player.Infrastructure;
 
 public class PlayerRepository(PlayerEventListener eventListener, Context context) : IPlayerRepository
 {
+    /// <summary>
+    /// Asynchronously retrieves a player domain model by its unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the player.</param>
+    /// <param name="cancellationToken">Token to cancel the asynchronous operation.</param>
+    /// <returns>The player domain model if found; otherwise, null.</returns>
     public async Task<Domain.Player?> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
         // Получаем сущность из хранилища
@@ -27,6 +33,11 @@ public class PlayerRepository(PlayerEventListener eventListener, Context context
         return player;
     }
 
+    /// <summary>
+    /// Saves or updates a player domain model in the database asynchronously.
+    /// </summary>
+    /// <param name="model">The player domain model to be saved or updated.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
     public async Task SaveAsync(Domain.Player model, CancellationToken cancellationToken = default)
     {
         PlayerEntity playerEntity = model.ToPlayerEntity();

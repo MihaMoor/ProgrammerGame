@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.GrpcContracts.V1;
 
@@ -6,6 +6,14 @@ namespace Server.Module.Player.Api;
 
 internal class Validation
 {
+    /// <summary>
+    /// Validates a UUID request, ensuring it is not null and contains a valid, non-empty PlayerId.
+    /// </summary>
+    /// <param name="request">The UUID request to validate.</param>
+    /// <returns>The validated UUID request.</returns>
+    /// <exception cref="RpcException">
+    /// Thrown if the request is null or if the PlayerId is null, empty, whitespace, or equals the empty GUID.
+    /// </exception>
     internal static UUID Validate(UUID request, ILogger logger)
     {
         if (request == null)

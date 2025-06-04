@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+using Grpc.Core;
 using Grpc.Net.Client;
 using Polly;
 
@@ -14,6 +14,14 @@ public class GrpcClient<TClient> : IDisposable
 
     protected TClient Client { get; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GrpcClient{TClient}"/> class with the specified gRPC client and server address.
+    /// </summary>
+    /// <param name="adress">The address of the gRPC server.</param>
+    /// <param name="client">The gRPC client instance to use for communication.</param>
+    /// <remarks>
+    /// Sets up the gRPC channel and configures an asynchronous retry policy for transient errors such as server unavailability or deadline exceeded.
+    /// </remarks>
     public GrpcClient(string adress, TClient client)
     {
         Client = client;
@@ -39,6 +47,12 @@ public class GrpcClient<TClient> : IDisposable
                 });
     }
 
+    /// <summary>
+    /// Releases the managed resources used by the GrpcClient instance.
+    /// </summary>
+    /// <param name="disposing">
+    /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
+    /// </param>
     protected virtual void Dispose(bool disposing)
     {
         if (!_disposedValue)

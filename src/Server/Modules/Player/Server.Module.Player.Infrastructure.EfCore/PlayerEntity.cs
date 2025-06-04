@@ -1,4 +1,4 @@
-﻿namespace Server.Module.Player.Infrastructure.EfCore;
+namespace Server.Module.Player.Infrastructure.EfCore;
 
 public sealed record PlayerEntity(
     Guid PlayerId,
@@ -11,6 +11,11 @@ public sealed record PlayerEntity(
 
 public static class PlayerEntityExtensions
 {
+    /// <summary>
+    /// Converts a <see cref="PlayerEntity"/> to a <see cref="Domain.Player"/> domain object.
+    /// </summary>
+    /// <returns>The corresponding <see cref="Domain.Player"/> instance.</returns>
+    /// <exception cref="Exception">Thrown if the domain player cannot be created from the entity's data.</exception>
     public static Domain.Player ToPlayerDomain(this PlayerEntity playerEntity)
     {
         var playerResult = Domain.Player.CreatePlayer(
@@ -30,7 +35,12 @@ public static class PlayerEntityExtensions
         return playerResult.Value;
     }
 
-    public static PlayerEntity ToPlayerEntity(this Domain.Player player)
+    /// <summary>
+            /// Converts a domain player object to a <see cref="PlayerEntity"/> for persistence.
+            /// </summary>
+            /// <param name="player">The domain player to convert.</param>
+            /// <returns>A <see cref="PlayerEntity"/> representing the given domain player.</returns>
+            public static PlayerEntity ToPlayerEntity(this Domain.Player player)
         => new(
             player.PlayerId,
             player.Name,

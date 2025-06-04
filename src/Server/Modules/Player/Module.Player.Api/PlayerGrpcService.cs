@@ -1,4 +1,4 @@
-﻿using Grpc.Core;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Server.Module.Player.Application;
 using Server.Module.Player.GrpcContracts.V1;
@@ -21,6 +21,14 @@ public class PlayerGrpcService(
     /// <exception cref="RpcException">
     /// Выбрасывается со статусом <see cref="StatusCode.InvalidArgument"/>
     /// при null или пустом Id у <paramref name="request"/>.
+    /// <summary>
+    /// Retrieves player information for the specified player ID.
+    /// </summary>
+    /// <param name="request">The UUID containing the player ID to retrieve.</param>
+    /// <param name="context">The gRPC server call context.</param>
+    /// <returns>The player data as a <see cref="PlayerDto"/>.</returns>
+    /// <exception cref="RpcException">
+    /// Thrown if the player cannot be found or if validation fails, with an appropriate gRPC status code.
     /// </exception>
     public override async Task<PlayerDto> Get(UUID request, ServerCallContext context)
     {
@@ -41,6 +49,16 @@ public class PlayerGrpcService(
         return result.Value.ToViewModel();
     }
 
+    /// <summary>
+    /// Streams real-time updates of a player's data to the client as they become available.
+    /// </summary>
+    /// <param name="request">The request containing the player ID to subscribe to.</param>
+    /// <param name="responseStream">The server stream used to send player updates to the client.</param>
+    /// <param name="context">The gRPC server call context.</param>
+    /// <remarks>
+    /// Throws an <see cref="RpcException"/> with <see cref="StatusCode.InvalidArgument"/> if the player ID is invalid,
+    /// or with an appropriate status code if subscription fails or a streaming error occurs.
+    /// </remarks>
     public override async Task Subscribe(
         UUID request,
         IServerStreamWriter<PlayerDto> responseStream,
@@ -86,6 +104,12 @@ public class PlayerGrpcService(
         }
     }
 
+    /// <summary>
+    /// Handles a request to create a new player by logging the command and delegating to the base implementation.
+    /// </summary>
+    /// <param name="request">The command containing player creation details.</param>
+    /// <param name="context">The gRPC server call context.</param>
+    /// <returns>A task representing the asynchronous operation, with the created player's data.</returns>
     public override Task<PlayerDto> Create(CreatePlayerCommand request, ServerCallContext context)
     {
         _logger.LogInformation(request.ToString());
