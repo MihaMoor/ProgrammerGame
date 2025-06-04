@@ -3,14 +3,14 @@
     "Name": "Wpf+Server-docker",
     "Projects": [
       {
-        "Path": "src\\Client\\WpfClient\\WpfClient.csproj",
-        "Action": "Start",
-        "DebugTarget": "WpfClient"
-      },
-      {
         "Path": "docker-compose.dcproj",
         "Action": "Start",
         "DebugTarget": "Docker Compose"
+      },
+      {
+        "Path": "src\\Client\\WpfClient\\WpfClient.csproj",
+        "Action": "Start",
+        "DebugTarget": "WpfClient"
       }
     ]
   }

@@ -28,7 +28,7 @@ public partial class PlayerWidget : Page
 
     private void ConnectToServer()
     {
-        _playerGrpcClient.Get(HandlePlayerGet, _cancellationTokenSource.Token);
+        _playerGrpcClient.GetAsync(HandlePlayerGet, _cancellationTokenSource.Token);
     }
 
     private void HandlePlayerGet(PlayerDto response)
