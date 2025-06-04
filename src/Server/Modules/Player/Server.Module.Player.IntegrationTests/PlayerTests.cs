@@ -1,5 +1,4 @@
-﻿using Elastic.Clients.Elasticsearch;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using Server.Module.Player.Api;
 using Server.Module.Player.Application;
@@ -11,9 +10,9 @@ namespace Server.Module.Player.IntegrationTests;
 [Trait("Category", "Integration")]
 public partial class PlayerTests
 {
-    private static readonly Mock<ILogger<PlayerGrpcService>> mockLogger = new();
-    private static readonly Mock<IPlayerRepository> playerRepositoryMock = new();
-    private static readonly Mock<IPlayerChangeNotifier> playerChangeNotifierMock = new();
+    private readonly Mock<ILogger<PlayerGrpcService>> mockLogger = new();
+    private readonly Mock<IPlayerRepository> playerRepositoryMock = new();
+    private readonly Mock<IPlayerChangeNotifier> playerChangeNotifierMock = new();
 
     [Theory]
     [MemberData(nameof(CreatePlayerData))]
@@ -27,8 +26,11 @@ public partial class PlayerTests
 
         IQueryHandler<GetPlayerQuery, Domain.Player> queryHandler = new GetPlayerQueryHandler(playerRepositoryMock.Object);
         PlayerGrpcService service = new(mockLogger.Object, queryHandler, null!);
+
         PlayerDto player = await service.Get(id, null!);
 
+        Assert.NotNull(player);
+        Assert.Equal(expected.PlayerId, player.PlayerId);
         Assert.Equal(expected.Name, player.Name);
         Assert.Equal(expected.Health, player.Health);
         Assert.Equal(expected.Hunger, player.Hunger);
