@@ -11,6 +11,10 @@ public class Program
 {
     private const ulong DefaultQueueLimitBytes = 104_857_600UL;
 
+    /// <summary>
+    /// Configures and runs the web application, setting up logging, gRPC, controllers, OpenAPI, endpoints, and middleware.
+    /// </summary>
+    /// <param name="args">Command-line arguments for application configuration.</param>
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -53,6 +57,10 @@ public class Program
         app.Run();
     }
 
+    /// <summary>
+    /// Configures logging for the application using Serilog, Logstash, and Elasticsearch based on application settings.
+    /// </summary>
+    /// <param name="builder">The web application builder used to configure services and logging.</param>
     private static void ConfigureELK(WebApplicationBuilder builder)
     {
         AppSettings? appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
@@ -92,6 +100,9 @@ public class Program
         builder.Host.UseSerilog();
     }
 
+    /// <summary>
+    /// Loads all DLL assemblies in the application's base directory and their dependencies that are not already loaded into the current AppDomain.
+    /// </summary>
     private static void LoadAllReferencedAssemblies()
     {
         List<Assembly> loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();

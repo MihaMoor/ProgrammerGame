@@ -1,4 +1,4 @@
-﻿namespace Server.Api;
+namespace Server.Api;
 
 public class AppSettings
 {
@@ -31,7 +31,11 @@ public class Logstash
     /// <summary>
     /// Получить url адрес подключения
     /// </summary>
-    /// <returns>url</returns>
+    /// <summary>
+    /// Returns the Logstash endpoint as a validated absolute <see cref="Uri"/>.
+    /// </summary>
+    /// <returns>The absolute <see cref="Uri"/> constructed from the <c>Url</c> property.</returns>
+    /// <exception cref="ArgumentException">Thrown if the <c>Url</c> property is not a valid absolute URI.</exception>
     public Uri GetUri()
     {
         if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri))
@@ -50,6 +54,9 @@ public class Elasticsearch
     /// <summary>
     /// Получить url адрес подключения
     /// </summary>
-    /// <returns>url</returns>
+    /// <summary>
+/// Returns a <see cref="Uri"/> object constructed from the configured URL.
+/// </summary>
+/// <returns>A <see cref="Uri"/> representing the endpoint URL.</returns>
     public Uri GetUri() => new(Url);
 }

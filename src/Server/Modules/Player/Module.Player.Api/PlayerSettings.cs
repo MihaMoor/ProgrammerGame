@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Server.Module.Player.Api;
 
@@ -15,6 +15,13 @@ public class PostgreSql
     public required string Username { get; set; }
     public required string Password { get; set; }
 
+    /// <summary>
+    /// Constructs and returns a PostgreSQL connection string using the configured properties.
+    /// </summary>
+    /// <returns>A PostgreSQL connection string based on the current property values.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <c>Host</c>, <c>Database</c>, or <c>Username</c> is null, empty, or consists only of whitespace.
+    /// </exception>
     public string CreateConnectionString()
     {
         if (string.IsNullOrWhiteSpace(Host))

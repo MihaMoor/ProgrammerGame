@@ -1,4 +1,4 @@
-﻿using Client.Infrastructure;
+using Client.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using WpfClient.Pages;
 using WpfClient.Widgets;
@@ -9,6 +9,12 @@ public static class AppServices
 {
     public static ServiceProvider? ServiceProvider { get; private set; }
 
+    /// <summary>
+    /// Configures and builds the application's dependency injection service provider.
+    /// </summary>
+    /// <remarks>
+    /// Registers core services, gRPC clients, UI pages, and widgets, then constructs the service provider for use throughout the application.
+    /// </remarks>
     public static void Configure()
     {
         ServiceCollection serviceCollection = new();

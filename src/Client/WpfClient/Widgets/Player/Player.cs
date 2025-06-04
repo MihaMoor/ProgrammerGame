@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace WpfClient.Widgets;
@@ -61,6 +61,10 @@ internal sealed class Player : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Raises the PropertyChanged event for the specified property.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that changed. Automatically set to the caller's name if not provided.</param>
     internal void OnPropertyChanged([CallerMemberName] string propertyName = null!)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
