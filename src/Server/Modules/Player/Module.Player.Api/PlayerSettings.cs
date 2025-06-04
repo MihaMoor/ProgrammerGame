@@ -1,8 +1,10 @@
-﻿namespace Server.Module.Player.Api;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Server.Module.Player.Api;
 
 internal class PlayerSettings
 {
-    public PostgreSql PostgreSql { get; set; }
+    public required PostgreSql PostgreSql { get; set; }
 }
 
 public class PostgreSql
@@ -15,6 +17,19 @@ public class PostgreSql
 
     public string CreateConnectionString()
     {
+        if (string.IsNullOrWhiteSpace(Host))
+        {
+            throw new ArgumentException("Host cannot be null or empty", nameof(Host));
+        }
+        if (string.IsNullOrWhiteSpace(Database))
+        {
+            throw new ArgumentException("Database cannot be null or empty", nameof(Database));
+        }
+        if (string.IsNullOrWhiteSpace(Username))
+        {
+            throw new ArgumentException("Username cannot be null or empty", nameof(Username));
+        }
+
         Npgsql.NpgsqlConnectionStringBuilder builder = new()
         {
             Host = Host,

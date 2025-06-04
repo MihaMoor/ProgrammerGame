@@ -13,7 +13,8 @@ public static class PlayerServiceRegistration
     public static IServiceCollection AddPlayerServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<PlayerSettings>(configuration.GetRequiredSection("PlayerSettings"));
-        PlayerSettings playerSettings = configuration.GetRequiredSection("PlayerSettings").Get<PlayerSettings>()!;
+        PlayerSettings playerSettings = configuration.GetRequiredSection("PlayerSettings").Get<PlayerSettings>() ??
+            throw new InvalidOperationException("PlayerSettings configuration is required");
 
         return services
             .AddDbContextPool<Context>(options =>

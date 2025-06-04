@@ -11,14 +11,14 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
         ConcurrentDictionary<Guid, Func<Domain.Player, Task>>
     > _subscriptions = new();
 
-    public IDisposable Subscribe(Guid mainStatsId, Func<Domain.Player, Task> handler)
+    public IDisposable Subscribe(Guid playerId, Func<Domain.Player, Task> handler)
     {
         // Создаем уникальный ID для подписки
         Guid subscriptionId = Guid.NewGuid();
 
-        // Получаем или создаем внутренний словарь для указанного mainStatsId
+        // Получаем или создаем внутренний словарь для указанного playerId
         ConcurrentDictionary<Guid, Func<Domain.Player, Task>> handlersDict = _subscriptions.GetOrAdd(
-            mainStatsId,
+            playerId,
             _ => new ConcurrentDictionary<Guid, Func<Domain.Player, Task>>()
         );
 
@@ -31,12 +31,14 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
         }
 
         // Возвращаем объект подписки
-        return new Subscription(mainStatsId, subscriptionId, this);
+        return new Subscription(playerId, subscriptionId, this);
     }
 
     // Вызывается при изменении Player
     public async Task OnMainStatsChanged(Domain.Player stats)
     {
+        ArgumentNullException.ThrowIfNull(stats);
+
         if (
             _subscriptions.TryGetValue(
                 stats.PlayerId,
@@ -71,7 +73,7 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
 
     internal void Unsubscribe(Guid mainStatsId, Guid subscriptionId)
     {
-        // Если для mainStatsId есть словарь обработчиков
+        // Если для playerId есть словарь обработчиков
         if (
             _subscriptions.TryGetValue(
                 mainStatsId,
@@ -82,10 +84,15 @@ public class PlayerChangeNotifier(ILogger<PlayerChangeNotifier> _logger) : IPlay
             // Удаляем обработчик по его ID
             handlersDict.TryRemove(subscriptionId, out _);
 
-            // Если словарь обработчиков пуст, удаляем его из основного словаря
+            // Пытаемся удалить только если словарь действительно пуст
             if (handlersDict.IsEmpty)
             {
-                _subscriptions.TryRemove(mainStatsId, out _);
+                _subscriptions.TryRemove(mainStatsId, out var removedDict);
+                // Если удаленный словарь не пуст, добавляем его обратно
+                if (removedDict != null && !removedDict.IsEmpty)
+                {
+                    _subscriptions.TryAdd(mainStatsId, removedDict);
+                }
             }
         }
     }

@@ -10,18 +10,19 @@ namespace Server.Module.Player.IntegrationTests;
 [Trait("Category", "Integration")]
 public partial class PlayerTests
 {
-    //[Theory(Timeout = 1000)]
-    //[MemberData(nameof(CreatePlayerData))]
+    private static readonly Mock<ILogger<PlayerGrpcService>> mockLogger = new();
+    private static readonly Mock<IPlayerRepository> playerRepositoryMock = new();
+    private static readonly Mock<IPlayerChangeNotifier> playerChangeNotifierMock = new();
+
+    [Theory(Timeout = 5_000)]
+    [MemberData(nameof(CreatePlayerData))]
     public async Task Получение_игрока(
         UUID id,
         PlayerDto expected)
     {
         // Arrange
-        Mock<ILogger<PlayerGrpcService>> mockLogger = new();
-        Mock<IPlayerRepository> playerRepositoryMock = new();
         IQueryHandler<GetPlayerQuery, Domain.Player> queryHandler = new GetPlayerQueryHandler(playerRepositoryMock.Object);
-
-        PlayerGrpcService service = new(mockLogger.Object, queryHandler);
+        PlayerGrpcService service = new(mockLogger.Object, queryHandler, null!);
         PlayerDto player = await service.Get(id, null!);
 
         Assert.Equal(expected.Name, player.Name);
@@ -34,16 +35,18 @@ public partial class PlayerTests
 
 public partial class PlayerTests
 {
+    private static readonly Guid playerId = Guid.CreateVersion7();
+
     public static TheoryData<UUID, PlayerDto> CreatePlayerData => new()
     {
         {
             new()
             {
-                PlayerId = Guid.NewGuid().ToString(),
+                PlayerId = playerId.ToString(),
             },
             new()
             {
-                PlayerId = Guid.NewGuid().ToString(),
+                PlayerId = playerId.ToString(),
                 Name = "Test1",
                 Health = 100,
                 Hunger = 100,
@@ -51,7 +54,7 @@ public partial class PlayerTests
                 PocketMoney =
                 {
                     Units = 99,
-                    Nanos = (int)(0.99 * 1_000_000_000)
+                    Nanos = 99_000_000
                 },
             }
         }
