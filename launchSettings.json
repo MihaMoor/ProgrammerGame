@@ -3,8 +3,19 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "None",
+      "composeLaunchServiceName": "server.api",
       "serviceActions": {
-        "server.api": "StartDebugging"
+        "server.api": "StartDebugging",
+        "elasticsearch": "StartWithoutDebugging",
+        "grafana": "StartWithoutDebugging",
+        "keycloak": "StartWithoutDebugging",
+        "keycloak.db": "StartWithoutDebugging",
+        "kibana": "StartWithoutDebugging",
+        "logstash": "StartWithoutDebugging",
+        "pgadmin": "StartWithoutDebugging",
+        "programming-game.db": "StartWithoutDebugging",
+        "prometheus": "StartWithoutDebugging"
       }
     }
   }

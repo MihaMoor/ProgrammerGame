@@ -79,6 +79,38 @@ services:
     depends_on:
       - prometheus
 
+  keycloak.db:
+    container_name: keycloak.db
+    image: postgres
+    environment:
+      POSTGRES_DB: "keycloak"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    ports:
+      - "6544:5432"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=adminpassword
+      - DB_VENDOR=postgres
+      - DB_ADDR=keycloak.db
+      - DB_DATABASE=keycloak
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+    ports:
+      - "7070:8080"
+    command:
+      - start-dev
+    restart: unless-stopped
+    depends_on:
+      - keycloak.db
+
 volumes:
   programming-game.db-data:
   pgadmin-data:
+  keycloak-db-data:

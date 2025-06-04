@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package server.module.player.grpccontracts.v1;
+
+option csharp_namespace = "Server.Module.Player.GrpcContracts.V1";
+
+import "money.proto";
+
+service PlayerService {
+    rpc Get(UUID) returns (PlayerDto);
+    rpc Subscribe(UUID) returns (stream PlayerDto);
+    rpc Create(CreatePlayerCommand) returns (PlayerDto);
+}
+
+message UUID {
+    string playerId = 1;
+}
+
+message PlayerDto {
+    string playerId = 1;
+    string name = 2;
+    int32 health = 3;
+    int32 hunger = 4;
+    int32 mood = 5;
+    google.type.Money pocketMoney = 6;
+}
+
+message CreatePlayerCommand {
+    string name = 1;
+}

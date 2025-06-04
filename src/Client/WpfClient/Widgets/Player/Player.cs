@@ -1,19 +1,21 @@
-п»їusing System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WpfClient.Widgets.PlayerWidget;
+namespace WpfClient.Widgets;
 
-internal class Player : INotifyPropertyChanged
+internal sealed class Player : INotifyPropertyChanged
 {
-    private uint _health;
-    private uint _hunger;
-    private double _money;
-    private uint _mood;
+    private int _health;
+    private int _hunger;
+    private int _mood;
     private double _pocketMoney;
-    private string _name;
+    private string _name = "Unknown";
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    /// <summary>
+    /// Имя
+    /// </summary>
     public string Name
     {
         get => _name;
@@ -24,6 +26,9 @@ internal class Player : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Карманные деньги
+    /// </summary>
     public double PocketMoney
     {
         get => _pocketMoney;
@@ -34,7 +39,10 @@ internal class Player : INotifyPropertyChanged
         }
     }
 
-    public uint Health
+    /// <summary>
+    /// Здоровье
+    /// </summary>
+    public int Health
     {
         get => _health;
         set
@@ -43,7 +51,11 @@ internal class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public uint Hunger
+
+    /// <summary>
+    /// Голод
+    /// </summary>
+    public int Hunger
     {
         get => _hunger;
         set
@@ -52,16 +64,11 @@ internal class Player : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public double Money
-    {
-        get => _money;
-        set
-        {
-            _money = Math.Round(value, 2);
-            OnPropertyChanged();
-        }
-    }
-    public uint Mood
+
+    /// <summary>
+    /// Настроение
+    /// </summary>
+    public int Mood
     {
         get => _mood;
         set
@@ -71,7 +78,11 @@ internal class Player : INotifyPropertyChanged
         }
     }
 
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null!)
+    /// <summary>
+    /// Вызывает событие PropertyChanged для уведомления подписчиков об изменении значения свойства.
+    /// </summary>
+    /// <param name="propertyName">Имя изменившегося свойства. Автоматически устанавливается в имя вызывающего свойства, если не указано явно.</param>
+    internal void OnPropertyChanged([CallerMemberName] string propertyName = null!)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

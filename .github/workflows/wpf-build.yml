@@ -3,8 +3,12 @@ name: .NET WPF Application Build
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'src/Client/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - 'src/Client/**'
 
 jobs:
   build-wpf:

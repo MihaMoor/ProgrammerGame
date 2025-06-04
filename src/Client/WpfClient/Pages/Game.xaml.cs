@@ -1,6 +1,5 @@
 ﻿using System.Windows.Controls;
-using WpfClient.Widgets.MenuBar;
-using WpfClient.Widgets.PlayerWidget;
+using WpfClient.Widgets;
 
 namespace WpfClient.Pages;
 
